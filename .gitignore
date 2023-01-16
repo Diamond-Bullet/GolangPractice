@@ -1,0 +1,10 @@
+Algorithm/main.go
+Algorithm/code_test.go
+local
+
+pkg
+.idea
+.DS_Store
+
+go.mod
+go.sum
