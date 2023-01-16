@@ -35,46 +35,41 @@ main(): your program's entrance
 // go version
 
 // the way `Closure` references a variable outside the anonymous function is pointer.
-func Test1(t *testing.T) {
-	innerFunc := Foo()
-	//println(&a)
-	//fmt.Printf("a size: %d\n", unsafe.Sizeof(a))
-	//println(&b)
-	//fmt.Printf("b size: %d\n", unsafe.Sizeof(b))
-	//println(&innerFunc)
-	//fmt.Printf("innerFunc size: %d\n", unsafe.Sizeof(innerFunc))
-	//println(pA)
-	//fmt.Printf("pA size: %d\n", unsafe.Sizeof(pA))
-	println(innerFunc(1))
-	println(innerFunc(2))
-}
-
-func Foo() func(x int) int {
-	a := 1
-	return func(x int) int {
-		a += x
-		return a
+func TestClosure(t *testing.T) {
+	Foo := func() func(x int) int {
+		a := 1
+		return func(x int) int {
+			a += x
+			return a
+		}
 	}
+
+	innerFunc := Foo()
+
+	println(&innerFunc)
+	fmt.Printf("innerFunc size: %d\n", unsafe.Sizeof(innerFunc))
+	println(innerFunc(1)) // 2
+	println(innerFunc(2)) // 4
 }
 
 // memory alignment
 // https://blog.csdn.net/u011957758/article/details/85059117
 func TestMemoryAlignment(t *testing.T) {
-	type Part2 struct {
+	type Part1 struct {
 		Name int32
 		Age  *int32
 	}
 
-	type Part1 struct {
+	type Part2 struct {
 		a bool
 		b int32
 		c int8
 		d int64
-		Part2
+		Part1
 		e byte
 	}
 
-	p := Part1{}
+	p := Part2{}
 	var x = 1<<63 - 1
 	println(unsafe.Offsetof(p.e))
 	fmt.Printf("p align: %d\n", unsafe.Alignof(p.e))
@@ -98,6 +93,7 @@ func TestPointer(t *testing.T) {
 }
 
 // defer: last in, first out
+//
 // reference：https://studygolang.com/articles/16067
 //		https://www.cnblogs.com/makelu/p/11226974.html
 func TestDefer(t *testing.T) {
@@ -188,6 +184,7 @@ func TestMemoryAddress(t *testing.T) {
 }
 
 // string runtime/string.go
+//
 //	type stringStruct struct {
 //		str unsafe.Pointer
 //		len int
