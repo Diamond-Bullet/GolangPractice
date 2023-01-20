@@ -50,8 +50,18 @@ func ForStrings() {
 }
 
 func ForRedBlackTree() {
-	t := redblacktree.NewWithIntComparator()
+	// RedBlackTree is also called sorted set in other languages like Java.
+	// it offers the time complexity of O(log n) for both insertion and deletion.
+
+	t := redblacktree.NewWithIntComparator() // sorted by `key`, and you can store something in `value`.
 	t.Put(1, 1)
+	t.Remove(1)
+
+	t.Left()  // smallest
+	t.Right() // biggest
+
+	t.Ceiling(1) // the smallest item greater than `key`
+	t.Floor(1)   // the biggest item smaller than `key`
 }
 
 func ForDoublyLinkedList() {
