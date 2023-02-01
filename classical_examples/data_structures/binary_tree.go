@@ -1,6 +1,6 @@
 package data_structures
 
-// TreeNode 二叉树
+// TreeNode # binary tree
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode

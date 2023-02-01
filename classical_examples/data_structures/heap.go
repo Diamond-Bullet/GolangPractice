@@ -1,6 +1,8 @@
 package data_structures
 
-// Heap 堆 小顶堆 需调用heap.Init,heap.Push,heap.Pop
+// Heap
+// the implement in Golang is a Min Heap.
+// DO NOT use the methods of Push and Pop we write below. Import 'heap' and Use heap.Init,heap.Push,heap.Pop instead.
 type Heap []int
 
 func (h Heap) Len() int           { return len(h) }
