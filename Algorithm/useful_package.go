@@ -106,7 +106,7 @@ type ListNode struct {
 	Next *ListNode
 }
 
-// leetcode related
+// ArrayToGoSlice # leetcode related
 func ArrayToGoSlice(arr string) interface{} {
 	var x [][]int // todo: here is not dynamic
 	_ = json.Unmarshal([]byte(arr), &x)

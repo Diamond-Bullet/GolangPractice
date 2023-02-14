@@ -1,47 +1,49 @@
 package data_structures
 
-// UnionFind 并查集
-type UnionFind struct {
+// DisjointSet union-find algorithm
+// https://www.geeksforgeeks.org/introduction-to-disjoint-set-data-structure-or-union-find-algorithm/
+type DisjointSet struct {
 	Parent   []int
 	Size     []int
 	N        int
 	SetCount int
 }
 
-func NewUnionFind(n int) *UnionFind {
+func NewDisjointSet(n int) *DisjointSet {
 	parent := make([]int, n)
 	for i := 1; i < n; i++ {
 		parent[i] = i
 	}
-	return &UnionFind{Parent: parent,
+	return &DisjointSet{Parent: parent,
 		Size:     make([]int, n),
 		N:        n,
 		SetCount: n,
 	}
 }
 
-func (uF *UnionFind) FindSet(x int) int {
-	if uF.Parent[x] == x {
+func (d *DisjointSet) Find(x int) int {
+	if d.Parent[x] == x {
 		return x
 	}
-	uF.Parent[x] = uF.FindSet(uF.Parent[x])
-	return uF.Parent[x]
+	d.Parent[x] = d.Find(d.Parent[x])
+	return d.Parent[x]
 }
 
-func (uF *UnionFind) Unite(x, y int) bool {
-	x, y = uF.FindSet(x), uF.FindSet(y)
+// Union let y become the child node of x.
+func (d *DisjointSet) Union(x, y int) bool {
+	x, y = d.Find(x), d.Find(y)
 	if x == y {
 		return false
 	}
-	if uF.Size[x] < uF.Size[y] {
+	if d.Size[x] < d.Size[y] {
 		x, y = y, x
 	}
-	uF.Parent[y] = x
-	uF.Size[x] += uF.Size[y]
-	uF.SetCount -= 1
+	d.Parent[y] = x
+	d.Size[x] += d.Size[y]
+	d.SetCount -= 1
 	return true
 }
 
-func (uF *UnionFind) Connected(x, y int) bool {
-	return uF.FindSet(x) == uF.FindSet(y)
+func (d *DisjointSet) Connected(x, y int) bool {
+	return d.Find(x) == d.Find(y)
 }
