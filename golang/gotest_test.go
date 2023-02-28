@@ -22,6 +22,31 @@ import (
 // -memprofile memprofile.out #Output the result of Mem analysis
 // https://blog.csdn.net/weixin_34232617/article/details/91854391
 
+/* An example for another way to use `go test`. And it's related to memory allocation from go101.
+var t *[5]int64
+var s []byte
+
+func f(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		t = &[5]int64{}
+	}
+}
+
+func g(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s = make([]byte, 32769)
+	}
+}
+
+func main() {
+	println(unsafe.Sizeof(*t))      // 40
+	rf := testing.Benchmark(f)
+	println(rf.AllocedBytesPerOp()) // 48
+	rg := testing.Benchmark(g)
+	println(rg.AllocedBytesPerOp()) // 40960
+}
+*/
+
 // stress test
 func BenchmarkDirect(b *testing.B) {
 	x, y := 1, 2
