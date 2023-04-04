@@ -287,10 +287,11 @@ func TestMap(t *testing.T) {
 		fmt.Println(k, m)
 	}
 
-	// Can not do some other concurrent operations at the same time when writing the map, unless using the lock or concurrency-safe data structures, like sync.Map。
-	// `fatal: concurrent write\read` will occur when you really start the program.
+	// Can not do some other concurrent operations at the same time when writing the map,
+	// unless using the lock or concurrency-safe data structures, like sync.Map。
+	// `fatal: concurrent write\read` will occur when you run the program.
 
-	// prepare appropriate room in advance，to avoid reallocating memory and rehashing after scaling up the mao.
+	// prepare appropriate room in advance，to avoid reallocating memory and rehashing after scaling up the map.
 }
 
 // Currently, after deleting enough elements from map，it won't shrink automatically, referring to `src/runtime/map.go`

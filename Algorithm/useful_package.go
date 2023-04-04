@@ -16,7 +16,9 @@ func ScatteredExamples() {
 }
 
 func ForBits() {
-	println(0b11111 &^ 0b00000) // 位置0
+	// set to 0 by bit.
+	// z = x &^ y. if the bit in `y` is 1, then the corresponding bit in `z` is 0.
+	println(0b11111 &^ 0b00001)
 
 	println(bits.OnesCount(6)) // return 2. represent the count of `1` of x in binary form.
 
