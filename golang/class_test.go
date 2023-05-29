@@ -9,9 +9,9 @@ import (
 )
 
 // struct
-// 结构体的内存对齐，见上
+// memory alignment of structs
 func TestStruct(t *testing.T) {
-	// 匿名结构体，_字段
+	// anonymous struct, _字段
 	m := struct {
 		_    int
 		Name string
@@ -31,7 +31,7 @@ func TestStruct(t *testing.T) {
 	println(f1 == f2)
 	println()
 
-	// 空结构体的长度为0，作为数组元素也是0
+	// the length of empty struct is 0, tha same as it's an item of the array.
 	// 一个不需要占用实际内存的 堆上 的变量，都会指向runtime.zerobase，例如一个空结构体的切片
 	b := struct{}{}
 	bs := [100]struct{}{}
@@ -67,7 +67,7 @@ func TestStruct(t *testing.T) {
 	println(v.Type().Field(0).Tag)
 }
 
-// 方法, 面向对象的部分实践
+// method
 func TestMethod(t *testing.T) {
 	// 一个对象可以调用其方法，以及其字段的方法
 	// 对象方法会覆盖匿名字段的方法，除非显示指定用该字段调用
@@ -95,10 +95,12 @@ func TestMethod(t *testing.T) {
 }
 
 // interface
+//
 //	type iface struct {
 //		tab  *itab // 保存interface类型、对象类型、对象方法地址
 //		data unsafe.Pointer // 实际对象指针
 //	}
+//
 // 最常用于 对包外提供访问 预留拓展空间
 // 根据实例的方法集判断对象是否实现接口
 // 接口可组合，方法不能重名
@@ -156,7 +158,7 @@ func TestInterface(t *testing.T) {
 	// var _ MultiString = x // 提示错误，因为x并没有实现该接口
 }
 
-// 嵌入匿名变量，TB继承了该变量的所有方法，当然实际调用方法的仍然是匿名变量
+// when embedding anonymous variables, TB can use all the variable's methods. and 当然实际调用方法的仍然是匿名变量
 type TB struct {
 	testing.TB
 }

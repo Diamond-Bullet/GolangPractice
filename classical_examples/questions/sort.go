@@ -5,7 +5,6 @@ import (
 	"math/rand"
 )
 
-// CountingSort MarkIt 计数排序
 func CountingSort(arr []int, k int, locate func(num int) int) []int {
 	rank := make([]int, k)
 	for _, x := range arr {
@@ -26,7 +25,6 @@ func CountingSort(arr []int, k int, locate func(num int) int) []int {
 	return ret
 }
 
-// RadixSort MarkIt 基数排序
 func RadixSort(arr []int, base, d int) []int {
 	keys := map[int][]int{}
 	for _, x := range arr {
@@ -47,7 +45,6 @@ func RadixSort(arr []int, base, d int) []int {
 	return arr
 }
 
-// QuickSort MarkIt 快速排序
 func QuickSort(arr []int) {
 	if len(arr) <= 1 {
 		return
@@ -71,7 +68,6 @@ func Partition(arr []int) int {
 	return j
 }
 
-// HeapSort MarkIt 堆排序
 func HeapSort(arr []int) {
 	Heapify(arr)
 
@@ -84,7 +80,7 @@ func HeapSort(arr []int) {
 	}
 }
 
-// Heapify 堆初始化
+// Heapify initialize the heap
 func Heapify(arr []int) {
 	n := len(arr)
 	for i := n/2 - 1; i >= 0; i-- {
@@ -92,7 +88,7 @@ func Heapify(arr []int) {
 	}
 }
 
-// SiftDown 堆结点移动
+// SiftDown move node i down to its proper position
 func SiftDown(arr []int, i int) {
 	n := len(arr)
 	for i <= n/2-1 {

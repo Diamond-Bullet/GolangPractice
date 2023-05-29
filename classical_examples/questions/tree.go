@@ -1,6 +1,6 @@
 package questions
 
-import "CodingPractice/classical_examples/data_structures"
+import "GolangPractice/classical_examples/data_structures"
 
 // InOrderWalk MarkIt 非递归,二叉树,中序遍历
 func InOrderWalk(root *data_structures.TreeNode) []int {
