@@ -1,10 +1,11 @@
-# CodingPractice
+# GolangPractice
+**study repo for Golang**
 
-**MarkDown grammar reference** https://www.markdownguide.org/basic-syntax/
+### MarkDown Grammar
+**reference** https://www.markdownguide.org/basic-syntax/
+<br><br/>
 
-### Basic Usage
-
-    reference: https://www.markdownguide.org/basic-syntax/
-----------------------------------------------
-    `#` ｜ 一级标题
-----------------------------------------------
+#### Basic Usage
+| col1 | col2 |
+|------|------|
+| 1    | 2    |
