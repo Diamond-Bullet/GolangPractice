@@ -66,7 +66,7 @@ func (st *SegmentTree) RightChild(index int) int {
 	return index<<1 + 2
 }
 
-//Query MarkIt 查询 [left, right]区间的值
+// Query MarkIt 查询 [left, right]区间的值
 func (st *SegmentTree) Query(left, right int) int {
 	if len(st.data) > 0 {
 		return st.QueryInTree(0, 0, len(st.data)-1, left, right)
