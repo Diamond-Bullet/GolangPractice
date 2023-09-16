@@ -1,11 +1,3 @@
-# GolangPractice
-**study repo for Golang**
+<h1>GolangPractice</h1>
 
-### MarkDown Grammar
-**reference** https://www.markdownguide.org/basic-syntax/
-<br><br/>
-
-#### Basic Usage
-| col1 | col2 |
-|------|------|
-| 1    | 2    |
+<strong><em>Study repo for Golang</em></strong>
