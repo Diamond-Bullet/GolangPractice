@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 )
 
 // kafka高版本server能兼容低版本client

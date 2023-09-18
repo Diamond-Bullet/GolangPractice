@@ -18,3 +18,22 @@ CREATE TABLE `friends` (
     unique key idx_friend1_friend2 (friend1,friend2) --联合索引
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+# calculate the in-disk size of table
+SELECT table_name                                             `Table`,
+       round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB`
+FROM information_schema.TABLES
+WHERE table_schema = ""
+  AND table_name = "";
+
+SHOW
+    TABLES FROM $database;
+
+SHOW CREATE
+    DATABASE $database;
+
+CREATE DATABASE $database CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+
+create table json_test (
+    data json
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
+
