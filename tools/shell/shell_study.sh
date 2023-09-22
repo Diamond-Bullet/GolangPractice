@@ -7,6 +7,7 @@
 foo="123"
 foo_name="ddd"
 foo1="111"
+foo2="${which go}"
 echo -e "变量命名：${foo}\n"
 
 # 引用传入的参数，必须是具体的数字

@@ -5,8 +5,7 @@ create table book (
     `type`       tinyint(4) unsigned NOT NULL default 0 COMMENT '0普通 1搞笑',
 
     primary key (`id`),
-    unique key `idx_book_name` (`book_name`),
-    key          `created_on` (`created_on`)
+    unique key `idx_book_name` (`book_name`)
 ) engine=InnoDB default charset=utf8mb4 comment='书本表';
 
 CREATE TABLE `friends` (
@@ -15,7 +14,7 @@ CREATE TABLE `friends` (
     `friend2`    bigint(20) unsigned NOT NULL default 0,
 
     PRIMARY KEY (`id`),
-    unique key idx_friend1_friend2 (friend1,friend2) --联合索引
+    unique key idx_friend1_friend2 (friend1,friend2) #联合索引
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 # calculate the in-disk size of table
@@ -25,11 +24,9 @@ FROM information_schema.TABLES
 WHERE table_schema = ""
   AND table_name = "";
 
-SHOW
-    TABLES FROM $database;
+SHOW TABLES FROM $database;
 
-SHOW CREATE
-    DATABASE $database;
+SHOW CREATE DATABASE $database;
 
 CREATE DATABASE $database CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
