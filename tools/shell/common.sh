@@ -51,6 +51,26 @@ wc -l text.txt
 wc -w text.txt
 
 
+## awk
+# 参考 菜鸟教程
+# BEGIN{开始时执行，仅一次};
+# {对每行进行处理};
+# END{结束时执行，仅一次}
+awk '{for(i=1;i<=NF;i++){if(NR==1){res[i]=$i;}else{res[i]=res[i]" "$i;}}};
+    END{for(i=1;i<=NF;i++){print res[i]}}' file.txt # 转置
+
+awk '{if(NR==10){print $0}}' file.txt # 输出第10行
+
+awk '{for(i=1;i<=NF;i++){res[$i]++}};
+    END{for(w in res){print w, res[w]};}' file.txt | sort -nr -k 2 # 统计词频
+
+awk '$0 ~ /^([0-9]{3}\-){2}[0-9]{4}$|^\([0-9]{3}\)\s[0-9]{3}\-[0-9]{4}$/' file.txt # 匹配手机号
+
+awk '{if($0 ~ /github\.com/){print $1"@"$2}}' go.mod # 下载go.mod下的github依赖
+
+ls -l | awk '$1 !~ /^d.*/  {print $9}' | xargs wc -l | sort -nr -k 1 # 排列目录下文件行数
+
+
 ####################### System resources #################
 ##df
 # 查看磁盘使用况

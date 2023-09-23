@@ -1,19 +1,21 @@
-function install_zsh() {
-  if [[ "$(which zsh)" == *"not found" ]]; then
-    apt update
-    apt install zsh
-  fi
+#!/bin/bash
 
-  if [[ "$SHELL" != *"zsh" ]]; then
-    chsh -s "$(which zsh)"
-  fi
-}
+if [[ "$(which zsh)" == *"not found" ]]; then
+  install_pkg zsh
+fi
+if [[ "$(which curl)" == *"not found" ]]; then
+  install_pkg curl
+fi
 
-function get_os() {
-  if [ $# -eq 1 ]; then
-    echo "参数数量为1个"
-    echo "${0}" # 函数内部也是通过 $n 获取传递的参数
-  fi
-}
+if [[ "$SHELL" != *"zsh" ]]; then
+  chsh -s "$(which zsh)"
+fi
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || exit 1
+
+function install_pkg() {
+  if [ $# -eq 1 ]; then
+    _=$(yum install "${1}")
+    _=$(apt install "${1}")
+  fi
+}
