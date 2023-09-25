@@ -51,6 +51,11 @@ wc -l text.txt
 wc -w text.txt
 
 
+##uniq
+# group by line and count the number of same line.
+uniq -c text.txt
+
+
 ## awk
 # 参考 菜鸟教程
 # BEGIN{开始时执行，仅一次};
@@ -83,4 +88,3 @@ du -h --max-depth=1 ./*
 
 # 查看该文件夹大小
 du -hs [path]
-
