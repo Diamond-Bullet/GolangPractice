@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/buger/jsonparser"
+	"github.com/gookit/color"
 	"github.com/pkg/errors"
 	"github.com/tealeg/xlsx"
 )
@@ -62,4 +63,28 @@ func TestGoErrors(t *testing.T) {
 	if err != nil {
 		println(errors.Wrap(err, "strconv.Atoi failed"))
 	}
+}
+
+func TestColorfulPrint(t *testing.T) {
+	color.Blueln("I am great")
+
+	// work on linux or macOS.
+	// https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
+	colorReset := "\033[0m"
+	colorRed := "\033[31m"
+	colorGreen := "\033[32m"
+	colorYellow := "\033[33m"
+	colorBlue := "\033[34m"
+	colorPurple := "\033[35m"
+	colorCyan := "\033[36m"
+	colorWhite := "\033[37m"
+
+	fmt.Println(colorRed, "test")
+	fmt.Println(colorGreen, "test")
+	fmt.Println(colorYellow, "test")
+	fmt.Println(colorBlue, "test")
+	fmt.Println(colorPurple, "test")
+	fmt.Println(colorWhite, "test")
+	fmt.Println(colorCyan, "test", colorReset)
+	fmt.Println("next")
 }
