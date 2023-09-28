@@ -94,6 +94,7 @@ du -h --max-depth=1 ./*
 du -hs [path]
 
 # network traffic analysis
+# https://www.scaler.com/topics/linux-monitor-network-traffic/
 cat /proc/net/dev
 ifconfig
 
