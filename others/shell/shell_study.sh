@@ -4,11 +4,17 @@
 # All commands shell script executes are linux commands.
 
 # variable naming
-foo="123"
-foo1_name=${PATH} # store the value of an exported variable
+foo="123" # no space allowed.
+foo1_name="${PATH}" # expressions work in double quotes.
+foo2_name='$PATH' # expressions don't work in single quotes. plain text.
 foo1="$(which go)" # store the output of command in variable
 
 echo -e "variable naming: ${foo}, ${foo1_name}, ${foo1}\n" # reference variable in other place.
+
+export foo # export variable as an environmental variable.
+export foo2="golang"
+
+unset foo # cancel exporting variable.
 
 # 引用传入的参数，必须是具体的数字
 echo -e "执行文件名：${0}\n"

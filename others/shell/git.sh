@@ -6,6 +6,8 @@ git config --global http.proxy http://127.0.0.1:12333
 # initialize a git repo in specified path(it is a subdirectory of current folder), `.` by default.
 git init [directory]
 
+# TODO 	usage of `.gitmodules`
+
 ## commit
 # alter the message of last commit
 git commit --amend -m "message"
@@ -45,6 +47,24 @@ git rm -f --cached [file]
 ## log
 # show commit history for current branch.
 git log
+# show history of the file.
+git log [file]
+# just show commit_id and message.
+git log --pretty=oneline
+# show modified files.
+git log --stat
+
+## show
+# show changes of the commit, and of the file if specified.
+git show [commit_id] [file]
+# just show changed files of the commit.
+git show --stat [commit_id]
+
+## diff. show difference between A and B. A, B can be commits, or branches.
+# if specify a file, only show difference in the file.
+git diff A B [file]
+# just show files having difference.
+git diff --stat
 
 # list traced files in current folder. -O for untracked.
 # https://blog.csdn.net/ystyaoshengting/article/details/104029519
