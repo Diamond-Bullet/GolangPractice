@@ -1,4 +1,4 @@
-package tools
+package others
 
 func SliceContainString(s []string, p string) bool {
 	for _, ss := range s {
