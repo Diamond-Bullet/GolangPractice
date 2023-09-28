@@ -66,12 +66,14 @@ awk '{if($0 ~ /github\.com/){print $1"@"$2}}' go.mod # 下载go.mod下的github�
 
 ls -l | awk '$1 !~ /^d.*/  {print $9}' | xargs wc -l | sort -nr -k 1 # 排列目录下文件行数
 
+## chmod
+chmod -R 600 [path]
+chmod -R +x [path]
 
 ####################### Profiling #################
 ##df
 # 查看磁盘使用况
 df -hT
-
 
 ##du
 # 查看当前文件夹下各个文件占用空间大小
