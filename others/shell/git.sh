@@ -33,4 +33,17 @@ git branch --set-upstream-to=[remote_branch] [local_branch]
 git remote set-url origin https://github.com/szq-123/codingPractice.git
 
 
+## git reset. reset the `head` pointer and the branch pointer that `head` is pointing at.
+# reset local repo.
+git reset --soft [commit_id]
+# reset local repo and 暂存区.
+git reset --mixed [commit_id]
+# reset local repo, 暂存区 and workspace.
+git reset --hard [commit_id]
+
+
+# list traced files in current folder. -O for untracked.
+# https://blog.csdn.net/ystyaoshengting/article/details/104029519
+git ls-files [path||file_name]
+git ls-files -O [path||file_name]
 

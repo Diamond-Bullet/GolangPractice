@@ -1,6 +1,6 @@
-package others
+package slice
 
-func SliceContainString(s []string, p string) bool {
+func ContainString(s []string, p string) bool {
 	for _, ss := range s {
 		if ss == p {
 			return true
