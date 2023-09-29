@@ -1,39 +1,6 @@
-####################### Remote Interaction #################
-## ssh
-# generate key pair and copy to remote server.
-ssh-keygen -t rsa
-ssh-copy-id root@1.2.3.4
-# login
-ssh user@1.2.3.4
-# scp src dst
-scp test.txt  root@1.2.3.4:/root
-scp root@1.2.3.4:/root/test.txt .
+####################### Trifle #################
 
-## ln
-ln -s target_file link_file
-# change target of link_file
-ln -snf target_file link_file
-
-## netstat
-# install
-apt install net-tools
-
-netstat -lnap
-# list all network adapters
-netstat -i
-
-# print the amount of different states for tcp.
-# https://computingforgeeks.com/how-to-check-tcp-connections-states-in-linux-with-netstat/
-netstat -nat | awk '{print $6}' | sort | uniq -c | sort -r
-
-## lsof. list open file
-# https://www.cnblogs.com/muchengnanfeng/p/9554993.html
-# search by port
-lsof -i:1234
-# search by process id
-lsof -p 1234
-
-####################### Text Processing #################
+####################### Text & File #################
 ## sort. 对文件中所有行，默认字典序排序. -n 按数值排序；-k 取某一列排序；-t 指定列的分隔符；-r 倒序；
 sort -n -k 5 -t " " text.txt
 
@@ -70,6 +37,16 @@ ls -l | awk '$1 !~ /^d.*/  {print $9}' | xargs wc -l | sort -nr -k 1 # 排列目
 chmod -R 600 [path]
 chmod -R +x [path]
 
+## ln
+ln -s target_file link_file
+# change target of link_file
+ln -snf target_file link_file
+
+## clear content of the file.
+true > test.txt
+cat /dev/null > test.txt
+echo > test.txt
+
 ####################### Profiling #################
 ##df
 # 查看磁盘使用况
@@ -90,3 +67,70 @@ ifconfig
 nethogs
 # show realtime traffic for each tcp connection
 iftop
+
+## netstat
+# install
+apt install net-tools
+
+netstat -lnap
+# list all network adapters
+netstat -i
+
+# print the amount of different states for tcp.
+# https://computingforgeeks.com/how-to-check-tcp-connections-states-in-linux-with-netstat/
+netstat -nat | awk '{print $6}' | sort | uniq -c | sort -r
+
+## lsof. list open file
+# https://www.cnblogs.com/muchengnanfeng/p/9554993.html
+# search by port
+lsof -i:1234
+# search by process id
+lsof -p 1234
+
+####################### Run #################
+# no hang up. continue running after existing the shell.
+# > redirect the output.
+# 0 standard input; 1 standard output; 2 standard error.
+# & run program in the background.
+nohup tmp.exe > log.txt 2>&1 &
+
+## jobs. show background tasks.
+jobs
+
+## kill
+# kill the No.1 background task. see the number in `jobs`.
+kill %1
+
+####################### Remote Interaction #################
+## ssh
+# generate key pair and copy to remote server.
+ssh-keygen -t rsa
+ssh-copy-id root@1.2.3.4
+# login
+ssh user@1.2.3.4
+# scp src dst
+scp test.txt  root@1.2.3.4:/root
+scp root@1.2.3.4:/root/test.txt .
+
+## openssl. To generate more types of certificate, refer to internet docs.
+# generate key
+openssl genrsa -des3 -out server.key 2048
+# show key's content
+openssl rsa -text -in server.key
+# generate doc for applying for certificate
+openssl req -new -key server.key -out server.csr
+# show doc's content
+openssl req -text -in server.csr -noout
+# generate certificate
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
+## ncat 正反向shell:
+# 正向Shell，服务器上使用ncat监听
+ncat -l [port] -e /bin/bash
+# 开发机上连接
+ncat [remote_ip] [port]
+
+#反向Shell，开发机上使用ncat监听
+ncat -l [port]
+# 服务器上连接
+ncat [local_ip] [port] -e /bin/bash
