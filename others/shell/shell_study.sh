@@ -4,10 +4,10 @@
 # All commands shell script executes are linux commands.
 
 # variable naming
-foo="123" # no space allowed.
+foo="123"           # no space allowed.
 foo1_name="${PATH}" # expressions work in double quotes.
-foo2_name='$PATH' # expressions don't work in single quotes. plain text.
-foo1="$(which go)" # store the output of command in variable
+foo2_name='$PATH'   # expressions don't work in single quotes. plain text.
+foo1="$(which go)"  # store the output of command in variable
 
 echo -e "variable naming: ${foo}, ${foo1_name}, ${foo1}\n" # reference variable in other place.
 
@@ -73,6 +73,15 @@ function testFunc() {
 }
 
 testFunc 1 2
+
+## environment variables. https://www.linuxprobe.com/environment-variable-configuration.html
+#	.profile文件只在用户登录的时候读取一次，而.bashrc会在每次运行Shell脚本的时候读取一次。
+#	可以自定义一个环境变量文件，比如在某个项目下定义uusama.profile，在这个文件中使用export定义一系列变量，
+#	然后在~/.profile文件后面加上：source uusama.profile，这样你每次登陆都可以在Shell脚本中使用自己定义的一系列变量。
+# 系统级
+cat /etc/environment /etc/profile /etc/bash.bashrc /etc/profile.d/test.sh
+# 用户级
+cat ~/.profile ~/.bashrc
 
 ####################### Examples #################
 # .kinit_auto.sh脚本，开机自动kinit
