@@ -22,7 +22,7 @@ git branch -a
 # create a branch
 git branch [name]
 # create a branch from specified commit or branch. from current branch by default.
-git checkout -b [name] [commit_id||branch_name]
+git checkout -b [name] [commit_id || branch_name]
 # delete local branch, -D for force delete.
 git branch -d [name]
 git branch -D [name]
@@ -68,6 +68,34 @@ git diff --stat
 
 # list traced files in current folder. -O for untracked.
 # https://blog.csdn.net/ystyaoshengting/article/details/104029519
-git ls-files [path||file_name]
-git ls-files -O [path||file_name]
+git ls-files [path || file_name]
+git ls-files -O [path || file_name]
 
+## stash. https://www.atlassian.com/git/tutorials/saving-changes/git-stash
+# store changes into stash list.
+git stash
+# save with message.
+git stash save "message"
+# show stash list.
+git stash list
+# show difference between workspace and stash.
+git stash show -p stash@{$num}
+# apply and not delete the stash.
+git stash apply stash@{$num}
+# push, pop
+git stash push stash@{$num}
+git stash pop stash@{$num}
+
+## tag
+# list tags
+git tag
+# add tag to specified commit. if commit_id is not provided, add to newest.
+git tag -a V1.2 [commit_id] -m 'release 1.2'
+# delete local tag
+git tag -d V1.2
+# push all local tags to remote repo.
+git push origin --tags
+# push specified tag to remote repo.
+git push origin [tag_name]
+# delete remote tag.
+git push origin :refs/tags/V1.2
