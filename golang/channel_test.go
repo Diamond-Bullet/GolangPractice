@@ -66,58 +66,6 @@ func TestChannel2(t *testing.T) {
 func TestChannel3(t *testing.T) {
 	ch := make(chan int, 2)
 
-	// fetch data from closed channel. the received are the default value of channel's underlying type.
-	//go func() {
-	//	for {
-	//		fmt.Printf("go routine: %d\n", <-ch)
-	//		time.Sleep(time.Second)
-	//	}
-	//}()
-	//
-	//for i := 0; i < 3; i++ {
-	//	ch <- 1
-	//	fmt.Printf("main thread: %d\n", i)
-	//}
-	//close(ch)
-	//time.Sleep(10*time.Second)
-
-	// Sending datum to closed channel, causing panic.
-	//go func() {
-	//	for i:=0;i<5;i++{
-	//		fmt.Printf("go routine: %d\n", <-ch)
-	//		time.Sleep(time.Second)
-	//	}
-	//	close(ch)
-	//}()
-	//
-	//for i := 0; i < 10; i++ {
-	//	ch <- 1
-	//	fmt.Printf("main thread: %d\n", i)
-	//}
-	//
-	//time.Sleep(10*time.Second)
-
-	// `ok` semantics, helping you judge whether channel closes.
-	//go func() {
-	//	for {
-	//		x, ok := <-ch
-	//		if ok {
-	//			fmt.Printf("go routine: %d\n", x)
-	//			time.Sleep(time.Second)
-	//		} else {
-	//			fmt.Println("go routine: channel has been closed")
-	//			break
-	//		}
-	//	}
-	//}()
-	//
-	//for i := 0; i < 3; i++ {
-	//	ch <- 1
-	//	fmt.Printf("main thread: %d\n", i)
-	//}
-	//close(ch)
-	//time.Sleep(10*time.Second)
-
 	// `for-range` traverses channel. if channel is empty, it's blocked. if channel is closed, it's over.
 	go func() {
 		for x := range ch {
@@ -128,6 +76,70 @@ func TestChannel3(t *testing.T) {
 	}()
 
 	for i := 0; i < 5; i++ {
+		ch <- 1
+		fmt.Printf("main thread: %d\n", i)
+	}
+	close(ch)
+	time.Sleep(10 * time.Second)
+}
+
+func TestChannel31(t *testing.T) {
+	ch := make(chan int, 2)
+
+	// fetch data from closed channel. the received are the default value of channel's underlying type.
+	go func() {
+		for {
+			fmt.Printf("go routine: %d\n", <-ch)
+			time.Sleep(time.Second)
+		}
+	}()
+
+	for i := 0; i < 3; i++ {
+		ch <- 1
+		fmt.Printf("main thread: %d\n", i)
+	}
+	close(ch)
+	time.Sleep(10 * time.Second)
+}
+
+func TestChannel32(t *testing.T) {
+	ch := make(chan int, 2)
+
+	// Sending datum to closed channel, causing panic.
+	go func() {
+		for i := 0; i < 5; i++ {
+			fmt.Printf("go routine: %d\n", <-ch)
+			time.Sleep(time.Second)
+		}
+		close(ch)
+	}()
+
+	for i := 0; i < 10; i++ {
+		ch <- 1
+		fmt.Printf("main thread: %d\n", i)
+	}
+
+	time.Sleep(10 * time.Second)
+}
+
+func TestChannel33(t *testing.T) {
+	ch := make(chan int, 2)
+
+	// `ok` semantics, helping you judge whether channel closes.
+	go func() {
+		for {
+			x, ok := <-ch
+			if ok {
+				fmt.Printf("go routine: %d\n", x)
+				time.Sleep(time.Second)
+			} else {
+				fmt.Println("go routine: channel has been closed")
+				break
+			}
+		}
+	}()
+
+	for i := 0; i < 3; i++ {
 		ch <- 1
 		fmt.Printf("main thread: %d\n", i)
 	}
@@ -168,30 +180,32 @@ func TestChannel4(t *testing.T) {
 	}
 	close(done)
 	time.Sleep(5 * time.Second)
+}
 
-	// TODO Not so definite here
+func TestChannel42(t *testing.T) {
 	// randomly select a channel and send data随机选择一个管道，向其发送数据并执行，管道满则该case阻塞
-	//ch2 := make(chan int, 2)
-	//go func() {
-	//	for {
-	//		select {
-	//		case ch1 <- 1:
-	//			fmt.Printf("go routine ch1: %d\n", 1)
-	//		case ch2 <- 1:
-	//			fmt.Printf("go routine ch2: %d\n", 1)
-	//		default:
-	//			fmt.Println("channel are filled with data!")
-	//			time.Sleep(2 * time.Second)
-	//		}
-	//	}
-	//}()
-	//
-	//for i := 0; i < 5; i++ {
-	//	<-ch1
-	//	<-ch2
-	//	time.Sleep(time.Second)
-	//}
-	//time.Sleep(10 * time.Second)
+	ch1 := make(chan int, 2)
+	ch2 := make(chan int, 2)
+	go func() {
+		for {
+			select {
+			case ch1 <- 1:
+				fmt.Printf("go routine ch1: %d\n", 1)
+			case ch2 <- 1:
+				fmt.Printf("go routine ch2: %d\n", 1)
+			default:
+				fmt.Println("channel are filled with data!")
+				time.Sleep(2 * time.Second)
+			}
+		}
+	}()
+
+	for i := 0; i < 5; i++ {
+		<-ch1
+		<-ch2
+		time.Sleep(time.Second)
+	}
+	time.Sleep(10 * time.Second)
 }
 
 // single-direction(one-way) channel, generally applied to receiver and sender respectively.
