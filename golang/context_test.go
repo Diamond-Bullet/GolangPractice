@@ -29,7 +29,6 @@ func TestContextWithTimeOut(t *testing.T) {
 		}
 	}(c)
 
-	// time.Sleep(15*time.Second)
 	time.Sleep(5 * time.Second)
 	cancel() // Both timeout and calling method `cancel`, are sending a signal to the channel `Done`.
 	time.Sleep(5 * time.Second)

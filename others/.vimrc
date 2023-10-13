@@ -1,10 +1,10 @@
-"显示行号
+"show line number
 set nu
 
 "语法高亮
 syntax on
 
-"tab缩进
+"tab indent
 set tabstop=4
 set shiftwidth=4
 set expandtab

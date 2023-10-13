@@ -169,7 +169,8 @@ func TestInterface(t *testing.T) {
 	// var _ StringType1 = x // 提示错误，因为x并没有实现该接口
 }
 
-// when embedding anonymous variables, TB can use all the variable's methods. and 当然实际调用方法的仍然是匿名变量
+// when embedding anonymous variables, TB can use all the variable's methods.
+// of course, the variable calling the method
 type TB struct {
 	testing.TB
 }
