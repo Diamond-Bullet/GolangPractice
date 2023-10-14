@@ -9,18 +9,18 @@ import (
 )
 
 // struct
-// memory alignment of structs
-func TestStruct(t *testing.T) {
+func TestAnonymous(t *testing.T) {
 	// anonymous struct, _字段
 	m := struct {
 		_    int
 		Name string
 		Age  int
 	}{Name: "song", Age: 18}
-	fmt.Printf("%#v\n", m)
-	println()
+	fmt.Println(m)
+}
 
-	// 在所有字段都支持==、!=时，struct可比较
+func TestCompare(t *testing.T) {
+	// when all fields support operators ==、!=, this struct is comparable.
 	type Foo struct {
 		Name string
 		Age  int
@@ -28,17 +28,21 @@ func TestStruct(t *testing.T) {
 	}
 	f1 := Foo{Name: "song", Age: 12}
 	f2 := Foo{Name: "li", Age: 12}
-	println(f1 == f2)
-	println()
+	f3 := Foo{Name: "li", Age: 12}
+	fmt.Println("f1 == f2: ", f1 == f2)
+	fmt.Println("f2 == f3: ", f2 == f3)
+}
 
+func TestEmptyStruct(t *testing.T) {
 	// the length of empty struct is 0, tha same as it's an item of the array.
-	// 一个不需要占用实际内存的 堆上 的变量，都会指向runtime.zerobase，例如一个空结构体的切片
+	// a variable does not need actual memory space in heap, will point to runtime.zerobase.
+	// for instance, a slice of empty struct
 	b := struct{}{}
 	bs := [100]struct{}{}
-	println(unsafe.Sizeof(b))
-	println(unsafe.Sizeof(bs))
+	println("size of b:", unsafe.Sizeof(b))
+	println("size of bs:", unsafe.Sizeof(bs))
 
-	// 使用空结构体在管道中做通信
+	// use empty struct to 使用空结构体在管道中做通信
 	c := make(chan struct{})
 	go func() {
 		<-time.After(3 * time.Second)
@@ -48,17 +52,24 @@ func TestStruct(t *testing.T) {
 	case <-c:
 		println("get struct, exit")
 	}
-	println()
+}
+
+// memory alignment of structs
+func TestStruct(t *testing.T) {
+	type Foo struct {
+		Name string
+		Age  int
+	}
 
 	// 结构体的组合
 	// 匿名字段，只有类型，没有名称的字段，
 	// 默认以类型名作为字段名，但可以直接引用匿名字段成员
 	// 可以是任何类型、类型指针。
 	type Bar struct {
-		Height int `高度:"完美"` // Tag，字段标签
 		Foo
-		int     // 名称为int
-		*string // 名称为string
+		Height  int `高度:"完美"` // Tag，字段标签
+		int                       // 名称为int
+		*string                   // 名称为string
 		// string 类型及其指针字段名相同，不能同时包含
 	}
 

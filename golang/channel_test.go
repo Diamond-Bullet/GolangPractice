@@ -12,11 +12,7 @@ import (
 // refer to `sudog`
 
 // Sending to a full channel shall block the goroutine, until receiver draws one out of the channel so the channel is no longer full.
-func TestChannel1(t *testing.T) {
-	//ch := make(chan int)
-	//
-	//ch <- 1
-
+func TestSend2Full(t *testing.T) {
 	ch := make(chan int, 3)
 	go func() {
 		time.Sleep(5 * time.Second)
@@ -31,24 +27,8 @@ func TestChannel1(t *testing.T) {
 }
 
 // fetching data from empty channel, resulting in blocking the receiver goroutine.
-func TestChannel2(t *testing.T) {
-	//ch := make(chan int)
-	//
-	//go func() {
-	//	for {
-	//
-	//		<-ch
-	//		fmt.Printf("go routine: %d", 1)
-	//	}
-	//}()
-	//
-	//for {
-	//	ch <- 1
-	//	time.Sleep(time.Second)
-	//	fmt.Printf("main thread: %d", 1)
-	//}
-
-	ch := make(chan int, 3)
+func TestFetchFromEmpty(t *testing.T) {
+	ch := make(chan int, 1)
 	go func() {
 		for {
 			<-ch
@@ -59,11 +39,10 @@ func TestChannel2(t *testing.T) {
 	for {
 		ch <- 1
 		time.Sleep(time.Second)
-		fmt.Printf("main thread: %d", 1)
 	}
 }
 
-func TestChannel3(t *testing.T) {
+func TestForRange(t *testing.T) {
 	ch := make(chan int, 2)
 
 	// `for-range` traverses channel. if channel is empty, it's blocked. if channel is closed, it's over.
@@ -83,7 +62,7 @@ func TestChannel3(t *testing.T) {
 	time.Sleep(10 * time.Second)
 }
 
-func TestChannel31(t *testing.T) {
+func TestFetchFromClosed(t *testing.T) {
 	ch := make(chan int, 2)
 
 	// fetch data from closed channel. the received are the default value of channel's underlying type.
@@ -102,7 +81,7 @@ func TestChannel31(t *testing.T) {
 	time.Sleep(10 * time.Second)
 }
 
-func TestChannel32(t *testing.T) {
+func TestSend2Closed(t *testing.T) {
 	ch := make(chan int, 2)
 
 	// Sending datum to closed channel, causing panic.
@@ -122,7 +101,7 @@ func TestChannel32(t *testing.T) {
 	time.Sleep(10 * time.Second)
 }
 
-func TestChannel33(t *testing.T) {
+func TestOkJudge(t *testing.T) {
 	ch := make(chan int, 2)
 
 	// `ok` semantics, helping you judge whether channel closes.
@@ -151,7 +130,7 @@ func TestChannel33(t *testing.T) {
 
 // `for-select`, https://programs.wiki/wiki/analysis-of-go-bottom-series-select-principle.html
 // select does not cycle(circulate, recur) itself.
-func TestChannel4(t *testing.T) {
+func TestSelectGet(t *testing.T) {
 	ch1 := make(chan int, 2)
 
 	// randomly select a case from ready ones, get data from it and execute. if no default statement here and no case ready, it's blocked.
@@ -165,7 +144,7 @@ func TestChannel4(t *testing.T) {
 				return
 			case x := <-ch1:
 				fmt.Printf("go routine ch1: %d\n", x)
-			case x := <-time.After(400 * time.Millisecond):
+			case x := <-time.After(4 * time.Second):
 				fmt.Printf("go routine time out: %v\n", x)
 				//default:
 				//	fmt.Println("go routine nothing from channel")
@@ -182,7 +161,7 @@ func TestChannel4(t *testing.T) {
 	time.Sleep(5 * time.Second)
 }
 
-func TestChannel42(t *testing.T) {
+func TestSelectSend(t *testing.T) {
 	// randomly select a channel and send data随机选择一个管道，向其发送数据并执行，管道满则该case阻塞
 	ch1 := make(chan int, 2)
 	ch2 := make(chan int, 2)
@@ -212,7 +191,7 @@ func TestChannel42(t *testing.T) {
 // so there is stricter restriction on both sides to prevent misoperations(misuse).
 
 // random number based on channel, just for fun.
-func TestChRandom(t *testing.T) {
+func TestRandom(t *testing.T) {
 	random(100)
 }
 
