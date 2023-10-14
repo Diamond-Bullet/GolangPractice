@@ -92,3 +92,7 @@ func TestMock(t *testing.T) {
 		convey.So(Add(1, 3), convey.ShouldEqual, 4) // fail
 	})
 }
+
+func Add(x, y int) int {
+	return x + y
+}

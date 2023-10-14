@@ -119,8 +119,8 @@ func TestInterface(t *testing.T) {
 
 	//  实例的方法集没有实现接口，指针实现了
 	// m := Manager{}
-	// multi1 := MultiString(m)
-	// multi2 := MultiString(&m)
+	// multi1 := StringType1(m)
+	// multi2 := StringType1(&m)
 
 	// 空接口没有方法，所有被任何类型实现
 	// 如果实现接口的类型支持，那么接口可比较
@@ -133,8 +133,8 @@ func TestInterface(t *testing.T) {
 	// println(t1 == t2)
 
 	// 接口组合
-	var mm MMMMMultiString
-	var m MultiString = mm
+	var mm StringType2
+	var m StringType1 = mm
 	println(m, "\n")
 
 	// 匿名接口
@@ -158,7 +158,7 @@ func TestInterface(t *testing.T) {
 
 	// 接口的类型转换。
 	// 接口和接口, 不使用ok模式会panic
-	if x, ok := mm.(MultiString); ok {
+	if x, ok := mm.(StringType1); ok {
 		println(x)
 	}
 	// 接口和具体类型，同样可以ok模式，或者 switch a.(type) case int ...
@@ -166,7 +166,7 @@ func TestInterface(t *testing.T) {
 
 	// 通过编译器检查是否实现某个接口
 	// var x string
-	// var _ MultiString = x // 提示错误，因为x并没有实现该接口
+	// var _ StringType1 = x // 提示错误，因为x并没有实现该接口
 }
 
 // when embedding anonymous variables, TB can use all the variable's methods. and 当然实际调用方法的仍然是匿名变量

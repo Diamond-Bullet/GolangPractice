@@ -7,7 +7,7 @@ func (u User) toString() {
 }
 
 func (u *User) toString2() {
-	println("user user")
+	println("user2")
 }
 
 type Manager struct {
@@ -19,19 +19,15 @@ func (m Manager) toString() {
 }
 
 func (m *Manager) toString2() {
-	println("manager manager")
+	println("manager2")
 }
 
-type MultiString interface {
+type StringType1 interface {
 	toString()
 	toString2()
 }
 
-type MMMMMultiString interface {
-	MultiString
+type StringType2 interface {
+	StringType1
 	toString3()
-}
-
-func Add(x, y int) int {
-	return x + y
 }
