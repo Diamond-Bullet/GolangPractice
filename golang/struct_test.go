@@ -9,8 +9,8 @@ import (
 )
 
 // struct
-func TestAnonymous(t *testing.T) {
-	// anonymous struct, _字段
+func TestAnonymousStruct(t *testing.T) {
+	// anonymous struct, `_` field
 	m := struct {
 		_    int
 		Name string
@@ -42,35 +42,41 @@ func TestEmptyStruct(t *testing.T) {
 	println("size of b:", unsafe.Sizeof(b))
 	println("size of bs:", unsafe.Sizeof(bs))
 
-	// use empty struct to 使用空结构体在管道中做通信
+	// use empty struct in channel to communicate between goroutines.
 	c := make(chan struct{})
 	go func() {
 		<-time.After(3 * time.Second)
 		c <- struct{}{}
 	}()
+
 	select {
 	case <-c:
 		println("get struct, exit")
 	}
 }
 
-// memory alignment of structs
-func TestStruct(t *testing.T) {
+func TestEmbedStruct(t *testing.T) {
 	type Foo struct {
 		Name string
 		Age  int
 	}
 
-	// 结构体的组合
-	// 匿名字段，只有类型，没有名称的字段，
-	// 默认以类型名作为字段名，但可以直接引用匿名字段成员
-	// 可以是任何类型、类型指针。
+	type Foo1 struct {
+		Name string
+	}
+
+	// embedded struct
+
+	// anonymous field, use type but not particular name. in this case, this field is named with its type name.
+	// we can use members in anonymous field directly.
+	// anonymous field can be any type or pointer.
 	type Bar struct {
 		Foo
-		Height  int `高度:"完美"` // Tag，字段标签
-		int                       // 名称为int
-		*string                   // 名称为string
-		// string 类型及其指针字段名相同，不能同时包含
+		FooFoo  Foo1
+		Height  int `height:"180"` // Tag
+		int                        // name: int
+		*string                    // name: string
+		// since `string` and `*string` have the same field name, they can not exist together.
 	}
 
 	bb := Bar{Height: 12}
@@ -78,50 +84,45 @@ func TestStruct(t *testing.T) {
 	println(v.Type().Field(0).Tag)
 }
 
-// method
 func TestMethod(t *testing.T) {
-	// 一个对象可以调用其方法，以及其字段的方法
-	// 对象方法会覆盖匿名字段的方法，除非显示指定用该字段调用
+	// an instance can call its methods and methods of its struct members.
+	// if instance `m` and one of it struct member have methods with the same name `Foo`, m.Foo() is calling m's.
 	m := Manager{}
 	m.toString()
-	m.User.toString()
+	m.User.toString() // if we want to call its struct member's method, specify the struct member.
 	println("————————————————————————")
 
-	// 实例和指针的方法集不同，但是它们均可以调用所有方法，不论其接收者是实例还是指针
+	// instance and pointer have different method sets. however, whatever the method's receiver is, both the two can call it.
 	m.toString2()
 	(&m).toString()
 	println("————————————————————————")
 
-	// 方法集：
-	// 实例：所有 receiver T 的方法
-	// 指针：所有 receiver T, *T 的方法
-	// 嵌入S，T包含所有 receiver S 方法
-	// 嵌入*S，T包含所有 receiver S, *S 方法
-	// 嵌入S或者*S，*T包含所有 receiver S, *S 方法
+	// method set：
+	// instance: methods with receiver T
+	// pointer: methods with receiver T or *T
+	// when embed S, T has all methods with receiver S
+	// when embed *S, T has all methods with receiver S or *S
+	// when embed S or *S, *T has all methods with receiver S or *S
 	ty := reflect.TypeOf(m)
 	for i, n := 0, ty.NumMethod(); i < n; i++ {
 		me := ty.Method(i)
 		fmt.Println(me.Name, me.Type)
 	}
+
+	// var _ StringType1 = Manager{} // `Manager` does not implement the interface
+	var _ StringType1 = &Manager{} // `*Manager` does
 }
 
 // interface
 //
 //	type iface struct {
-//		tab  *itab // 保存interface类型、对象类型、对象方法地址
-//		data unsafe.Pointer // 实际对象指针
+//		tab  *itab // store interface typ, object type and object methods addresses.
+//		data unsafe.Pointer // point to the object
 //	}
 //
-// 最常用于 对包外提供访问 预留拓展空间
-// 根据实例的方法集判断对象是否实现接口
-// 接口可组合，方法不能重名
+// an interface is a set of methods or a set of types.
+// interface can embed another one. they can't have method with the same name.
 func TestInterface(t *testing.T) {
-
-	//  实例的方法集没有实现接口，指针实现了
-	// m := Manager{}
-	// multi1 := StringType1(m)
-	// multi2 := StringType1(&m)
-
 	// 空接口没有方法，所有被任何类型实现
 	// 如果实现接口的类型支持，那么接口可比较
 	var t1, t2 interface{}
@@ -129,8 +130,6 @@ func TestInterface(t *testing.T) {
 	t1, t2 = 100, 100
 	println(reflect.TypeOf(t1).String())
 	println(t1 == t2)
-	// t1, t2 = []int{}, []int{}
-	// println(t1 == t2)
 
 	// 接口组合
 	var mm StringType2
@@ -170,7 +169,7 @@ func TestInterface(t *testing.T) {
 }
 
 // when embedding anonymous variables, TB can use all the variable's methods.
-// of course, the variable calling the method
+// of course, it's the anonymous variable calling the method
 type TB struct {
 	testing.TB
 }
