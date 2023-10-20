@@ -6,14 +6,14 @@ import (
 	"testing"
 )
 
-// runtime go运行时
+// runtime stands for the time the go process is running.
 
 func TestMajorFunc(t *testing.T) {
-	runtime.GC() // 垃圾回收
+	runtime.GC() // garbage collection
 
-	runtime.NumGoroutine() // 当前goroutine数量
+	runtime.NumGoroutine() // current goroutine amount
 }
 
 func TestDebug(t *testing.T) {
-	debug.PrintStack() // 打印调用栈
+	debug.PrintStack() // print calling stack
 }

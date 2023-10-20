@@ -2,6 +2,7 @@ package golang
 
 import (
 	"fmt"
+	"github.com/gookit/color"
 	"reflect"
 	"runtime"
 	"testing"
@@ -95,7 +96,8 @@ func TestPointer(t *testing.T) {
 // defer: last in, first out
 //
 // reference：https://studygolang.com/articles/16067
-//		https://www.cnblogs.com/makelu/p/11226974.html
+//
+//	https://www.cnblogs.com/makelu/p/11226974.html
 func TestDefer(t *testing.T) {
 	defer func() {
 		println(1)
@@ -275,7 +277,7 @@ func TestMap(t *testing.T) {
 	}
 
 	change(m)
-	println(m[1]) // result:2, map is a pointer
+	println(m[1]) // result: 2, map is a pointer
 
 	// adding or eliminating key during traversing the map is safe.
 	for i := 2; i < 5; i++ {
@@ -296,20 +298,24 @@ func TestMap(t *testing.T) {
 
 // Currently, after deleting enough elements from map，it won't shrink automatically, referring to `src/runtime/map.go`
 func TestMapShrinkWhenDelete(t *testing.T) {
+	const EntryAmount = 10000
+
 	m := make(map[int]int)
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < EntryAmount; i++ {
 		m[i] = i
 		if (i+1)%100 == 0 {
 			// this expression is based on the structure of map, map returned by `make` is a reference to `hmap`
 			// you can see the comprised fields of it in the mentioned file.
-			fmt.Print(*(*uint8)(unsafe.Pointer(uintptr(*(*unsafe.Pointer)(unsafe.Pointer(&m))) + uintptr(9))), " ")
+			color.Redp(*(*uint8)(unsafe.Pointer(uintptr(*(*unsafe.Pointer)(unsafe.Pointer(&m))) + uintptr(9))), " ")
 		}
 	}
+
 	println()
-	for i := 0; i < 10000; i++ {
+
+	for i := 0; i < EntryAmount; i++ {
 		delete(m, i)
 		if (i+1)%1000 == 0 {
-			fmt.Print(*(*uint8)(unsafe.Pointer(uintptr(*(*unsafe.Pointer)(unsafe.Pointer(&m))) + uintptr(9))), " ")
+			color.Greenp(*(*uint8)(unsafe.Pointer(uintptr(*(*unsafe.Pointer)(unsafe.Pointer(&m))) + uintptr(9))), " ")
 		}
 	}
 }

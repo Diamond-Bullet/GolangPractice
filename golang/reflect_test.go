@@ -6,11 +6,12 @@ import (
 	"testing"
 )
 
-// https://zhuanlan.zhihu.com/p/269096255 #introduce CanSet, CanAddr, flag
+// https://zhuanlan.zhihu.com/p/269096255 introduce CanSet, CanAddr, flag
 
 // Reflect.
 // an Interface type variable stores a 2-elements tuple: (value, type)
-func TestReflectBase(t *testing.T) {
+
+func TestBase(t *testing.T) {
 	var x float64
 	fmt.Printf("x type: %v\n", reflect.TypeOf(x))   // Type
 	fmt.Printf("x value: %v\n", reflect.ValueOf(x)) // Value
@@ -35,7 +36,7 @@ func TestReflectBase(t *testing.T) {
 	fmt.Println(p, p.Elem())
 }
 
-func TestReflectTypeOf(t *testing.T) {
+func TestReflectType(t *testing.T) {
 	var x User
 	tx := reflect.TypeOf(x)
 	fmt.Println("x type: ", tx) // 类型
@@ -43,7 +44,7 @@ func TestReflectTypeOf(t *testing.T) {
 	fmt.Println("x package path: ", tx.PkgPath())
 }
 
-func TestReflectValueOf(t *testing.T) {
+func TestReflectValue(t *testing.T) {
 	var x int
 	vx := reflect.ValueOf(x)
 	fmt.Println("vx can set: ", vx.CanSet())
