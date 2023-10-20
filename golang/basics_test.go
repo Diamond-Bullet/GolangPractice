@@ -98,7 +98,11 @@ func TestPointer(t *testing.T) {
 // reference：https://studygolang.com/articles/16067
 //
 //	https://www.cnblogs.com/makelu/p/11226974.html
-func TestDefer(t *testing.T) {
+func TestDeferSequence(t *testing.T) {
+	// output
+	// 2
+	// 1
+
 	defer func() {
 		println(1)
 	}()
@@ -106,12 +110,9 @@ func TestDefer(t *testing.T) {
 	defer func() {
 		println(2)
 	}()
-	// output
-	// 2
-	// 1
 }
 
-func TestDefer1(t *testing.T) {
+func TestDeferParameter(t *testing.T) {
 	var x int
 	defer func() {
 		fmt.Printf("x == 0: %v\n", x == 0) // false # as wrapped with an anonymous func, the variable is not certain until defer func really executes.
@@ -122,7 +123,7 @@ func TestDefer1(t *testing.T) {
 }
 
 // keyword 'return' actually has two steps in golang.
-func TestDefer2(t *testing.T) {
+func TestDeferReturn(t *testing.T) {
 	tf := func() (x int) {
 		var i int
 		defer func() {
@@ -246,13 +247,14 @@ func TestArray(t *testing.T) {
 }
 
 // slice
+// by slice, it's easy to implement stack and queue.
 func TestSlice(t *testing.T) {
 	var s1 []int
-	s2 := []int{}
 	fmt.Printf("%#v\n", (*reflect.SliceHeader)(unsafe.Pointer(&s1))) // 0x0, invalid.
+
+	s2 := []int{}
 	fmt.Printf("%#v\n", (*reflect.SliceHeader)(unsafe.Pointer(&s2))) // s2 is initialized, and the pointer is set, but point to `zerobase`
 	println()
-	// by slice, it's easy to implement stack and queue.
 
 	// `append`, will add new element to the end of the underlying array.
 	s := make([]int, 0, 10)
@@ -260,6 +262,7 @@ func TestSlice(t *testing.T) {
 	s4 := append(s, 20)
 	fmt.Println(s3)
 	fmt.Println(s4)
+
 	// when capacity is no longer sufficient, slice will scale up，a new underlying array will be assigned to replace the old and smaller one.
 	s5 := s[:2:3] // start:end:cap
 	s6 := append(s5, 20, 30, 40, 50)
