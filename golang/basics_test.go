@@ -282,10 +282,10 @@ func TestMap(t *testing.T) {
 	change(m)
 	println(m[1]) // result: 2, map is a pointer
 
-	// adding or eliminating key during traversing the map is safe.
 	for i := 2; i < 5; i++ {
 		m[i] = i + 10
 	}
+	// adding or eliminating key during traversing the map is safe.
 	for k := range m {
 		m[k+10] = k + 20
 		delete(m, k+1)
