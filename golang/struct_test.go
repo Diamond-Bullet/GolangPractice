@@ -100,9 +100,9 @@ func TestMethod(t *testing.T) {
 	// method set：
 	// instance: methods with receiver T
 	// pointer: methods with receiver T or *T
-	// when embed S, T has all methods with receiver S
-	// when embed *S, T has all methods with receiver S or *S
-	// when embed S or *S, *T has all methods with receiver S or *S
+	// when embeds S, T has all methods with receiver S
+	// when embeds *S, T has all methods with receiver S or *S
+	// when embeds S or *S, *T has all methods with receiver S or *S
 	ty := reflect.TypeOf(m)
 	for i, n := 0, ty.NumMethod(); i < n; i++ {
 		me := ty.Method(i)
@@ -116,32 +116,43 @@ func TestMethod(t *testing.T) {
 // interface
 //
 //	type iface struct {
-//		tab  *itab // store interface typ, object type and object methods addresses.
+//		tab  *itab // store interface type, object type and object method address.
 //		data unsafe.Pointer // point to the object
 //	}
 //
 // an interface is a set of methods or a set of types.
 // interface can embed another one. they can't have method with the same name.
-func TestInterface(t *testing.T) {
-	// 空接口没有方法，所有被任何类型实现
-	// 如果实现接口的类型支持，那么接口可比较
+
+func TestCompareInterface(t *testing.T) {
+	// type eface struct {
+	//	 _type *_type
+	//	 data  unsafe.Pointer
+	// }
+
+	// empty interface comprises no method, so it's implemented by any type.
 	var t1, t2 interface{}
 	println(t1 == t2, t1 == nil)
+
+	// if the type set to the interface is comparable, so does the interface.
 	t1, t2 = 100, 100
 	println(reflect.TypeOf(t1).String())
 	println(t1 == t2)
+}
 
-	// 接口组合
-	var mm StringType2
-	var m StringType1 = mm
-	println(m, "\n")
-
-	// 匿名接口
+func TestAnonymousInterface(t *testing.T) {
+	// anonymous interface
 	var tt interface {
 		toString()
 	} = User{}
 	println(tt)
-	println()
+}
+
+// TODO organize sections about interface
+func TestInterface(t *testing.T) {
+	// interface combination
+	var mm StringType2
+	var m StringType1 = mm
+	println(m, "\n")
 
 	// 把变量赋值给接口时，会发生复制
 	// unaddressable的变量不可赋值
@@ -155,17 +166,17 @@ func TestInterface(t *testing.T) {
 	println(a == nil, b == nil)
 	println()
 
-	// 接口的类型转换。
-	// 接口和接口, 不使用ok模式会panic
+	// type conversion of interface
+	// conversion between interfaces have to use `ok` pattern, otherwise panic is caused.
 	if x, ok := mm.(StringType1); ok {
 		println(x)
 	}
-	// 接口和具体类型，同样可以ok模式，或者 switch a.(type) case int ...
+	// convert interface to specified struct. you can use `ok` pattern or `switch a.(type) case int ...`, etc.
 	println(b.(*int))
 
-	// 通过编译器检查是否实现某个接口
+	// check if a struct implements an interface by compiler
 	// var x string
-	// var _ StringType1 = x // 提示错误，因为x并没有实现该接口
+	// var _ StringType1 = x // prompt an error, because `string` doesn't implement `StringType1`
 }
 
 // when embedding anonymous variables, TB can use all the variable's methods.
@@ -179,8 +190,9 @@ func (p *TB) Fatal(args ...interface{}) {
 }
 
 func TestInterfaceWrapper(t *testing.T) {
-	// 隐式转换，因为TB实现了testing.TB的所有方法
-	// 这样就跳过了私有方法，而在外部实现了testing.TB接口。
+	// implicit type conversion.
+	// it's feasible since `TB` implements `testing.TB`
+	// In this way, `testing.TB` is implemented outside its package and private methods are circumvented.
 	var tb testing.TB = new(TB)
 	tb.Fatal("Hello, playground")
 }
