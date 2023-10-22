@@ -2,11 +2,11 @@ package golang
 
 type User struct{}
 
-func (u User) toString() {
+func (u User) ToString() {
 	println("user")
 }
 
-func (u *User) toString2() {
+func (u *User) ToStringPtr() {
 	println("user2")
 }
 
@@ -14,20 +14,20 @@ type Manager struct {
 	User
 }
 
-func (m Manager) toString() {
+func (m Manager) ToString() {
 	println("manager")
 }
 
-func (m *Manager) toString2() {
-	println("manager2")
+func (m *Manager) ToStringPtr() {
+	println("manager ptr")
 }
 
 type StringType1 interface {
-	toString()
-	toString2()
+	ToString()
+	ToStringPtr()
 }
 
 type StringType2 interface {
 	StringType1
-	toString3()
+	ToString2()
 }

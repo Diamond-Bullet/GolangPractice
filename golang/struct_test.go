@@ -88,13 +88,13 @@ func TestMethod(t *testing.T) {
 	// an instance can call its methods and methods of its struct members.
 	// if instance `m` and one of it struct member have methods with the same name `Foo`, m.Foo() is calling m's.
 	m := Manager{}
-	m.toString()
-	m.User.toString() // if we want to call its struct member's method, specify the struct member.
+	m.ToString()
+	m.User.ToString() // if we want to call its struct member's method, specify the struct member.
 	println("————————————————————————")
 
 	// instance and pointer have different method sets. however, whatever the method's receiver is, both the two can call it.
-	m.toString2()
-	(&m).toString()
+	m.ToStringPtr()
+	(&m).ToString()
 	println("————————————————————————")
 
 	// method set：
@@ -142,7 +142,7 @@ func TestCompareInterface(t *testing.T) {
 func TestAnonymousInterface(t *testing.T) {
 	// anonymous interface
 	var tt interface {
-		toString()
+		ToString()
 	} = User{}
 	println(tt)
 }
