@@ -21,5 +21,5 @@ func TestArchiveZip(t *testing.T) {
 	defer f.Close()
 
 	z := zip.NewWriter(f)
-	z.Close() // `Flush` will execute in the function.
+	defer z.Close() // `Flush` will execute in the function.
 }
