@@ -1,8 +1,8 @@
 package slice
 
-func ContainString(s []string, p string) bool {
+func Contain[T comparable](s []T, p T) bool {
 	for _, ss := range s {
-		if ss == p {
+		if p == ss {
 			return true
 		}
 	}
