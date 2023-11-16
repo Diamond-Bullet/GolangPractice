@@ -66,8 +66,6 @@ func TestGoErrors(t *testing.T) {
 }
 
 func TestColorfulPrint(t *testing.T) {
-	color.Blueln("I am great")
-
 	// work on linux or macOS.
 	// https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
 	colorReset := "\033[0m"
@@ -86,5 +84,22 @@ func TestColorfulPrint(t *testing.T) {
 	fmt.Println(colorPurple, "test")
 	fmt.Println(colorWhite, "test")
 	fmt.Println(colorCyan, "test", colorReset)
-	fmt.Println("next")
+	fmt.Println()
+
+	// find more at https://github.com/gookit/color
+	// basic colors
+	color.Blueln("I am great Blue")
+	color.Magentaln("color Magenta")
+	color.New(color.FgRed, color.BgCyan).Println("FgRed BgCyan")
+	// partial rendering
+	fmt.Println(color.FgRed.Render("red"), "line")
+
+	// 256 colors
+	color.C256(132).Println("what the fucking color132")
+	color.S256(110, 120).Println("fg110 bg120")
+
+	// RGB colors
+	color.RGB(100, 200, 30).Println("color.RGB r100 g200 b30")
+	color.HEX("#1976D2").Println("color.HEX #1976D2")
+	color.RGBStyleFromString("170,187,204", "70,87,4").Println("RGBStyleFromString")
 }
