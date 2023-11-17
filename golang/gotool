@@ -9,10 +9,3 @@ cover：生成代码覆盖率
 compile：代码汇编
     go tool compile -N -l -S example.go 禁用内联和代码优化
     go tool compile -S example.go   查看汇编输出
-
-
-工作：
-1.错误日志一定要打在出错的调用方：如果一个函数foo被多次调用，错误日志打在foo里，那怎么定位错误？
-2.关键的逻辑结点，留info日志，方便日后统计、排查问题。
-
-3.数据表设计可以预埋字段(text, bigint等)。
