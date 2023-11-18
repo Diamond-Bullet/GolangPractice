@@ -122,29 +122,33 @@ func TestMethod(t *testing.T) {
 //
 // an interface is a set of methods or a set of types.
 // interface can embed another one. they can't have method with the same name.
-
 func TestCompareInterface(t *testing.T) {
 	// type eface struct {
 	//	 _type *_type
 	//	 data  unsafe.Pointer
 	// }
-
 	// empty interface comprises no method, so it's implemented by any type.
+
 	var t1, t2 interface{}
 	println(t1 == t2, t1 == nil)
-
 	// if the type set to the interface is comparable, so does the interface.
 	t1, t2 = 100, 100
 	println(reflect.TypeOf(t1).String())
 	println(t1 == t2)
+
+	// an interface consists of two parts: data, type. if and only if both the two parts are nil, the interface is nil。
+	var a interface{} = nil
+	var b interface{} = (*int)(nil) // despite no data, value set to `b` has type.
+	fmt.Printf("Part 3: a == nil: %t, b == nil: %t\n", a == nil, b == nil)
 }
 
 func TestAnonymousInterface(t *testing.T) {
 	// anonymous interface
-	var tt interface {
+	var i interface {
 		ToString()
 	} = User{}
-	println(tt)
+
+	fmt.Println(i)
 }
 
 // TODO organize sections about interface
@@ -160,11 +164,6 @@ func TestInterface(t *testing.T) {
 	// 两个方法集相同的接口，可以作比较。
 	// 先比较类型，再比较方法。接口默认值是nil。
 
-	// 接口变量的两部分都为nil, 接口才为nil。
-	var a interface{} = nil
-	var b interface{} = (*int)(nil) // b是有类型的
-	println(a == nil, b == nil)
-	println()
 
 	// type conversion of interface
 	// conversion between interfaces have to use `ok` pattern, otherwise panic is caused.
@@ -172,7 +171,8 @@ func TestInterface(t *testing.T) {
 		println(x)
 	}
 	// convert interface to specified struct. you can use `ok` pattern or `switch a.(type) case int ...`, etc.
-	println(b.(*int))
+	var b interface{} = (*int)(nil)
+	fmt.Println("convert interface b to *int:", b.(*int))
 
 	// check if a struct implements an interface by compiler
 	// var x string
