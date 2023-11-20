@@ -1,9 +1,9 @@
 package golang
 
 import (
+	"github.com/agiledragon/gomonkey/v2"
 	"testing"
 
-	"github.com/agiledragon/gomonkey/v2"
 	"github.com/smartystreets/goconvey/convey"
 )
 
@@ -15,8 +15,8 @@ import (
 // go test -v  golang.go -test.bench ForFun -test.run ForFun #test a func in benchmark mode
 // go test -bench=. -benchtime=3s #run all benchmarks, specify the test duration.
 
-// -cpuprofile profile.out #output the result of cpu analysis
-// -memprofile memprofile.out #Output the result of Mem analysis
+// -cpuprofile: profile.out #output the result of cpu analysis
+// -memprofile: memprofile.out #Output the result of Mem analysis
 // https://blog.csdn.net/weixin_34232617/article/details/91854391
 
 /* An example for another way to use `go test`. And it's related to memory allocation from go101.
@@ -82,8 +82,6 @@ var globalNum int
 // explain: -N disable optimizations, -l disable inline.
 // run `go tool compile -help` to get more about `gcflag`.
 func TestMock(t *testing.T) {
-	var num int
-
 	convey.Convey("test_single", t, func() {
 		// Mock Function
 		// make it by replacing the func address
@@ -132,6 +130,7 @@ func TestMock(t *testing.T) {
 		})
 
 		convey.Convey("test_bulk_3", func() {
+			var num int
 			// Mock global variable
 			patches := gomonkey.ApplyGlobalVar(&num, 666)
 			defer patches.Reset()

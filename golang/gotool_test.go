@@ -11,6 +11,20 @@ import (
 	_ "net/http/pprof"
 )
 
+/*
+	go tool 查看内置工具
+
+	nm：查看 二进制文件 的符号表（等同于系统 nm 命令）
+
+	objdump：反汇编工具，分析二进制文件（等同于系统 objdump 命令）
+
+	cover：生成代码覆盖率
+
+	compile：代码汇编
+		go tool compile -N -l -S example.go 禁用内联和代码优化
+		go tool compile -S example.go   查看汇编输出
+*/
+
 // runtime.NumGoroutine() 当前协程数量
 
 func TestRuntimePprof(t *testing.T) {
@@ -37,7 +51,7 @@ func TestNetHttpPprof(t *testing.T) {
 		log.Println(http.ListenAndServe(":61111", nil))
 	}()
 
-	// 业务代码
+	// your product code here
 	select {}
 }
 
@@ -56,6 +70,6 @@ func TestTrace(t *testing.T) {
 	}
 	defer trace.Stop()
 
-	// 业务代码
+	// your product code here
 	select {}
 }

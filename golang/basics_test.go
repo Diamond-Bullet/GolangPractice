@@ -138,36 +138,36 @@ func TestDeferReturn(t *testing.T) {
 	println(tt) // 1
 }
 
-// recover panic
-// `recover` can only heal panic in current goroutine, since every goroutine has its own stack.
-func TestRecover(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Printf("recovered from crash: %v", r)
-		}
-	}()
-
-	panic("I want to panic")
+func JustForPanic() {
+	panic("I want to PANIC")
 }
 
-// no captured/caught panic will crash the main progress.
-func TestPanic(t *testing.T) {
+// `recover` can only recover panic in current goroutine, since every goroutine has its own stack.
+func TestPanicCaptured(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Printf("recovered from crash: %v", r)
 		}
 	}()
-	//go func() {
-	//	JustForPanic()
-	//}()
 
 	JustForPanic()
 
 	time.Sleep(time.Second)
 }
 
-func JustForPanic() {
-	panic("I want to PANIC")
+// non-captured/uncaught panic will make the main progress crash.
+func TestPanicNotCaptured(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("recovered from crash: %v", r)
+		}
+	}()
+
+	go func() {
+		JustForPanic()
+	}()
+
+	time.Sleep(time.Second)
 }
 
 // TODO For `Go`, memory address can change in runtime

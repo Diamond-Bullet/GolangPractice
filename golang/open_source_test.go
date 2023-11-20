@@ -33,7 +33,7 @@ func TestJsonParser(t *testing.T) {
   }
 }`)
 
-	val, err := jsonparser.Set(data, []byte("http://github.com"), "person", "avatars", "[0]", "backup_url")
+	val, err := jsonparser.Set(data, []byte("https://github.com"), "person", "avatars", "[0]", "backup_url")
 	fmt.Println(string(val), " err: ", err)
 }
 
