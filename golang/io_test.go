@@ -2,6 +2,10 @@ package golang
 
 import (
 	"archive/zip"
+	"bufio"
+	"bytes"
+	"fmt"
+	"io"
 	"os"
 	"testing"
 )
@@ -18,14 +22,53 @@ import (
 
 func TestFile(t *testing.T) {
 	// flag `os.O_CREATE` used for creating a file when not existing. you can use os.Create() instead.
-	f, _ := os.OpenFile("test.txt", os.O_RDWR | os.O_CREATE, 0666)
+	f, err := os.OpenFile("test.txt", os.O_RDWR|os.O_CREATE, 0666)
+	if err != nil {
+		fmt.Println("open file err: ", err)
+		return
+	}
 	defer f.Close()
 
-	f.Write([]byte(`you are the beast!`))
+	n, err := f.Write([]byte(`you are the beast!`))
+	if err != nil {
+		fmt.Printf("writing does not finish. %d bytes writed\n", n)
+	}
+
+	os.Remove("test1.txt")
+}
+
+func TestReadFile(t *testing.T) {
+	// os.Open just for Reading.
+	file, err := os.Open("test.txt")
+	if err != nil {
+		fmt.Println("open file err: ", err)
+		return
+	}
+	defer file.Close()
+
+	content := bytes.NewBuffer(nil)
+	var buf [128]byte
+	for {
+		n, err1 := file.Read(buf[:])
+		// complete reading file.
+		if err1 == io.EOF {
+			break
+		}
+		if err1 != nil {
+			fmt.Println("read file err: ", err1)
+			return
+		}
+		content.Write(buf[:n])
+	}
+	fmt.Println("content:", content.String())
+
+	content1, err := os.ReadFile("test.txt")
+	fmt.Printf("content1: %s, 				err: %s\n", content1, err.Error())
 }
 
 func TestZip(t *testing.T) {
-	f, _ := os.OpenFile("demo.zip", os.O_RDWR | os.O_CREATE, 0666)
+	// TODO
+	f, _ := os.OpenFile("demo.zip", os.O_RDWR|os.O_CREATE, 0666)
 	defer f.Close()
 
 	z := zip.NewWriter(f)
@@ -34,7 +77,29 @@ func TestZip(t *testing.T) {
 
 func TestStd(t *testing.T) {
 	input := make([]byte, 0, 20)
-	os.Stdin.Read(input)
+	_, err := os.Stdin.Read(input)
+	fmt.Printf("input: %s, 					err: %s", input, err.Error())
 
-	os.Stdout.Write(input)
+	_, err = os.Stdout.Write(input)
+	fmt.Println("err:", err)
+}
+
+func TestBufIO(t *testing.T) {
+	f, err := os.OpenFile("test.txt", os.O_RDWR|os.O_CREATE, 0666)
+	if err != nil {
+		fmt.Println("open file err: ", err)
+		return
+	}
+	defer f.Close()
+
+	bufWriter := bufio.NewWriter(f)
+	for i := 0; i < 10; i++ {
+		bufWriter.Write([]byte("123\n"))
+		bufWriter.Flush()
+	}
+
+	// bufio.NewReader(f) = bufio.NewReaderSize(f, 4096)
+	reader := bufio.NewReaderSize(f, 4096)
+
+	reader.ReadBytes('\n')
 }
