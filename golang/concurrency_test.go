@@ -103,7 +103,7 @@ func TestPubSub(t *testing.T) {
 func TestWaitGroup(t *testing.T) {
 	const goroutineNum = 2
 
-	wg := sync.WaitGroup{}
+	wg := &sync.WaitGroup{}
 	wg.Add(2)
 
 	for i := 0; i < goroutineNum; i++ {

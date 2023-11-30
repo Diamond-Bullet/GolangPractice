@@ -45,6 +45,10 @@ true > test.txt
 cat /dev/null > test.txt
 echo > test.txt
 
+## grep
+# -v exclude lines with certain word
+grep -v "exclude_word" test.txt
+
 ####################### Profiling #################
 ##df
 # 查看磁盘使用况

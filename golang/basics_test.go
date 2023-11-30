@@ -5,6 +5,7 @@ import (
 	"github.com/gookit/color"
 	"reflect"
 	"runtime"
+	"runtime/debug"
 	"testing"
 	"time"
 	"unsafe"
@@ -143,18 +144,6 @@ func JustForPanic() {
 }
 
 // `recover` can only recover panic in current goroutine, since every goroutine has its own stack.
-func TestPanicCaptured(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Printf("recovered from crash: %v", r)
-		}
-	}()
-
-	JustForPanic()
-
-	time.Sleep(time.Second)
-}
-
 // non-captured/uncaught panic will make the main progress crash.
 func TestPanicNotCaptured(t *testing.T) {
 	defer func() {
@@ -166,6 +155,19 @@ func TestPanicNotCaptured(t *testing.T) {
 	go func() {
 		JustForPanic()
 	}()
+
+	time.Sleep(time.Second)
+}
+
+func TestPanicCaptured(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("recovered from crash: %v", r)                                      // here is only a line of error
+			fmt.Printf("recovered from crash: %v, detailed stack: %s\n", r, debug.Stack()) // print goroutine stack
+		}
+	}()
+
+	JustForPanic()
 
 	time.Sleep(time.Second)
 }

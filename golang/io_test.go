@@ -10,8 +10,6 @@ import (
 	"testing"
 )
 
-// golang common IO libraries: https://www.cnblogs.com/zhichaoma/p/12509984.html
-
 // here are some frequently used package provided by the official group.
 // io: basic `reader`, `writer`, etc. pipe,
 // os: file
