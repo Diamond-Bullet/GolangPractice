@@ -1,14 +1,14 @@
 package golang
 
 import (
+	"errors"
 	"fmt"
-	"github.com/bwmarrin/snowflake"
-	"strconv"
 	"testing"
 
 	"github.com/buger/jsonparser"
+	"github.com/bwmarrin/snowflake"
 	"github.com/gookit/color"
-	"github.com/pkg/errors"
+	pkgerrors "github.com/pkg/errors"
 	"github.com/tealeg/xlsx"
 )
 
@@ -57,15 +57,6 @@ func TestHandleExel(t *testing.T) {
 	}
 }
 
-// https://github.com/pkg/errors
-// see new feature of GO 2 on error handling.
-func TestGoErrors(t *testing.T) {
-	_, err := strconv.Atoi("12ab")
-	if err != nil {
-		println(errors.Wrap(err, "strconv.Atoi failed"))
-	}
-}
-
 func TestColorfulPrint(t *testing.T) {
 	// work on linux or macOS.
 	// https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
@@ -105,8 +96,8 @@ func TestColorfulPrint(t *testing.T) {
 	color.RGBStyleFromString("170,187,204", "70,87,4").Println("RGBStyleFromString")
 }
 
-// universally unique identifier
-// see more at https://github.com/search?q=uuid+language%3AGo+&type=repositories&s=stars&o=desc
+// snowflake
+// see uuid (universally unique identifier) at https://github.com/search?q=uuid+language%3AGo+&type=repositories&s=stars&o=desc
 func TestSnowFlake(t *testing.T) {
 	// Create a new Node with a Node number of 1
 	node, err := snowflake.NewNode(1)
@@ -135,4 +126,38 @@ func TestSnowFlake(t *testing.T) {
 
 	// Generate and print, all in one.
 	fmt.Printf("ID       : %d\n", node.Generate().Int64())
+}
+
+// error with stack trace
+// another repo https://github.com/go-errors/errors
+// learn about new error handling draft `Go2 errors` by Go team.
+func TestStackError(t *testing.T) {
+	err := pkgerrors.Errorf("err: %s", "i want to bring out an error")
+	fmt.Println(err)
+	fmt.Printf("%+v\n", err)
+	println()
+
+	err1 := pkgerrors.Wrap(err, "err1")
+	fmt.Printf("%+v\n", err1)
+	println()
+
+	err2 := StackError1()
+	fmt.Printf("%+v\n", err2)
+	println()
+}
+
+func StackError1() error {
+	return StackError2()
+}
+
+func StackError2() error {
+	return pkgerrors.New("error here")
+}
+
+// provided by Go team. simply wrap an error with new prefix.
+func TestWrapError(t *testing.T) {
+	err := errors.New("error here")
+	err1 := fmt.Errorf("layer1: %w", err)
+	err2 := fmt.Errorf("layer2: %w", err1)
+	fmt.Println(err2)
 }
