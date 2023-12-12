@@ -54,4 +54,10 @@ BEGIN
     END WHILE;
 END;
 
-CALL add_data(100); 
+CALL add_data(100);
+
+
+####################### Trifle #################
+# `;`, `\G`
+select * from book limit 1;
+select * from book limit 1\G
