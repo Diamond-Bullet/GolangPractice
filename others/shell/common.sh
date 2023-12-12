@@ -125,6 +125,8 @@ openssl req -new -key server.key -out server.csr
 openssl req -text -in server.csr -noout
 # generate certificate
 openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+# generate random base64 string
+openssl rand -base64 21
 
 ## ncat 正反向shell:
 # 正向Shell，服务器上使用ncat监听
