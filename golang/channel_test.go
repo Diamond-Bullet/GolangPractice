@@ -28,16 +28,20 @@ func TestSend2Full(t *testing.T) {
 
 // fetching data from empty channel, resulting in blocking the receiver goroutine.
 func TestFetchFromEmpty(t *testing.T) {
-	ch := make(chan int, 1)
+	ch := make(chan int)
 	go func() {
 		for {
-			<-ch
-			fmt.Printf("go routine: %d", 1)
+			fmt.Printf("go routine1: %d\n", <-ch)
+		}
+	}()
+	go func() {
+		for {
+			fmt.Printf("go routine2: %d\n", <-ch)
 		}
 	}()
 
-	for {
-		ch <- 1
+	for i := 0; ; i = 1 - i {
+		ch <- i
 		time.Sleep(time.Second)
 	}
 }

@@ -1,9 +1,9 @@
 package golang
 
 import (
-	"github.com/agiledragon/gomonkey/v2"
 	"testing"
 
+	"github.com/agiledragon/gomonkey/v2"
 	"github.com/smartystreets/goconvey/convey"
 )
 
@@ -43,6 +43,9 @@ func main() {
 	println(rg.AllocedBytesPerOp()) // 40960
 }
 */
+
+// do unit test for application code:
+// https://medium.com/@rishibhardwaj2010/writing-unit-test-cases-in-golang-4389b43dc57e
 
 // stress test
 func BenchmarkDirect(b *testing.B) {
@@ -131,9 +134,10 @@ func TestMock(t *testing.T) {
 
 		convey.Convey("test_bulk_3", func() {
 			var num int
-			// Mock global variable
+			// Mock local variable
 			patches := gomonkey.ApplyGlobalVar(&num, 666)
 			defer patches.Reset()
+			// Mock global variable
 			patches.ApplyGlobalVar(&globalNum, 666)
 
 			convey.So(num, convey.ShouldEqual, 666)

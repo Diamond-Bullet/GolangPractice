@@ -27,6 +27,10 @@ import (
 
 // runtime.NumGoroutine() 当前协程数量
 
+// `go tool pprof [pprof_file]` to enter interactive mode.
+// use help to get commands you can use, like `top 5`, `list [func_name]`, `png`, etc.
+// to visualize profile, install `graphviz` using command like `yum install graphviz`.
+// for more at https://go.dev/blog/pprof
 func TestRuntimePprof(t *testing.T) {
 	// cpu
 	f, err := os.Create("cpu.prof")
