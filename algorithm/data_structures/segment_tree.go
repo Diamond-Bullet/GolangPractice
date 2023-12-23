@@ -25,8 +25,8 @@ type mergeFunc func(i, j int) int
 // SegmentTree not all the fields are needed, follow definition is a self-contained demonstration.
 type SegmentTree struct {
 	data, tree, lazy []int // data 原数据， tree 各个子节点之和
-	left, right      int
-	merge            mergeFunc
+	left, right int
+	merge       mergeFunc
 }
 
 // Init MarkIt 线段树 初始化

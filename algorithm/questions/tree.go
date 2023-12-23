@@ -1,12 +1,12 @@
 package questions
 
 import (
-	data_structures2 "GolangPractice/algorithm/classical_examples/data_structures"
+	"GolangPractice/algorithm/data_structures"
 )
 
 // InOrderWalk MarkIt 非递归,二叉树,中序遍历
-func InOrderWalk(root *data_structures2.TreeNode) []int {
-	stack := data_structures2.StackTemplate{}
+func InOrderWalk(root *data_structures.TreeNode) []int {
+	stack := data_structures.StackTemplate{}
 	var ret []int
 	node := root
 	for node != nil || len(stack) > 0 {
@@ -14,7 +14,7 @@ func InOrderWalk(root *data_structures2.TreeNode) []int {
 			stack.Push(node)
 			node = node.Left
 		}
-		node = stack.Pop().(*data_structures2.TreeNode)
+		node = stack.Pop().(*data_structures.TreeNode)
 		ret = append(ret, node.Val)
 		node = node.Right
 	}
@@ -22,8 +22,8 @@ func InOrderWalk(root *data_structures2.TreeNode) []int {
 }
 
 // PreOrderWalk MarkIt 非递归,二叉树,前序遍历
-func PreOrderWalk(root *data_structures2.TreeNode) []int {
-	stack := data_structures2.StackTemplate{}
+func PreOrderWalk(root *data_structures.TreeNode) []int {
+	stack := data_structures.StackTemplate{}
 	var ret []int
 	node := root
 	for node != nil || len(stack) > 0 {
@@ -32,15 +32,15 @@ func PreOrderWalk(root *data_structures2.TreeNode) []int {
 			ret = append(ret, node.Val)
 			node = node.Left
 		}
-		node = stack.Pop().(*data_structures2.TreeNode)
+		node = stack.Pop().(*data_structures.TreeNode)
 		node = node.Right
 	}
 	return ret
 }
 
 // PostOrderWalk MarkIt 非递归,二叉树,后序遍历
-func PostOrderWalk(root *data_structures2.TreeNode) []int {
-	stack := data_structures2.StackTemplate{}
+func PostOrderWalk(root *data_structures.TreeNode) []int {
+	stack := data_structures.StackTemplate{}
 	var ret []int
 	node := root
 	for node != nil || len(stack) > 0 {
@@ -49,7 +49,7 @@ func PostOrderWalk(root *data_structures2.TreeNode) []int {
 			ret = append(ret, node.Val)
 			node = node.Right
 		}
-		node = stack.Pop().(*data_structures2.TreeNode)
+		node = stack.Pop().(*data_structures.TreeNode)
 		node = node.Left
 	}
 
@@ -63,7 +63,7 @@ func PostOrderWalk(root *data_structures2.TreeNode) []int {
 }
 
 // TreeDelete MarkIt 二叉搜索树，删除节点
-func TreeDelete(root, target *data_structures2.TreeNode) {
+func TreeDelete(root, target *data_structures.TreeNode) {
 	targetParent := NodeParent(root, target)
 	if target.Left == nil {
 		TransPlant(root, target, target.Right, targetParent, target)
@@ -83,7 +83,7 @@ func TreeDelete(root, target *data_structures2.TreeNode) {
 	}
 }
 
-func TransPlant(root, u, v, uParent, vParent *data_structures2.TreeNode) {
+func TransPlant(root, u, v, uParent, vParent *data_structures.TreeNode) {
 	if uParent == nil {
 		root = v
 	} else if u == uParent.Left {
@@ -96,7 +96,7 @@ func TransPlant(root, u, v, uParent, vParent *data_structures2.TreeNode) {
 	}
 }
 
-func NodeParent(root, target *data_structures2.TreeNode) *data_structures2.TreeNode {
+func NodeParent(root, target *data_structures.TreeNode) *data_structures.TreeNode {
 	node := root
 	for node != target {
 		if node.Val > target.Val {
@@ -108,7 +108,7 @@ func NodeParent(root, target *data_structures2.TreeNode) *data_structures2.TreeN
 	return node
 }
 
-func TreeMinimum(root *data_structures2.TreeNode) *data_structures2.TreeNode {
+func TreeMinimum(root *data_structures.TreeNode) *data_structures.TreeNode {
 	if root == nil {
 		return nil
 	}
