@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"github.com/gookit/color"
 	"io"
 	"os"
 	"testing"
@@ -19,8 +20,11 @@ import (
 // io/fs: file system.
 
 func TestFile(t *testing.T) {
+	// get user home dir
+	homeDir, _ := os.UserHomeDir()
+
 	// flag `os.O_CREATE` used for creating a file when not existing. you can use os.Create() instead.
-	f, err := os.OpenFile("test.txt", os.O_RDWR|os.O_CREATE, 0666)
+	f, err := os.OpenFile(homeDir+"test.txt", os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
 		fmt.Println("open file err: ", err)
 		return
@@ -79,7 +83,20 @@ func TestStd(t *testing.T) {
 	fmt.Printf("input: %s, 					err: %s", input, err.Error())
 
 	_, err = os.Stdout.Write(input)
-	fmt.Println("err:", err)
+	fmt.Println("Write err:", err)
+
+	// TODO doesn't work well
+	// redirect output to particular file
+	redirectFile, err := os.OpenFile("/tmp/redirectFile", os.O_RDWR|os.O_CREATE|os.O_SYNC, 0766)
+	if err != nil {
+		color.Redln("failed to open redirectFile file, reason: ", err.Error())
+		return
+	}
+	defer redirectFile.Close()
+	os.Stdout = redirectFile
+	os.Stderr = redirectFile
+
+	fmt.Println("output after redirect")
 }
 
 func TestBufIO(t *testing.T) {
