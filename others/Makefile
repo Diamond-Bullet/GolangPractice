@@ -1,5 +1,3 @@
-# for study
-
 # 赋值
 # https://www.cnblogs.com/wanghuaijun/p/8092747.html	?= := = += 的区别
 v1="v1"
