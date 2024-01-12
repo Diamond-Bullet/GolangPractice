@@ -5,3 +5,6 @@ mysqldump -h 1.2.3.4 -P 3306 -uroot -p1234 database table > file.sql
 
 # another way to dump table
 mysql -h 1.2.3.4 -P 3306 -uroot -p1234 -D database -e "select * from table_name" > file.txt
+
+# execute a file with sql statements.
+mysql -h 1.2.3.4 -P 3306 -uroot -p1234 -e 'source file.sql'

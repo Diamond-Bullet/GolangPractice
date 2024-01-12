@@ -31,6 +31,10 @@ awk '{if($0 ~ /github\.com/){print $1"@"$2}}' go.mod # 下载go.mod下的github�
 
 ls -l | awk '$1 !~ /^d.*/  {print $9}' | xargs wc -l | sort -nr -k 1 # 排列目录下文件行数
 
+# -F 指定分隔符
+# refer to https://juejin.cn/post/7055242139222949924
+grep "parent" log.txt  | awk -F "child\":\"" '{print $2}' | awk -F "\":\"" '{print $1" "$5}' | awk -F "\",\"name" '{print $1}' | sort -k 2 -r | head -n 25
+
 ## chmod
 chmod -R 600 [path]
 chmod -R +x [path]
@@ -41,9 +45,9 @@ ln -s target_file link_file
 ln -snf target_file link_file
 
 ## clear content of the file.
-true > test.txt
-cat /dev/null > test.txt
-echo > test.txt
+true >test.txt
+cat /dev/null >test.txt
+echo >test.txt
 
 ## grep
 # -v exclude lines with certain word
@@ -94,7 +98,7 @@ lsof -p 1234
 # > redirect the output.
 # 0 standard input; 1 standard output; 2 standard error.
 # & run program in the background.
-nohup tmp.exe > log.txt 2>&1 &
+nohup tmp.exe >log.txt 2>&1 &
 
 ## jobs. show background tasks.
 jobs
@@ -104,17 +108,16 @@ jobs
 kill %1
 
 ####################### Remote Interaction #################
-## ssh
 # generate key pair and copy to remote server.
 ssh-keygen -t rsa
 ssh-copy-id root@1.2.3.4
 # login
 ssh user@1.2.3.4
 # scp src dst
-scp test.txt  root@1.2.3.4:/root
+scp test.txt root@1.2.3.4:/root
 scp root@1.2.3.4:/root/test.txt .
 
-## openssl. To generate more types of certificate, refer to internet docs.
+## To generate more types of certificate, refer to internet docs.
 # generate key
 openssl genrsa -des3 -out server.key 2048
 # show key's content
@@ -128,7 +131,7 @@ openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
 # generate random base64 string
 openssl rand -base64 21
 
-## ncat 正反向shell:
+## 正反向shell:
 # 正向Shell，服务器上使用ncat监听
 ncat -l [port] -e /bin/bash
 # 开发机上连接
@@ -138,6 +141,13 @@ ncat [remote_ip] [port]
 ncat -l [port]
 # 服务器上连接
 ncat [local_ip] [port] -e /bin/bash
+
+## send file with GUI
+yum install lrzsz
+# send file from linux to remote machine
+sz file.txt
+# receive file from remote machine
+rz
 
 ####################### Trifle #################
 # ES query
@@ -168,7 +178,6 @@ doc.uk.value.length()*10);} else {return doc.uk.value.length()*10;}} else {retur
 
 # proto generation
 protoc --micro_out=. --go_out=. ./customer.proto
-
 
 ####################### Mac OS #################
 # Mac下使用了zsh会不执行/etc/profile文件，当然，如果用原始的是会执行。
