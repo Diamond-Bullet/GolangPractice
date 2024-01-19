@@ -10,6 +10,7 @@ import (
 	"github.com/gookit/color"
 	pkgerrors "github.com/pkg/errors"
 	"github.com/tealeg/xlsx"
+	"golang.org/x/sync/errgroup"
 )
 
 // https://github.com/buger/jsonparser #Parse json data dynamically，support Get、Set。
@@ -160,4 +161,21 @@ func TestWrapError(t *testing.T) {
 	err1 := fmt.Errorf("layer1: %w", err)
 	err2 := fmt.Errorf("layer2: %w", err1)
 	fmt.Println(err2)
+}
+
+// when running tasks concurrently, use this to handle error.
+func TestErrGroup(t *testing.T) {
+	g := new(errgroup.Group)
+
+	g.Go(func() error {
+		return nil
+	})
+	g.Go(func() error {
+		return errors.New("very good")
+	})
+
+	err := g.Wait()
+	if err != nil {
+		color.Redln(err)
+	}
 }

@@ -52,6 +52,10 @@ echo >test.txt
 ## grep
 # -v exclude lines with certain word
 grep -v "exclude_word" test.txt
+# print lines around pattern line. -A4 4 lines after it. -B before it. -C before and after it.
+grep -A4 "pattern" test.txt
+# -E regular expression
+grep -E "[0-9][a-z]" test.txt
 
 ####################### Profiling #################
 ##df
@@ -81,10 +85,11 @@ apt install net-tools
 netstat -lnap
 # list all network adapters
 netstat -i
-
 # print the amount of different states for tcp.
 # https://computingforgeeks.com/how-to-check-tcp-connections-states-in-linux-with-netstat/
 netstat -nat | awk '{print $6}' | sort | uniq -c | sort -r
+# print the amount of each tcp connection status
+netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
 
 ## lsof. list open file
 # https://www.cnblogs.com/muchengnanfeng/p/9554993.html

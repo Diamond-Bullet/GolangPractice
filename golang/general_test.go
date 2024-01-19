@@ -1,6 +1,7 @@
 package golang
 
 import (
+	"encoding/base64"
 	"fmt"
 	"strconv"
 	"strings"
@@ -14,4 +15,13 @@ func TestUnicodeDecode(t *testing.T) {
 
 	text, err := strconv.Unquote(strings.Replace(strconv.Quote(uContent), `\\u`, `\u`, -1))
 	fmt.Println(text, err)
+}
+
+func TestBase64(t *testing.T) {
+	data := "种豆得豆"
+	sEnc := base64.StdEncoding.EncodeToString([]byte(data))
+	fmt.Println(sEnc)
+
+	sDec, _ := base64.StdEncoding.DecodeString(sEnc)
+	fmt.Println(string(sDec))
 }

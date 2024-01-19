@@ -99,3 +99,7 @@ git push origin --tags
 git push origin [tag_name]
 # delete remote tag.
 git push origin :refs/tags/V1.2
+# fetch a tag
+git fetch origin [tag_name]
+# checkout from tag
+git checkout tags/v1.0 [branch_name]
