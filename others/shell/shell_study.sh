@@ -83,6 +83,13 @@ cat /etc/environment /etc/profile /etc/bash.bashrc /etc/profile.d/test.sh
 # 用户级
 cat ~/.profile ~/.bashrc
 
+# check whether file exists.
+if [ -f "/data/filename" ]; then
+  echo "file exists"
+else
+  echo "file doesn't exist"
+fi
+
 ####################### Examples #################
 # .kinit_auto.sh脚本，开机自动kinit
 fail=false

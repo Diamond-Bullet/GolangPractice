@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function install_pkg() {
-  if [ $# -eq 1 ]; then
+  if [ $# -eq 1 ]; then # argument count is 1.
     _=$(yum install "${1}")
     _=$(apt install "${1}")
   fi

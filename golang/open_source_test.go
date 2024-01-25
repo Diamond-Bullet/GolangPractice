@@ -7,6 +7,7 @@ import (
 
 	"github.com/buger/jsonparser"
 	"github.com/bwmarrin/snowflake"
+	"github.com/google/go-cmp/cmp"
 	"github.com/gookit/color"
 	pkgerrors "github.com/pkg/errors"
 	"github.com/tealeg/xlsx"
@@ -178,4 +179,9 @@ func TestErrGroup(t *testing.T) {
 	if err != nil {
 		color.Redln(err)
 	}
+}
+
+// compare 2 objects with custom rules by implementing Equal() for the type.
+func TestCmp(t *testing.T) {
+	cmp.Equal(1, 2)
 }

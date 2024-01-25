@@ -35,6 +35,12 @@ ls -l | awk '$1 !~ /^d.*/  {print $9}' | xargs wc -l | sort -nr -k 1 # 排列目
 # refer to https://juejin.cn/post/7055242139222949924
 grep "parent" log.txt  | awk -F "child\":\"" '{print $2}' | awk -F "\":\"" '{print $1" "$5}' | awk -F "\",\"name" '{print $1}' | sort -k 2 -r | head -n 25
 
+## sed
+# -i, replace string and update the file. -e, print content after substituting and not change the file.
+sed -i "s/old_string/new_string/" file.txt
+# print line 5-10.
+sed -n '5,10p' file.txt
+
 ## chmod
 chmod -R 600 [path]
 chmod -R +x [path]
@@ -56,6 +62,19 @@ grep -v "exclude_word" test.txt
 grep -A4 "pattern" test.txt
 # -E regular expression
 grep -E "[0-9][a-z]" test.txt
+
+# print first X lines
+head -n 10 test.txt
+# print last X lines
+tail -n 10 test.txt
+
+# list directory tree
+tree /tmp
+# -a, show hidden files and folders. -L [num] display depth of directory tree.
+tree -L 2 -a /tmp
+
+# print absolute path. output: /root/folder/test.txt
+realpath test.txt
 
 ####################### Profiling #################
 ##df
@@ -97,6 +116,11 @@ netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
 lsof -i:1234
 # search by process id
 lsof -p 1234
+
+# show processes https://www.geeksforgeeks.org/ps-command-in-linux-with-examples/
+# -aux, format: USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
+# TTY: short for teletype. the terminal file this process connects to.
+ps -aux
 
 ####################### Run #################
 # no hang up. continue running after existing the shell.
