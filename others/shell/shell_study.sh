@@ -16,11 +16,11 @@ export foo2="golang"
 
 unset foo # cancel exporting variable.
 
-# 引用传入的参数，必须是具体的数字
-echo -e "执行文件名：${0}\n"
-# $# 传入的参数个数
+# invoke arguments passed to, 必须是具体的数字
+echo -e "executable name：${0}\n"
+# `$#` arguments amount
 if [ $# -gt 0 ]; then
-  echo -e "传入参数1: ${1}\n"
+  echo -e "argument 1: ${1}\n"
 else
   echo -e "1 more args expected, get 1\n"
 fi
@@ -28,7 +28,7 @@ fi
 # while-loop
 index=0
 while [ ${index} -le ${#} ]; do
-  echo -e "循环传入参数：${index}\n"
+  echo -e "argument $index：${index}\n"
   ((index++))
 done
 
@@ -38,23 +38,23 @@ for item in ${foo_arr[*]}; do
   echo "${item}"
 done
 
-# 数组长度
-echo -e "\n 数组foo_arr的长度是：${#foo_arr[*]}"
+# array length
+echo -e "length of array 'foo_arr' is: ${#foo_arr[*]}\n"
 
-# case 语法
+# case
 while true; do
-  echo -n "输入1-5之间的数字：" # -n 不换行
-  read -r aNum          # 将输入读取到 aNum
+  echo -n "input a number between 1 and 5: " # `-n` disable switching to a new line
+  read -r aNum          # read input and store in aNum
   case ${aNum} in
   1 | 2 | 3)
-    echo "输入数字小于4: ${aNum}"
+    echo "input a number less than 4: ${aNum}"
     ;;
   4 | 5)
-    echo "输入数字大于等于4：${aNum}"
+    echo "input a number greater than or equal to 4：${aNum}"
     ;;
   *)
-    echo "无效数字，游戏结束"
-    break # continue关键字，跳出当前循环
+    echo "invalid number. game over."
+    break # `continue` jump to next execution of the loop.
     ;;
   esac
 done
@@ -63,12 +63,12 @@ done
 function testFunc() {
   # 关系运算符：eq ne gt lt ge le
   if [ $# -eq 1 ]; then
-    echo "参数数量为1个"
-    echo "${1}" # 函数内部也是通过 $n 获取传递的参数
+    echo "arguments amount is 1"
+    echo "${1}" # use `$num` to get arguments in the function as well.
   fi
 
   if [ 1 -lt $# ]; then
-    echo "参数数量大于1个，获得参数2：${2}"
+    echo "arguments amount greater than 1, get argument 2: ${2}"
   fi
 }
 
@@ -91,7 +91,7 @@ else
 fi
 
 ####################### Examples #################
-# .kinit_auto.sh脚本，开机自动kinit
+# .kinit_auto.sh, kinit automatically when powering on.
 fail=false
 for ((i = 0; i < 5; i++)); do
   kdestroy && kinit --password-file=/root/.kinit_password -l 86400 root@666.com
