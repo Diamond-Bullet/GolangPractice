@@ -68,13 +68,8 @@ head -n 10 test.txt
 # print last X lines
 tail -n 10 test.txt
 
-# list directory tree
-tree /tmp
-# -a, show hidden files and folders. -L [num] display depth of directory tree.
-tree -L 2 -a /tmp
-
-# print absolute path. output: /root/folder/test.txt
-realpath test.txt
+# print while enabling
+echo -e "\t\n"
 
 ####################### Profiling #################
 ##df
@@ -121,6 +116,14 @@ lsof -p 1234
 # -aux, format: USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
 # TTY: short for teletype. the terminal file this process connects to.
 ps -aux
+
+# list directory tree
+tree /tmp
+# -a, show hidden files and folders. -L [num] display depth of directory tree.
+tree -L 2 -a /tmp
+
+# print absolute path. output: /root/folder/test.txt
+realpath test.txt
 
 ####################### Run #################
 # no hang up. continue running after existing the shell.

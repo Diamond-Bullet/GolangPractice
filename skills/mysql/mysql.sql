@@ -1,3 +1,4 @@
+####################### CRUD #################
 create table book (
     `id`         bigint(20) unsigned not null auto_increment comment 'book ID',
     `book_name`  varchar(64) not null default '' comment 'book name',
@@ -15,6 +16,7 @@ create table book (
 
 CREATE DATABASE database_name CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
+####################### Profiling #################
 SHOW TABLES FROM database_name;
 SHOW CREATE DATABASE database_name;
 
@@ -22,15 +24,27 @@ SHOW CREATE TABLE book;
 SHOW TABLE STATUS LIKE '%table_name%';
 SHOW INDEXES FROM book;
 
-# calculate the in-disk size of table
-SELECT table_name                                             `Table`,
-       round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB`
-FROM information_schema.TABLES
-WHERE table_schema = 'database'
-  AND table_name = 'table';
+# query all indexes of a database, except for primary keys.
+SELECT t.TABLE_NAME, t.INDEX_NAME, GROUP_CONCAT(t.COLUMN_NAME) as INDEX_COLUMN
+FROM information_schema.statistics t
+WHERE table_schema='database' and t.INDEX_NAME != 'PRIMARY'
+GROUP BY t.TABLE_NAME, t.INDEX_NAME;
 
+# calculate the in-disk size of table
+SELECT table_name `Table`, round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB`
+FROM information_schema.TABLES
+WHERE table_schema = 'database' AND table_name = 'table';
+
+show variables like '%transaction_isolation%'; 	# show isolation level of current session.
+set session transaction isolation level read uncommitted; # set isolation level.
+set session transaction isolation level read committed;
+set session transaction isolation level repeatable read;
+set session transaction isolation level serializable;
 
 ####################### Procedure #################
+show procedure status where db='database';    # show procedures of the database
+select routine_name from information_schema.routines where routine_schema='database';
+
 # insert records in batches.
 # for now, it doesn't work on mariadb.
 CREATE FUNCTION `rand_string`(n INT) RETURNS varchar(255) CHARSET latin1
@@ -56,8 +70,11 @@ END;
 
 CALL add_data(100);
 
-
-####################### Trifle #################
+####################### Grammar #################
 # `;`, `\G`
 select * from book limit 1;
 select * from book limit 1\G
+
+####################### Functions #################
+select round(1.23333, 2) # 四舍五入，保留n位小数
+
