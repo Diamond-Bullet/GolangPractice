@@ -4,7 +4,6 @@ import (
 	"archive/zip"
 	"bufio"
 	"bytes"
-	"fmt"
 	"github.com/gookit/color"
 	"io"
 	"os"
@@ -19,6 +18,23 @@ import (
 // archive/zip: read and write compressed files with buffer.
 // io/fs: file system.
 
+func TestWorkDir(t *testing.T) {
+	// Get current work directory
+	workDir, err := os.Getwd()
+	if err != nil {
+		logger.Println(color.Red.Sprint(err))
+		return
+	}
+	logger.Println(color.Blue.Sprint("workDir:", workDir))
+
+	// change current directory
+	err = os.Chdir("/root")
+	if err != nil {
+		logger.Println(color.Red.Sprint(err))
+		return
+	}
+}
+
 func TestFile(t *testing.T) {
 	// get user home dir
 	homeDir, _ := os.UserHomeDir()
@@ -26,24 +42,24 @@ func TestFile(t *testing.T) {
 	// flag `os.O_CREATE` used for creating a file when not existing. you can use os.Create() instead.
 	f, err := os.OpenFile(homeDir+"test.txt", os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
-		fmt.Println("open file err: ", err)
+		logger.Println("open file err: ", err)
 		return
 	}
 	defer f.Close()
 
 	n, err := f.Write([]byte(`you are the beast!`))
 	if err != nil {
-		fmt.Printf("writing does not finish. %d bytes writed\n", n)
+		logger.Printf("writing does not finish. %d bytes writed\n", n)
 	}
 
 	os.Remove("test1.txt")
 }
 
 func TestReadFile(t *testing.T) {
-	// os.Open just for Reading.
+	// METHOD 1: os.Open just for Reading.
 	file, err := os.Open("test.txt")
 	if err != nil {
-		fmt.Println("open file err: ", err)
+		logger.Println("open file err: ", err)
 		return
 	}
 	defer file.Close()
@@ -57,15 +73,16 @@ func TestReadFile(t *testing.T) {
 			break
 		}
 		if err1 != nil {
-			fmt.Println("read file err: ", err1)
+			logger.Println("read file err: ", err1)
 			return
 		}
 		content.Write(buf[:n])
 	}
-	fmt.Println("content:", content.String())
+	logger.Println("content:", content.String())
 
+	// METHOD 2
 	content1, err := os.ReadFile("test.txt")
-	fmt.Printf("content1: %s, 				err: %s\n", content1, err.Error())
+	logger.Printf("content1: %s, 				err: %s\n", content1, err.Error())
 }
 
 func TestZip(t *testing.T) {
@@ -80,10 +97,10 @@ func TestZip(t *testing.T) {
 func TestStd(t *testing.T) {
 	input := make([]byte, 0, 20)
 	_, err := os.Stdin.Read(input)
-	fmt.Printf("input: %s, 					err: %s", input, err.Error())
+	logger.Printf("input: %s, 					err: %s", input, err.Error())
 
 	_, err = os.Stdout.Write(input)
-	fmt.Println("Write err:", err)
+	logger.Println("Write err:", err)
 
 	// TODO doesn't work well
 	// redirect output to particular file
@@ -96,13 +113,13 @@ func TestStd(t *testing.T) {
 	os.Stdout = redirectFile
 	os.Stderr = redirectFile
 
-	fmt.Println("output after redirect")
+	logger.Println("output after redirect")
 }
 
 func TestBufIO(t *testing.T) {
 	f, err := os.OpenFile("test.txt", os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
-		fmt.Println("open file err: ", err)
+		logger.Println("open file err: ", err)
 		return
 	}
 	defer f.Close()

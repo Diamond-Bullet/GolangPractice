@@ -1,5 +1,9 @@
 package golang
 
+import (
+	"github.com/sirupsen/logrus"
+)
+
 type User struct{}
 
 func (u User) ToString() {
@@ -30,4 +34,12 @@ type StringType1 interface {
 type StringType2 interface {
 	StringType1
 	ToString2()
+}
+
+var logger = logrus.New()
+
+func init() {
+	logger.SetNoLock()
+	logger.SetReportCaller(true)
+	logger.SetFormatter(&logrus.TextFormatter{})
 }

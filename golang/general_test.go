@@ -3,6 +3,8 @@ package golang
 import (
 	"encoding/base64"
 	"fmt"
+	"github.com/gookit/color"
+	"regexp"
 	"strconv"
 	"strings"
 	"testing"
@@ -24,4 +26,16 @@ func TestBase64(t *testing.T) {
 
 	sDec, _ := base64.StdEncoding.DecodeString(sEnc)
 	fmt.Println(string(sDec))
+}
+
+func TestRegExp(t *testing.T) {
+	// match strings starts with things like `(1234, '`
+	r, err := regexp.Compile(`^\([0-9]*[1-9][0-9]*, '`)
+	if err != nil {
+		color.Redln(err)
+		return
+	}
+
+	color.Blueln("r.MatchString(\"(1234, 'Good Good'\"):", r.MatchString("(1234, 'Good Good'"))
+	color.Blueln("r.FindStringIndex(\"(1234, 'Good Good'\")", r.FindStringIndex("(1234, 'Good Good'"))
 }

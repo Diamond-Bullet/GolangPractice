@@ -10,6 +10,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/gookit/color"
 	pkgerrors "github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/tealeg/xlsx"
 	"golang.org/x/sync/errgroup"
 )
@@ -42,13 +43,15 @@ func TestJsonParser(t *testing.T) {
 
 // https://github.com/tealeg/xlsx #seems like the official's.
 // https://github.com/qax-os/excelize is the most starred repo by now
-func TestHandleExel(t *testing.T) {
+func TestHandleExelSheet(t *testing.T) {
 	excelFileName := "/foo.xlsx"
 	xlFile, err := xlsx.OpenFile(excelFileName)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+
+	// traverse the sheet.
 	for _, sheet := range xlFile.Sheets {
 		for _, row := range sheet.Rows {
 			for _, cell := range row.Cells {
@@ -57,9 +60,29 @@ func TestHandleExel(t *testing.T) {
 			}
 		}
 	}
+
+	// read individual cell.
+	xlFile.Sheet[""].Row(0).Cells[2].String()
 }
 
 func TestColorfulPrint(t *testing.T) {
+	// find more at https://github.com/gookit/color
+	// basic colors
+	color.Blueln("I am great Blue")
+	color.Magentaln("color Magenta")
+	color.New(color.FgRed, color.BgCyan).Println("FgRed BgCyan")
+	// partial rendering
+	fmt.Println(color.FgRed.Render("red"), "line")
+
+	// 256 colors
+	color.C256(132).Println("what the fucking color132")
+	color.S256(110, 120).Println("fg110 bg120")
+
+	// RGB colors
+	color.RGB(100, 200, 30).Println("color.RGB r100 g200 b30")
+	color.HEX("#1976D2").Println("color.HEX #1976D2")
+	color.RGBStyleFromString("170,187,204", "70,87,4").Println("RGBStyleFromString")
+
 	// work on linux or macOS.
 	// https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
 	colorReset := "\033[0m"
@@ -79,23 +102,6 @@ func TestColorfulPrint(t *testing.T) {
 	fmt.Println(colorWhite, "test")
 	fmt.Println(colorCyan, "test", colorReset)
 	fmt.Println()
-
-	// find more at https://github.com/gookit/color
-	// basic colors
-	color.Blueln("I am great Blue")
-	color.Magentaln("color Magenta")
-	color.New(color.FgRed, color.BgCyan).Println("FgRed BgCyan")
-	// partial rendering
-	fmt.Println(color.FgRed.Render("red"), "line")
-
-	// 256 colors
-	color.C256(132).Println("what the fucking color132")
-	color.S256(110, 120).Println("fg110 bg120")
-
-	// RGB colors
-	color.RGB(100, 200, 30).Println("color.RGB r100 g200 b30")
-	color.HEX("#1976D2").Println("color.HEX #1976D2")
-	color.RGBStyleFromString("170,187,204", "70,87,4").Println("RGBStyleFromString")
 }
 
 // snowflake
@@ -184,4 +190,16 @@ func TestErrGroup(t *testing.T) {
 // compare 2 objects with custom rules by implementing Equal() for the type.
 func TestCmp(t *testing.T) {
 	cmp.Equal(1, 2)
+}
+
+func TestLog(t *testing.T) {
+	// github.com/sirupsen/logrus
+	logrus.Errorln("error")
+
+	localLogger := logrus.New()
+	localLogger.SetNoLock()
+	localLogger.SetReportCaller(true)
+	localLogger.SetFormatter(&logrus.TextFormatter{})
+
+	localLogger.Errorln("error")
 }
