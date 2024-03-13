@@ -1,6 +1,7 @@
 package golang
 
 import (
+	"GolangPractice/utils/logger"
 	"archive/zip"
 	"bufio"
 	"bytes"
@@ -22,15 +23,15 @@ func TestWorkDir(t *testing.T) {
 	// Get current work directory
 	workDir, err := os.Getwd()
 	if err != nil {
-		logger.Println(color.Red.Sprint(err))
+		logger.Errorln(err)
 		return
 	}
-	logger.Println(color.Blue.Sprint("workDir:", workDir))
+	logger.Infoln("workDir:", workDir)
 
 	// change current directory
 	err = os.Chdir("/root")
 	if err != nil {
-		logger.Println(color.Red.Sprint(err))
+		logger.Errorln(err)
 		return
 	}
 }
@@ -42,14 +43,14 @@ func TestFile(t *testing.T) {
 	// flag `os.O_CREATE` used for creating a file when not existing. you can use os.Create() instead.
 	f, err := os.OpenFile(homeDir+"test.txt", os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
-		logger.Println("open file err: ", err)
+		logger.Errorln("open file err:", err)
 		return
 	}
 	defer f.Close()
 
 	n, err := f.Write([]byte(`you are the beast!`))
 	if err != nil {
-		logger.Printf("writing does not finish. %d bytes writed\n", n)
+		logger.Errorf("writing does not finish. %d bytes writed\n", n)
 	}
 
 	os.Remove("test1.txt")
@@ -59,7 +60,7 @@ func TestReadFile(t *testing.T) {
 	// METHOD 1: os.Open just for Reading.
 	file, err := os.Open("test.txt")
 	if err != nil {
-		logger.Println("open file err: ", err)
+		logger.Errorln("open file err: ", err)
 		return
 	}
 	defer file.Close()
@@ -73,16 +74,16 @@ func TestReadFile(t *testing.T) {
 			break
 		}
 		if err1 != nil {
-			logger.Println("read file err: ", err1)
+			logger.Errorln("read file err:", err1)
 			return
 		}
 		content.Write(buf[:n])
 	}
-	logger.Println("content:", content.String())
+	logger.Infoln("content:", content.String())
 
 	// METHOD 2
 	content1, err := os.ReadFile("test.txt")
-	logger.Printf("content1: %s, 				err: %s\n", content1, err.Error())
+	logger.Infof("content1: %s, 				err: %s\n", content1, err.Error())
 }
 
 func TestZip(t *testing.T) {
@@ -97,10 +98,10 @@ func TestZip(t *testing.T) {
 func TestStd(t *testing.T) {
 	input := make([]byte, 0, 20)
 	_, err := os.Stdin.Read(input)
-	logger.Printf("input: %s, 					err: %s", input, err.Error())
+	logger.Infof("input: %s, 					err: %s", input, err.Error())
 
 	_, err = os.Stdout.Write(input)
-	logger.Println("Write err:", err)
+	logger.Errorln("Write err:", err)
 
 	// TODO doesn't work well
 	// redirect output to particular file
@@ -113,13 +114,13 @@ func TestStd(t *testing.T) {
 	os.Stdout = redirectFile
 	os.Stderr = redirectFile
 
-	logger.Println("output after redirect")
+	logger.Infoln("output after redirect")
 }
 
 func TestBufIO(t *testing.T) {
 	f, err := os.OpenFile("test.txt", os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
-		logger.Println("open file err: ", err)
+		logger.Errorln("open file err: ", err)
 		return
 	}
 	defer f.Close()

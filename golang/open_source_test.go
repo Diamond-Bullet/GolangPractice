@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/buger/jsonparser"
 	"github.com/bwmarrin/snowflake"
@@ -12,6 +13,7 @@ import (
 	pkgerrors "github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/tealeg/xlsx"
+	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -62,7 +64,13 @@ func TestHandleExelSheet(t *testing.T) {
 	}
 
 	// read individual cell.
-	xlFile.Sheet[""].Row(0).Cells[2].String()
+	xlFile.Sheet["规则表名"].Cell(0, 2).String()
+	xlFile.Sheets[0].Row(0).Cells[2].String()
+	// write specified cell.
+	xlFile.Sheets[0].Rows[0].Cells[2].SetBool(true)
+	// add sell.
+	newCell := xlFile.Sheets[0].Row(0).AddCell()
+	newCell.SetDate(time.Now())
 }
 
 func TestColorfulPrint(t *testing.T) {
@@ -193,7 +201,7 @@ func TestCmp(t *testing.T) {
 }
 
 func TestLog(t *testing.T) {
-	// github.com/sirupsen/logrus
+	// https://github.com/sirupsen/logrus nice but I don't like the format.
 	logrus.Errorln("error")
 
 	localLogger := logrus.New()
@@ -202,4 +210,16 @@ func TestLog(t *testing.T) {
 	localLogger.SetFormatter(&logrus.TextFormatter{})
 
 	localLogger.Errorln("error")
+
+	color.Magentaln("###############################################################")
+
+	// go.uber.org/zap
+	sugar := zap.NewExample().Sugar()
+	defer sugar.Sync()
+	sugar.Infow("failed to fetch URL",
+		"url", "http://example.com",
+		"attempt", 3,
+		"backoff", time.Second,
+	)
+	sugar.Infof("failed to fetch URL: %s", "http://example.com")
 }

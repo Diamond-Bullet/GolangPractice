@@ -1,6 +1,7 @@
 package golang
 
 import (
+	"GolangPractice/utils/logger"
 	"fmt"
 	"github.com/gookit/color"
 	"reflect"
@@ -252,24 +253,23 @@ func TestArray(t *testing.T) {
 // by slice, it's easy to implement stack and queue.
 func TestSlice(t *testing.T) {
 	var s1 []int
-	fmt.Printf("%#v\n", (*reflect.SliceHeader)(unsafe.Pointer(&s1))) // 0x0, invalid.
+	logger.Infof("%#v", (*reflect.SliceHeader)(unsafe.Pointer(&s1))) // 0x0, invalid.
 
 	s2 := []int{}
-	fmt.Printf("%#v\n", (*reflect.SliceHeader)(unsafe.Pointer(&s2))) // s2 is initialized, and the pointer is set, but point to `zerobase`
-	println()
+	logger.Infof("%#v", (*reflect.SliceHeader)(unsafe.Pointer(&s2))) // s2 is initialized, and the pointer is set, but point to `zerobase`
 
 	// `append`, will add new element to the end of the underlying array.
 	s := make([]int, 0, 10)
 	s3 := append(s, 10)
 	s4 := append(s, 20)
-	fmt.Println(s3)
-	fmt.Println(s4)
+	logger.Infoln(s3)
+	logger.Infoln(s4)
 
 	// when capacity is no longer sufficient, slice will scale up，a new underlying array will be assigned to replace the old and smaller one.
 	s5 := s[:2:3] // start:end:cap
 	s6 := append(s5, 20, 30, 40, 50)
-	fmt.Println(&s5[0])
-	fmt.Println(&s6[0])
+	logger.Infoln(&s5[0])
+	logger.Infoln(&s6[0])
 }
 
 // map

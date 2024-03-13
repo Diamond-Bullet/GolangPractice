@@ -1,6 +1,7 @@
 package golang
 
 import (
+	"GolangPractice/utils/logger"
 	"net/http"
 	"os"
 	"runtime/pprof"
@@ -51,7 +52,7 @@ func TestRuntimePprof(t *testing.T) {
 func TestNetHttpPprof(t *testing.T) {
 	// pprof
 	go func() {
-		logger.Println(http.ListenAndServe(":61111", nil))
+		logger.Infoln(http.ListenAndServe(":61111", nil))
 	}()
 
 	// your product code here
