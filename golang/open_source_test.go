@@ -1,6 +1,7 @@
 package golang
 
 import (
+	"GolangPractice/utils/logger"
 	"errors"
 	"fmt"
 	"testing"
@@ -40,7 +41,7 @@ func TestJsonParser(t *testing.T) {
 }`)
 
 	val, err := jsonparser.Set(data, []byte("https://github.com"), "person", "avatars", "[0]", "backup_url")
-	fmt.Println(string(val), " err: ", err)
+	logger.Infoln(string(val), " err: ", err)
 }
 
 // https://github.com/tealeg/xlsx #seems like the official's.
@@ -49,7 +50,7 @@ func TestHandleExelSheet(t *testing.T) {
 	excelFileName := "/foo.xlsx"
 	xlFile, err := xlsx.OpenFile(excelFileName)
 	if err != nil {
-		fmt.Println(err)
+		logger.Errorln(err)
 		return
 	}
 
@@ -58,9 +59,10 @@ func TestHandleExelSheet(t *testing.T) {
 		for _, row := range sheet.Rows {
 			for _, cell := range row.Cells {
 				text := cell.String()
-				fmt.Printf("%s\n", text)
+				fmt.Printf("%s ", text)
 			}
 		}
+		println()
 	}
 
 	// read individual cell.
@@ -118,7 +120,7 @@ func TestSnowFlake(t *testing.T) {
 	// Create a new Node with a Node number of 1
 	node, err := snowflake.NewNode(1)
 	if err != nil {
-		fmt.Println(err)
+		logger.Errorln(err)
 		return
 	}
 
@@ -126,22 +128,22 @@ func TestSnowFlake(t *testing.T) {
 	id := node.Generate()
 
 	// Print out the ID in a few different ways.
-	fmt.Printf("Int64  ID: %d\n", id)
-	fmt.Printf("String ID: %s\n", id)
-	fmt.Printf("Base2  ID: %s\n", id.Base2())
-	fmt.Printf("Base64 ID: %s\n", id.Base64())
+	logger.Infof("Int64  ID: %d", id)
+	logger.Infof("String ID: %s", id)
+	logger.Infof("Base2  ID: %s", id.Base2())
+	logger.Infof("Base64 ID: %s", id.Base64())
 
 	// Print out the ID's timestamp
-	fmt.Printf("ID Time  : %d\n", id.Time())
+	logger.Infof("ID Time  : %d", id.Time())
 
 	// Print out the ID's node number
-	fmt.Printf("ID Node  : %d\n", id.Node())
+	logger.Infof("ID Node  : %d", id.Node())
 
 	// Print out the ID's sequence number
-	fmt.Printf("ID Step  : %d\n", id.Step())
+	logger.Infof("ID Step  : %d", id.Step())
 
 	// Generate and print, all in one.
-	fmt.Printf("ID       : %d\n", node.Generate().Int64())
+	logger.Infof("ID       : %d", node.Generate().Int64())
 }
 
 // error with stack trace
@@ -191,7 +193,7 @@ func TestErrGroup(t *testing.T) {
 
 	err := g.Wait()
 	if err != nil {
-		color.Redln(err)
+		logger.Errorln(err)
 	}
 }
 

@@ -2,7 +2,6 @@ package golang
 
 import (
 	"GolangPractice/utils/logger"
-	"fmt"
 	"github.com/gookit/color"
 	"reflect"
 	"runtime"
@@ -49,10 +48,10 @@ func TestClosure(t *testing.T) {
 
 	innerFunc := Foo()
 
-	println(&innerFunc)
-	fmt.Printf("innerFunc size: %d\n", unsafe.Sizeof(innerFunc))
-	println(innerFunc(1)) // 2
-	println(innerFunc(2)) // 4
+	logger.Infoln(&innerFunc)
+	logger.Infof("innerFunc size: %d", unsafe.Sizeof(innerFunc))
+	logger.Infoln(innerFunc(1)) // 2
+	logger.Infoln(innerFunc(2)) // 4
 }
 
 // memory alignment
@@ -74,11 +73,11 @@ func TestMemoryAlignment(t *testing.T) {
 
 	p := Part2{}
 	var x = 1<<63 - 1
-	println(unsafe.Offsetof(p.e))
-	fmt.Printf("p align: %d\n", unsafe.Alignof(p.e))
-	println(&(p.e))
-	println(&x)
-	fmt.Printf("p size: %d\n", unsafe.Sizeof(p))
+	logger.Infoln(unsafe.Offsetof(p.e))
+	logger.Infof("p align: %d", unsafe.Alignof(p.e))
+	logger.Infoln(&(p.e))
+	logger.Infoln(&x)
+	logger.Infof("p size: %d", unsafe.Sizeof(p))
 }
 
 // pointer computation/operation/calculation
@@ -89,10 +88,10 @@ func TestPointer(t *testing.T) {
 	}
 
 	s := S1{}
-	fmt.Println(s)
+	logger.Infoln(s)
 	b := (*int64)(unsafe.Pointer(uintptr(unsafe.Pointer(&s)) + unsafe.Offsetof(s.B)))
 	*b = 1
-	fmt.Println(s)
+	logger.Infoln(s)
 }
 
 // defer: last in, first out
@@ -106,20 +105,20 @@ func TestDeferSequence(t *testing.T) {
 	// 1
 
 	defer func() {
-		println(1)
+		logger.Infoln(1)
 	}()
 
 	defer func() {
-		println(2)
+		logger.Infoln(2)
 	}()
 }
 
 func TestDeferParameter(t *testing.T) {
 	var x int
 	defer func() {
-		fmt.Printf("x == 0: %v\n", x == 0) // false # as wrapped with an anonymous func, the variable is not certain until defer func really executes.
+		logger.Infof("x == 0: %v", x == 0) // false # as wrapped with an anonymous func, the variable is not certain until defer func really executes.
 	}()
-	defer fmt.Printf("x == 1: %v\n", x == 1) //false # the value is certain right now.
+	defer logger.Infof("x == 1: %v", x == 1) //false # the value is certain right now.
 
 	x++
 }
@@ -137,7 +136,7 @@ func TestDeferReturn(t *testing.T) {
 		return i // x = i, defer func, ret x
 	}
 	tt := tf()
-	println(tt) // 1
+	logger.Infoln(tt) // 1
 }
 
 func JustForPanic() {
@@ -149,7 +148,7 @@ func JustForPanic() {
 func TestPanicNotCaptured(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Printf("recovered from crash: %v", r)
+			logger.Infof("recovered from crash: %v", r)
 		}
 	}()
 
@@ -163,8 +162,8 @@ func TestPanicNotCaptured(t *testing.T) {
 func TestPanicCaptured(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Printf("recovered from crash: %v", r)                                      // here is only a line of error
-			fmt.Printf("recovered from crash: %v, detailed stack: %s\n", r, debug.Stack()) // print goroutine stack
+			logger.Infof("recovered from crash: %v", r)                                      // here is only a line of error
+			logger.Infof("recovered from crash: %v, detailed stack: %s", r, debug.Stack()) // print goroutine stack
 		}
 	}()
 
@@ -184,7 +183,7 @@ func TestMemoryAddress(t *testing.T) {
 
 		px := (*[]int)(unsafe.Pointer(p))
 		if (*px)[0] != x[0] {
-			println(*px)
+			logger.Infoln(*px)
 		}
 	}
 }
@@ -199,22 +198,21 @@ func TestString(t *testing.T) {
 	s := "abcdefg 好东西 @#¥" // pointer points to a bytes array.
 	s1 := s[2:4]
 
-	fmt.Printf("%#v\n", (*reflect.StringHeader)(unsafe.Pointer(&s)))
-	fmt.Printf("%#v\n", (*reflect.StringHeader)(unsafe.Pointer(&s1)))
-	println()
+	logger.Infof("%#v", (*reflect.StringHeader)(unsafe.Pointer(&s)))
+	logger.Infof("%#v", (*reflect.StringHeader)(unsafe.Pointer(&s1)))
+	logger.Infoln()
 
 	// byte
 	for i := 0; i < len(s); i++ {
-		fmt.Printf("%d: %c  ", i, s[i])
+		logger.Infof("%d: %c  ", i, s[i])
 	}
-	println()
+	logger.Infoln()
 
 	// rune
 	// library `utf8` offers some functions handling type `rune`.
 	for i, x := range s {
-		fmt.Printf("%d: %c  ", i, x)
+		logger.Infof("%d: %c  ", i, x)
 	}
-	println("\n")
 
 	// In general(normally, usually, commonly, generally), modifying string has to transform it into []byte、[]rune, which calls a reallocation of memory and data duplication.
 	// If we just need to turn string into []byte in a read-only situation, using unsafe.Pointer instead can avoid extra actions mentioned above.
@@ -223,8 +221,8 @@ func TestString(t *testing.T) {
 	sb := *(*string)(unsafe.Pointer(&b))
 	bs := *(*[]byte)(unsafe.Pointer(&sb))
 	bs[1] = 'a'
-	println(sb)
-	fmt.Printf("%s\n", bs)
+	logger.Infoln(sb)
+	logger.Infof("%s", bs)
 
 	// Concatenating/Joining/Splicing strings dynamically needs to reallocate memory constantly, leading to(resulting in) worse performance.
 	// Allocating memory in advance(ahead, beforehand).
@@ -236,17 +234,17 @@ func TestString(t *testing.T) {
 func TestArray(t *testing.T) {
 	d1 := [4]int{3: 10}   // Initialize by the index.
 	d2 := [...]int{2: 10} // define/clear/crystallize `length` characteristic/property according to the biggest index has been declared by the user.
-	fmt.Printf("%v\n", d1)
-	fmt.Printf("%v\n", d2)
+	logger.Infof("%v", d1)
+	logger.Infof("%v", d2)
 
 	d3 := [3][3]int{}     // multidimensional array.
 	d4 := [...][3]int{{}} // the characteristic `[...]` is available if and only if it's the first layer.
-	fmt.Printf("%v\n", d3)
-	fmt.Printf("%v\n", d4)
+	logger.Infof("%v", d3)
+	logger.Infof("%v", d4)
 
 	// if the array's basic(underlying) type supports operations like `==`、`!=`, the array does too(then so does the array).
 	a, b := [2]int{1, 2}, [2]int{2, 4}
-	println(a == b)
+	logger.Infoln(a == b)
 }
 
 // slice
@@ -282,7 +280,7 @@ func TestMap(t *testing.T) {
 	}
 
 	change(m)
-	println(m[1]) // result: 2, map is a pointer
+	logger.Infoln(m[1]) // result: 2, map is a pointer
 
 	for i := 2; i < 5; i++ {
 		m[i] = i + 10
@@ -291,7 +289,7 @@ func TestMap(t *testing.T) {
 	for k := range m {
 		m[k+10] = k + 20
 		delete(m, k+1)
-		fmt.Println(k, m)
+		logger.Infoln(k, m)
 	}
 
 	// Can not do some other concurrent operations at the same time when writing the map,
@@ -314,8 +312,6 @@ func TestMapShrinkWhenDelete(t *testing.T) {
 			color.Redp(*(*uint8)(unsafe.Pointer(uintptr(*(*unsafe.Pointer)(unsafe.Pointer(&m))) + uintptr(9))), " ")
 		}
 	}
-
-	println()
 
 	for i := 0; i < EntryAmount; i++ {
 		delete(m, i)
