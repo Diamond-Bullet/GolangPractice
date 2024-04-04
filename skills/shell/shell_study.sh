@@ -3,12 +3,21 @@
 # In this way, you can avoid using `source [file]`.
 # All commands shell script executes are linux commands.
 
-# variable naming
+###################### variable naming ##############################
 foo="123"           # no space allowed.
 foo1_name="${PATH}" # expressions work in double quotes.
 foo2_name='$PATH'   # expressions don't work in single quotes. plain text.
 foo1="$(which go)"  # store the output of command in variable
 
+# set variable by typing
+read foo3
+
+# give a var an alias
+alias bar1=foo1
+# unset the alias
+unalias bar1
+
+echo ${foo}
 echo -e "variable naming: ${foo}, ${foo1_name}, ${foo1}\n" # reference variable in other place.
 
 export foo # export variable as an environmental variable.
@@ -16,6 +25,23 @@ export foo2="golang"
 
 unset foo # cancel exporting variable.
 
+# print all env variables
+env
+# print all shell variables
+set
+
+## environment variables. https://www.linuxprobe.com/environment-variable-configuration.html
+#	.profile is read only when user logs in. While .bashrc is read every time a shell script runs.
+
+#	可以自定义一个环境变量文件，比如在某个项目下定义example.profile，在这个文件中使用export定义一系列变量，
+#	然后在~/.profile文件后面加上：source example.profile，这样你每次登陆都可以在Shell脚本中使用自己定义的一系列变量。
+
+# system-level
+cat /etc/environment /etc/profile /etc/bash.bashrc /etc/profile.d/test.sh
+# user-level
+cat ~/.profile ~/.bashrc
+
+###################### commandline parameters ##############################
 # invoke arguments passed to, 必须是具体的数字
 echo -e "executable name：${0}\n"
 # `$#` arguments amount
@@ -25,14 +51,14 @@ else
   echo -e "1 more args expected, get 1\n"
 fi
 
-# while-loop
+###################### while-loop ##############################
 index=0
 while [ ${index} -le ${#} ]; do
   echo -e "argument $index：${index}\n"
   ((index++))
 done
 
-# for-loop
+###################### for-loop ##############################
 foo_arr=(a b c d "${foo}")
 for item in ${foo_arr[*]}; do
   echo "${item}"
@@ -41,7 +67,7 @@ done
 # array length
 echo -e "length of array 'foo_arr' is: ${#foo_arr[*]}\n"
 
-# case
+###################### switch-case ##############################
 while true; do
   echo -n "input a number between 1 and 5: " # `-n` disable switching to a new line
   read -r aNum          # read input and store in aNum
@@ -59,7 +85,7 @@ while true; do
   esac
 done
 
-# function
+###################### function ##############################
 function testFunc() {
   # 关系运算符：eq ne gt lt ge le
   if [ $# -eq 1 ]; then
@@ -73,22 +99,6 @@ function testFunc() {
 }
 
 testFunc 1 2
-
-## environment variables. https://www.linuxprobe.com/environment-variable-configuration.html
-#	.profile文件只在用户登录的时候读取一次，而.bashrc会在每次运行Shell脚本的时候读取一次。
-#	可以自定义一个环境变量文件，比如在某个项目下定义uusama.profile，在这个文件中使用export定义一系列变量，
-#	然后在~/.profile文件后面加上：source uusama.profile，这样你每次登陆都可以在Shell脚本中使用自己定义的一系列变量。
-# 系统级
-cat /etc/environment /etc/profile /etc/bash.bashrc /etc/profile.d/test.sh
-# 用户级
-cat ~/.profile ~/.bashrc
-
-# check whether file exists.
-if [ -f "/data/filename" ]; then
-  echo "file exists"
-else
-  echo "file doesn't exist"
-fi
 
 ####################### Examples #################
 # .kinit_auto.sh, kinit automatically when powering on.
@@ -104,4 +114,11 @@ for ((i = 0; i < 5; i++)); do
 done
 if [ $fail == true ]; then
   echo >>/root/.kinit_log.txt
+fi
+
+# check whether file exists.
+if [ -f "/data/filename" ]; then
+  echo "file exists"
+else
+  echo "file doesn't exist"
 fi

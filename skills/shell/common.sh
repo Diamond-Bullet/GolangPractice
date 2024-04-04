@@ -1,16 +1,16 @@
 ####################### Text & File #################
 ## sort. 对文件中所有行，默认字典序排序. -n 按数值排序；-k 取某一列排序；-t 指定列的分隔符；-r 倒序；
-sort -n -k 5 -t " " text.txt
+sort -n -k 5 -t " " file.txt
 
 ## wc
 # count by line
-wc -l text.txt
+wc -l file.txt
 # count by word
-wc -w text.txt
+wc -w file.txt
 
 ##uniq
 # group by line and count the number of same line.
-uniq -c text.txt
+uniq -c file.txt
 
 ## awk
 # 参考 菜鸟教程
@@ -33,13 +33,22 @@ ls -l | awk '$1 !~ /^d.*/  {print $9}' | xargs wc -l | sort -nr -k 1 # 排列目
 
 # -F 指定分隔符
 # refer to https://juejin.cn/post/7055242139222949924
-grep "parent" log.txt  | awk -F "child\":\"" '{print $2}' | awk -F "\":\"" '{print $1" "$5}' | awk -F "\",\"name" '{print $1}' | sort -k 2 -r | head -n 25
+grep "parent" log.txt | awk -F "child\":\"" '{print $2}' | awk -F "\":\"" '{print $1" "$5}' | awk -F "\",\"name" '{print $1}' | sort -k 2 -r | head -n 25
 
 ## sed
 # -i, replace string and update the file. -e, print content after substituting and not change the file.
 sed -i "s/old_string/new_string/" file.txt
 # print line 5-10.
 sed -n '5,10p' file.txt
+
+## `xargs`, handle multiple input lines with a command.
+# default delimiter is `\n`. specify it using flag `-d`.
+cat file.txt | xargs wget
+cat file.txt | xargs -n1 -t
+
+## `zcat`, uncompress files to standard output.
+# like `uncompress -c`
+zcat api.log.gz | grep --binary-files=text '/app/content/config' | grep -a '1000976'
 
 ## chmod
 chmod -R 600 [path]
@@ -51,25 +60,37 @@ ln -s target_file link_file
 ln -snf target_file link_file
 
 ## clear content of the file.
-true >test.txt
-cat /dev/null >test.txt
-echo >test.txt
+true >file.txt
+cat /dev/null >file.txt
+echo >file.txt
 
 ## grep
 # -v exclude lines with certain word
-grep -v "exclude_word" test.txt
+grep -v "exclude_word" file.txt
 # print lines around pattern line. -A4 4 lines after it. -B before it. -C before and after it.
-grep -A4 "pattern" test.txt
+grep -A4 "pattern" file.txt
 # -E regular expression
-grep -E "[0-9][a-z]" test.txt
+grep -E "[0-9][a-z]" file.txt
 
 # print first X lines
-head -n 10 test.txt
+head -n 10 file.txt
 # print last X lines
-tail -n 10 test.txt
+tail -n 10 file.txt
 
 # print while enabling
 echo -e "\t\n"
+
+# print with format
+printf "%d - %d = %s" 12 1 "11"
+
+# `od`, dump files in human-readable format, like binaries.
+# default: octal. -c: ASCII. -x hex.
+od -c file.txt
+# hexdump, similar as `od`.
+
+## `more`, view files in pagination.
+# -[number], like -20, shows 20 lines per screenful.
+more -c -20 file.txt
 
 ####################### Profiling #################
 ##df
@@ -122,8 +143,8 @@ tree /tmp
 # -a, show hidden files and folders. -L [num] display depth of directory tree.
 tree -L 2 -a /tmp
 
-# print absolute path. output: /root/folder/test.txt
-realpath test.txt
+# print absolute path. output: /root/folder/file.txt
+realpath file.txt
 
 ####################### Run #################
 # no hang up. continue running after existing the shell.
@@ -146,8 +167,8 @@ ssh-copy-id root@1.2.3.4
 # login
 ssh user@1.2.3.4
 # scp src dst
-scp test.txt root@1.2.3.4:/root
-scp root@1.2.3.4:/root/test.txt .
+scp file.txt root@1.2.3.4:/root
+scp root@1.2.3.4:/root/file.txt .
 
 ## To generate more types of certificate, refer to internet docs.
 # generate key
@@ -210,6 +231,10 @@ doc.uk.value.length()*10);} else {return doc.uk.value.length()*10;}} else {retur
 
 # proto generation
 protoc --micro_out=. --go_out=. ./customer.proto
+
+####################### Package Management #################
+# update package information to latest
+apt update
 
 ####################### Mac OS #################
 # Mac下使用了zsh会不执行/etc/profile文件，当然，如果用原始的是会执行。
