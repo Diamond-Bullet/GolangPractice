@@ -1,4 +1,5 @@
 #!/bin/bash
+# installing instruction https://www.cnblogs.com/hello-me/p/16855568.html
 
 function install_pkg() {
   if [ $# -eq 1 ]; then # argument count is 1.

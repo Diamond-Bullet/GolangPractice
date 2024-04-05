@@ -96,17 +96,16 @@ more -c -20 file.txt
 ##df
 # 查看磁盘使用况
 df -hT
-
 ##du
 # 查看当前文件夹下各个文件占用空间大小
 du -h --max-depth=1 ./*
 # 查看该文件夹大小
 du -hs [path]
 
-# network traffic analysis
+## network traffic analysis
 # https://www.scaler.com/topics/linux-monitor-network-traffic/
+# https://www.cnblogs.com/nmap/p/9427260.html
 cat /proc/net/dev
-
 ifconfig
 # show realtime traffic for each program
 nethogs
@@ -116,7 +115,6 @@ iftop
 ## netstat
 # install
 apt install net-tools
-
 netstat -lnap
 # list all network adapters
 netstat -i
@@ -134,17 +132,25 @@ lsof -i:1234
 lsof -p 1234
 
 # show processes https://www.geeksforgeeks.org/ps-command-in-linux-with-examples/
-# -aux, format: USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
+# `-aux`, format: USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
 # TTY: short for teletype. the terminal file this process connects to.
 ps -aux
 
 # list directory tree
 tree /tmp
-# -a, show hidden files and folders. -L [num] display depth of directory tree.
+# `-a`, show hidden files and folders. `-L [num]` display depth of directory tree.
 tree -L 2 -a /tmp
 
 # print absolute path. output: /root/folder/file.txt
 realpath file.txt
+# print file format
+file file.txt
+
+# print Linux kernel version.
+uname -a
+
+# print CPU information
+cat /proc/cpuinfo
 
 ####################### Run #################
 # no hang up. continue running after existing the shell.
@@ -155,10 +161,23 @@ nohup tmp.exe >log.txt 2>&1 &
 
 ## jobs. show background tasks.
 jobs
+# foreground specified job.
+fg %1
+# make specified job background.
+bg %1
+ctrl+z # halt execution of current foreground process.
 
 ## kill
 # kill the No.1 background task. see the number in `jobs`.
 kill %1
+# list all signals.
+kill -l
+
+# https://linuxhandbook.com/here-input-redirections/
+# `>`, `<`, input redirection
+# `>>`, `<<`, convey multiple lines of input.
+# `<<<`, convey single line of input.
+cat output.txt <<< "1234"
 
 ####################### Remote Interaction #################
 # generate key pair and copy to remote server.
@@ -184,17 +203,6 @@ openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
 # generate random base64 string
 openssl rand -base64 21
 
-## 正反向shell:
-# 正向Shell，服务器上使用ncat监听
-ncat -l [port] -e /bin/bash
-# 开发机上连接
-ncat [remote_ip] [port]
-
-#反向Shell，开发机上使用ncat监听
-ncat -l [port]
-# 服务器上连接
-ncat [local_ip] [port] -e /bin/bash
-
 ## send file with GUI
 yum install lrzsz
 # send file from linux to remote machine
@@ -202,7 +210,47 @@ sz file.txt
 # receive file from remote machine
 rz
 
+# install DNS tools like `dig`, `nslookup`.
+apt install dnsutils
+
+## `ncat`, 正反向shell:
+# 正向Shell，服务器上使用ncat监听
+ncat -l [port] -e /bin/bash
+# 开发机上连接
+ncat [remote_ip] [port]
+#反向Shell，开发机上使用ncat监听
+ncat -l [port]
+# 服务器上连接
+ncat [local_ip] [port] -e /bin/bash
+
+# `socat`, 正向Shell，1.服务器上使用socat监听
+socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp-listen:9999,bind=0.0.0.0,reuseaddr,fork
+#正向Shell，2.开发机上连接
+socat file:`tty`,raw,echo=0 tcp:192.168.0.1:9999
+#反向Shell，1.开发机上使用socat监听
+socat file:`tty`,raw,echo=0 tcp-listen:9999,bind=0.0.0.0,reuseaddr,fork
+#反向Shell，2.服务器上连接
+socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:192.168.0.10:9999
+
 ####################### Trifle #################
+## package management.
+# update package information to latest
+apt update
+
+## vim
+# build Go developing env on vim. https://www.cnblogs.com/breg/p/5386365.html
+vim .vimrc # configuration file of vim.
+10gg # go to line 10.
+G # jump to the end of the file.
+^ # go to the start of the line.
+$ # go to the end of the line.
+10yy # copy next 10 lines from current line.
+p # paste contents from clipboard.
+10dd # delete following 10 lines from current line.
+ctrl+v
+U # undo last operation.
+ctrl+r # recover undone operation.
+
 # ES query
 curl -H "Content-Type: application/json" -u elastic:gRYppQtdTpP3nFzH -XPOST 'http://172.16.5.146:9200/imissu/_doc/_search?pretty' -d '{
   "query": {
@@ -232,9 +280,20 @@ doc.uk.value.length()*10);} else {return doc.uk.value.length()*10;}} else {retur
 # proto generation
 protoc --micro_out=. --go_out=. ./customer.proto
 
-####################### Package Management #################
-# update package information to latest
-apt update
+## `mutagen`, synchronize data between computers.
+# installation
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install mutagen-io/mutagen/mutagen
+mutagen sync create --name=songzq --sync-mode=one-way-replica --ignore='output/' ~/work root@${IP}:~/work
+Mutagen daemon start
+Mutagen list
+Mutagen daemon stop
+
+## register new service on Linux.
+# /usr/bin/systemd/system 服务配置文件夹
+sudo systemctl daemon-reload
+sudo systemctl enable job.service
+sudo systemctl start job.service
 
 ####################### Mac OS #################
 # Mac下使用了zsh会不执行/etc/profile文件，当然，如果用原始的是会执行。
