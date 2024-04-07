@@ -77,8 +77,12 @@ head -n 10 file.txt
 # print last X lines
 tail -n 10 file.txt
 
-# print while enabling
+# enable interpretation of backslash escape character.`\n`, `\r` are escape sequences.
 echo -e "\t\n"
+# print env variable
+echo ${VAR}
+# print PID of current process
+echo $$
 
 # print with format
 printf "%d - %d = %s" 12 1 "11"
