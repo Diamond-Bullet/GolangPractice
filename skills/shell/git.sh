@@ -31,7 +31,7 @@ git push origin --delete [name]
 # link local branch to remote branch.
 git branch --set-upstream-to=[remote_branch] [local_branch]
 # change git repository
-git remote set-url origin https://github.com/szq-123/codingPractice.git
+git remote set-url origin https://github.com/szq-123/GolangPractice.git
 
 ## git reset. reset the `head` pointer and the branch pointer that `head` is pointing at.
 # reset local repo.

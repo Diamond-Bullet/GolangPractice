@@ -289,9 +289,9 @@ protoc --micro_out=. --go_out=. ./customer.proto
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install mutagen-io/mutagen/mutagen
 mutagen sync create --name=songzq --sync-mode=one-way-replica --ignore='output/' ~/work root@${IP}:~/work
-Mutagen daemon start
-Mutagen list
-Mutagen daemon stop
+mutagen daemon start
+mutagen list
+mutagen daemon stop
 
 ## register new service on Linux.
 # /usr/bin/systemd/system 服务配置文件夹
