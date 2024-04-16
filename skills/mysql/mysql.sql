@@ -76,5 +76,10 @@ select * from book limit 1;
 select * from book limit 1\G
 
 ####################### Functions #################
-select round(1.23333, 2) # 四舍五入，保留n位小数
+select round(1.23333, 2); # 四舍五入，保留n位小数
+
+select left('123456', 2); # 截取左边2位
+
+####################### Examples #################
+
 

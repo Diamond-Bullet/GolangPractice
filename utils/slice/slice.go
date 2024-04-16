@@ -8,3 +8,14 @@ func Contain[T comparable](s []T, p T) bool {
 	}
 	return false
 }
+
+func Unique[T comparable](s []T) (res []T) {
+	seen := make(map[T]bool)
+	for _, ss := range s {
+		if !seen[ss] {
+			res = append(res, ss)
+			seen[ss] = true
+		}
+	}
+	return
+}
