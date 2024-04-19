@@ -1,8 +1,10 @@
 package golang
 
 import (
+	"GolangPractice/utils/logger"
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -131,4 +133,36 @@ func TestWaitGroup(t *testing.T) {
 
 	// Using Factory Pattern to bind goroutine to a channel.
 	// some goroutines are permanently waiting for receiving messages from or sending messages to a channel due to certain bug in our program. it causes memory leaks.
+}
+
+// sync.Pool is safe for use by multiple goroutines simultaneously.
+func TestSyncPool(t *testing.T) {
+	var numCalcsCreated int32
+
+	objectPool := &sync.Pool{
+		New: func() any {
+			atomic.AddInt32(&numCalcsCreated, 1)
+			buffer := make([]byte, 1024)
+			return &buffer
+		},
+	}
+
+	const numWorkers int = 1e6
+
+	var wg sync.WaitGroup
+	wg.Add(numWorkers)
+
+	for i := 0; i < numWorkers; i++ {
+		go func() {
+			defer wg.Done()
+			// 申请一个 buffer 实例
+			buffer := objectPool.Get()
+			_ = buffer.(*[]byte)
+			// 释放一个 buffer 实例
+			defer objectPool.Put(buffer)
+		}()
+	}
+	wg.Wait()
+
+	logger.Infoln(numCalcsCreated)
 }

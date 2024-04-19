@@ -217,6 +217,10 @@ rz
 # install DNS tools like `dig`, `nslookup`.
 apt install dnsutils
 
+# ftp
+ftp 1.2.3.4 # the interactive terminal will ask you username and password.
+ftp -p 1.2.3.4 # use with passive mode.
+
 ## `ncat`, 正反向shell:
 # 正向Shell，服务器上使用ncat监听
 ncat -l [port] -e /bin/bash

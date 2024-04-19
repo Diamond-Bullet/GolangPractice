@@ -6,6 +6,9 @@ import (
 	"os"
 )
 
+//TODO
+// 1. support multiple color options
+// 2. enable colored print throughout couples of lines.
 var defaultLogger = log.New(os.Stderr, "", log.Lshortfile)
 
 func Debugln(v ...any) {

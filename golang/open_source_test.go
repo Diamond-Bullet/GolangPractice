@@ -151,17 +151,14 @@ func TestSnowFlake(t *testing.T) {
 // learn about new error handling draft `Go2 errors` by Go team.
 func TestStackError(t *testing.T) {
 	err := pkgerrors.Errorf("err: %s", "i want to bring out an error")
-	fmt.Println(err)
-	fmt.Printf("%+v\n", err)
-	println()
+	logger.Infoln(err)
+	logger.Infof("%+v", err)
 
 	err1 := pkgerrors.Wrap(err, "err1")
-	fmt.Printf("%+v\n", err1)
-	println()
+	logger.Infof("%+v", err1)
 
 	err2 := StackError1()
-	fmt.Printf("%+v\n", err2)
-	println()
+	logger.Infof("%+v", err2)
 }
 
 func StackError1() error {
@@ -225,3 +222,5 @@ func TestLog(t *testing.T) {
 	)
 	sugar.Infof("failed to fetch URL: %s", "http://example.com")
 }
+
+// TODO　https://github.com/jlaffaye/ftp
