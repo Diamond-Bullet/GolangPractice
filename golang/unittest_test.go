@@ -12,7 +12,7 @@ import (
 // It seems like the difference between the two repo is tiny. Or the latter might have some improvement from the former.
 
 // go test -v  golang.go -test.run Add #Test the single func `TestAdd`
-// go test -v  golang.go -test.bench ForFun -test.run ForFun #test a func in benchmark mode
+// go test -v  golang.go -test.bench ForFun -test.run ForFun #Test a func in benchmark mode
 // go test -bench=. -benchtime=3s #run all benchmarks, specify the test duration.
 
 // -cpuprofile: profile.out #output the result of cpu analysis
