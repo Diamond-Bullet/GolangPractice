@@ -16,7 +16,7 @@ create table book (
 
 CREATE DATABASE database_name CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
-####################### Profiling #################
+####################### System #################
 SHOW TABLES FROM database_name;
 SHOW CREATE DATABASE database_name;
 
@@ -40,6 +40,9 @@ set session transaction isolation level read uncommitted; # set isolation level.
 set session transaction isolation level read committed;
 set session transaction isolation level repeatable read;
 set session transaction isolation level serializable;
+
+# change password.
+ALTER user 'root'@'localhost' IDENTIFIED BY '123456';
 
 ####################### Procedure #################
 show procedure status where db='database';    # show procedures of the database
@@ -75,10 +78,22 @@ CALL add_data(100);
 select * from book limit 1;
 select * from book limit 1\G
 
+# when the result set of select statement is empty, null gets returned.
+select ifnull((select * from book), 0);
+
 ####################### Functions #################
 select round(1.23333, 2); # 四舍五入，保留n位小数
 
 select left('123456', 2); # 截取左边2位
+
+# https://learn.microsoft.com/en-us/sql/t-sql/functions/row-number-transact-sql?view=sql-server-ver16
+# ROW_NUMBER(): number the results sequentially, like 1,2,3,4.
+# RANK(): 1,2,2,4
+# DENSE_RANK(): 1,2,2,3
+SELECT
+    ROW_NUMBER() OVER(PARTITION BY book_name ORDER BY book_pages) AS 'Row#',
+    book_name, created_time
+FROM book WHERE id > 5;
 
 ####################### Examples #################
 

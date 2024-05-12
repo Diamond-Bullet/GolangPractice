@@ -7,6 +7,8 @@ sort -n -k 5 -t " " file.txt
 wc -l file.txt
 # count by word
 wc -w file.txt
+# view file(not folder, symbolic link, etc.) amount in current directory.
+ls -l [path]| grep "^-" | wc -l
 
 ##uniq
 # group by line and count the number of same line.
@@ -96,6 +98,22 @@ od -c file.txt
 # -[number], like -20, shows 20 lines per screenful.
 more -c -20 file.txt
 
+# list directory tree
+tree /tmp
+# `-a`, show hidden files and folders. `-L [num]` display depth of directory tree.
+tree -L 2 -a /tmp
+
+# print absolute path. output: /root/folder/file.txt
+realpath file.txt
+# print file type (ordinary file, folder, link, etc.)
+file file.txt
+# show comprehensive information of the file. like type, ctime, mtime, size, etc.
+stat file.txt
+
+# find files whose name matches the pattern in specified folder.
+# `-type` file type. `-ctime` creation time. `-mtime` modification time.
+find . -name "*.c"
+
 ####################### Profiling #################
 ##df
 # 查看磁盘使用况
@@ -140,18 +158,11 @@ lsof -p 1234
 # TTY: short for teletype. the terminal file this process connects to.
 ps -aux
 
-# list directory tree
-tree /tmp
-# `-a`, show hidden files and folders. `-L [num]` display depth of directory tree.
-tree -L 2 -a /tmp
-
-# print absolute path. output: /root/folder/file.txt
-realpath file.txt
-# print file format
-file file.txt
-
 # print Linux kernel version.
 uname -a
+
+# view resources usage limit for current user.
+ulimit -a
 
 # print CPU information
 cat /proc/cpuinfo
@@ -302,6 +313,9 @@ mutagen daemon stop
 sudo systemctl daemon-reload
 sudo systemctl enable job.service
 sudo systemctl start job.service
+
+# print present time in particular pattern.
+date "+%Y-%m-%d %H:%M:%S"
 
 ####################### Mac OS #################
 # Mac下使用了zsh会不执行/etc/profile文件，当然，如果用原始的是会执行。
