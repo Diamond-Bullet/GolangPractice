@@ -14,10 +14,10 @@ import (
 func TestSyncMap(t *testing.T) {
 	key, subKey := "", 50
 	m := &sync.Map{}
-	SetMap(m, key, subKey)
+	setMap(m, key, subKey)
 }
 
-func SetMap(m *sync.Map, key string, subKey int) {
+func setMap(m *sync.Map, key string, subKey int) {
 	if subM, ok := m.Load(key); ok {
 		e, ok1 := subM.(*sync.Map).Load(subKey)
 		if ok1 {
@@ -135,7 +135,8 @@ func TestWaitGroup(t *testing.T) {
 	// some goroutines are permanently waiting for receiving messages from or sending messages to a channel due to certain bug in our program. it causes memory leaks.
 }
 
-// sync.Pool is safe for use by multiple goroutines simultaneously.
+// sync.Pool an object pool.
+// It is safe for use by multiple goroutines simultaneously.
 func TestSyncPool(t *testing.T) {
 	var numCalcsCreated int32
 
@@ -165,4 +166,34 @@ func TestSyncPool(t *testing.T) {
 	wg.Wait()
 
 	logger.Infoln(numCalcsCreated)
+}
+
+func TestSyncCond(t *testing.T) {
+	var sharedRsc = make(map[int]interface{})
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+	m := sync.Mutex{}
+	c := sync.NewCond(&m)
+
+	for i := 0; i < 2; i++ {
+		go func(index int) {
+			// this go routine wait for changes to the sharedRsc
+			c.L.Lock()
+			for len(sharedRsc) == 0 {
+				c.Wait()
+			}
+			fmt.Println(sharedRsc[index])
+			c.L.Unlock()
+			wg.Done()
+		}(i)
+	}
+
+	// this one writes changes to sharedRsc
+	c.L.Lock()
+	sharedRsc[1] = "foo"
+	sharedRsc[2] = "bar"
+	c.Broadcast()
+	c.L.Unlock()
+	wg.Wait()
 }

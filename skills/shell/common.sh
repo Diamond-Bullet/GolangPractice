@@ -114,6 +114,11 @@ stat file.txt
 # `-type` file type. `-ctime` creation time. `-mtime` modification time.
 find . -name "*.c"
 
+# compress a file/folder to tar format
+tar -cvf file.tar file.txt
+# decompress or extract the .tar file
+tar -xvf file.tar
+
 ####################### Profiling #################
 ##df
 # 查看磁盘使用况
@@ -166,6 +171,13 @@ ulimit -a
 
 # print CPU information
 cat /proc/cpuinfo
+
+####################### System #################
+# create a new user, and a group with the same name by default.
+# `-m`, create a directory in `/home`
+useradd -m username
+# configure the password(PIN) for a user
+passwd username
 
 ####################### Run #################
 # no hang up. continue running after existing the shell.

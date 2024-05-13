@@ -69,7 +69,7 @@ func TestForRange(t *testing.T) {
 func TestFetchFromClosed(t *testing.T) {
 	ch := make(chan int, 2)
 
-	// fetch data from closed channel. the received are the default value of channel's underlying type.
+	// fetch data from closed channel. the received are default values of channel's underlying type.
 	go func() {
 		for {
 			fmt.Printf("go routine: %d\n", <-ch)

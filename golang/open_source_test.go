@@ -4,6 +4,7 @@ import (
 	"GolangPractice/utils/logger"
 	"errors"
 	"fmt"
+	"sync"
 	"testing"
 	"time"
 
@@ -11,6 +12,7 @@ import (
 	"github.com/bwmarrin/snowflake"
 	"github.com/google/go-cmp/cmp"
 	"github.com/gookit/color"
+	"github.com/panjf2000/ants/v2"
 	pkgerrors "github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/tealeg/xlsx"
@@ -178,6 +180,7 @@ func TestWrapError(t *testing.T) {
 }
 
 // when running tasks concurrently, use this to handle error.
+// https://golang.org/x/sync/errgroup
 func TestErrGroup(t *testing.T) {
 	g := new(errgroup.Group)
 
@@ -224,3 +227,27 @@ func TestLog(t *testing.T) {
 }
 
 // TODO　https://github.com/jlaffaye/ftp
+
+// https://github.com/panjf2000/ants/v2
+func TestGoroutinePool(t *testing.T) {
+	const TaskNum = 1e3
+
+	pool, err := ants.NewPool(TaskNum / 10)
+	if err != nil {
+		logger.Errorln(err)
+		return
+	}
+	defer pool.Release()
+
+	waitGroup := new(sync.WaitGroup)
+
+	for i := 0; i < TaskNum; i++ {
+		_ = pool.Submit(func() {
+			waitGroup.Add(1)
+			defer waitGroup.Done()
+			fmt.Println("Good task")
+		})
+	}
+
+	waitGroup.Wait()
+}

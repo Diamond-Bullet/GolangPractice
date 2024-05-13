@@ -1,5 +1,9 @@
 #!/bin/bash
-# installing instruction https://www.cnblogs.com/hello-me/p/16855568.html
+# installation instruction https://github.com/ohmyzsh/ohmyzsh/wiki
+# nowadays, you can simply ask ChatGPT how to achieve it.
+# you can also install it from source, which is quite easy as well.
+
+cd ~
 
 function install_pkg() {
   if [ $# -eq 1 ]; then # argument count is 1.
@@ -22,3 +26,5 @@ if [[ "$(which curl)" == *"not found" ]]; then
 fi
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || exit 1
+
+source ~/.zshrc
