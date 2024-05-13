@@ -77,3 +77,37 @@ func TestGenericStack(t *testing.T) {
 	}
 	logger.Infoln(staticValue)
 }
+
+// Generic Set type
+type Set[T comparable] map[T]struct{}
+
+// Add inserts a new element into the set
+func (s Set[T]) Add(value T) {
+	s[value] = struct{}{}
+}
+
+// Contains checks if the set contains the specified element
+func (s Set[T]) Contains(value T) bool {
+	_, exists := s[value]
+	return exists
+}
+
+// Generic quicksort function
+func QuickSort[T constraints.Ordered](data []T) []T {
+	if len(data) < 2 {
+		return data
+	}
+	left, right := 0, len(data)-1
+	pivot := len(data) / 2
+	data[pivot], data[right] = data[right], data[pivot]
+	for i := range data {
+		if data[i] < data[right] {
+			data[left], data[i] = data[i], data[left]
+			left++
+		}
+	}
+	data[left], data[right] = data[right], data[left]
+	QuickSort(data[:left])
+	QuickSort(data[left+1:])
+	return data
+}
