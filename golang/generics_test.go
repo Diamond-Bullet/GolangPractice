@@ -2,6 +2,7 @@ package golang
 
 import (
 	"GolangPractice/utils/logger"
+	"encoding/json"
 	"golang.org/x/exp/constraints"
 	"testing"
 )
@@ -110,4 +111,39 @@ func QuickSort[T constraints.Ordered](data []T) []T {
 	QuickSort(data[:left])
 	QuickSort(data[left+1:])
 	return data
+}
+
+// use generics to implement more graceful result checking.
+type GenericResult[T any] struct {
+	Result T
+	err    error
+}
+
+func (g *GenericResult[T]) Value() T {
+	return g.Result
+}
+
+func (g *GenericResult[T]) Err() error {
+	return g.err
+}
+
+func Validate[T any](results ...*GenericResult[T]) error {
+	for _, result := range results {
+		if result.Err() != nil {
+			return result.Err()
+		}
+	}
+	return nil
+}
+
+func TestGenericResult(t *testing.T) {
+	b, err := json.Marshal("")
+	result := &GenericResult[[]byte]{
+		Result: b,
+		err:    err,
+	}
+	if Validate(result) != nil {
+		return
+	}
+	logger.Infoln(result.Value())
 }

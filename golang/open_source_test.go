@@ -78,8 +78,9 @@ func TestHandleExelSheet(t *testing.T) {
 }
 
 func TestColorfulPrint(t *testing.T) {
-	// find more at https://github.com/gookit/color
-	// basic colors
+	// https://github.com/gookit/color
+	// basic colors below
+	// for more information, see ReadMe.MD
 	color.Blueln("I am great Blue")
 	color.Magentaln("color Magenta")
 	color.New(color.FgRed, color.BgCyan).Println("FgRed BgCyan")
@@ -148,8 +149,8 @@ func TestSnowFlake(t *testing.T) {
 	logger.Infof("ID       : %d", node.Generate().Int64())
 }
 
-// error with stack trace
-// another repo https://github.com/go-errors/errors
+// https://github.com/pkg/errors error with stack trace
+// alternative: https://github.com/go-errors/errors
 // learn about new error handling draft `Go2 errors` by Go team.
 func TestStackError(t *testing.T) {
 	err := pkgerrors.Errorf("err: %s", "i want to bring out an error")
@@ -176,11 +177,12 @@ func TestWrapError(t *testing.T) {
 	err := errors.New("error here")
 	err1 := fmt.Errorf("layer1: %w", err)
 	err2 := fmt.Errorf("layer2: %w", err1)
-	fmt.Println(err2)
+	logger.Errorln(err2)
 }
 
-// when running tasks concurrently, use this to handle error.
 // https://golang.org/x/sync/errgroup
+// Slightly different from `go func()...`, it handles errors.
+// ErrGroup does NOT offer the functionality of recovering from panic.
 func TestErrGroup(t *testing.T) {
 	g := new(errgroup.Group)
 
@@ -197,13 +199,15 @@ func TestErrGroup(t *testing.T) {
 	}
 }
 
-// compare 2 objects with custom rules by implementing Equal() for the type.
+// https://github.com/google/go-cmp/cmp
+// Compare 2 objects according to customized rules which are implemented in `Equal()` method of the type.
 func TestCmp(t *testing.T) {
 	cmp.Equal(1, 2)
 }
 
-func TestLog(t *testing.T) {
-	// https://github.com/sirupsen/logrus nice but I don't like the format.
+// https://github.com/sirupsen/logrus Logging component.
+// pretty nice, but I don't like the format.
+func TestLogRus(t *testing.T) {
 	logrus.Errorln("error")
 
 	localLogger := logrus.New()
@@ -212,10 +216,10 @@ func TestLog(t *testing.T) {
 	localLogger.SetFormatter(&logrus.TextFormatter{})
 
 	localLogger.Errorln("error")
+}
 
-	color.Magentaln("###############################################################")
-
-	// go.uber.org/zap
+// https://go.uber.org/zap Logging Component.
+func TestUberZap(t *testing.T) {
 	sugar := zap.NewExample().Sugar()
 	defer sugar.Sync()
 	sugar.Infow("failed to fetch URL",
@@ -228,7 +232,7 @@ func TestLog(t *testing.T) {
 
 // TODO　https://github.com/jlaffaye/ftp
 
-// https://github.com/panjf2000/ants/v2
+// https://github.com/panjf2000/ants/v2 Goroutine Pool.
 func TestGoroutinePool(t *testing.T) {
 	const TaskNum = 1e3
 
