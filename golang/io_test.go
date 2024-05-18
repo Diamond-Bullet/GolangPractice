@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-// here are some frequently used package provided by the official group.
+// here are some frequently used package provided by the official team.
 // io: basic `reader`, `writer`, etc. pipe,
 // os: file
 // bufio: reading and writing with buffer.

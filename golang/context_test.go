@@ -14,17 +14,17 @@ import (
 // `WithDeadLine` has similar functionality. `TimeOut` is implemented with `DeadLine` fundamentally.
 func TestContextWithTimeOut(t *testing.T) {
 	c, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+
 	var p int
 	go func(c context.Context) {
 		for {
 			select {
-			case <-c.Done(): // the child coroutine listens to `Done` channel.
-				println("DONE")
+			case <-c.Done(): // the child goroutine listens to `Done` channel.
+				println("WORK DONE")
 				return
-			default:
+			case <-time.After(500 * time.Millisecond):
 				fmt.Printf("I am working: %d\n", p)
 				p++
-				time.Sleep(500 * time.Millisecond)
 			}
 		}
 	}(c)

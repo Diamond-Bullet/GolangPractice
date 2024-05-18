@@ -214,7 +214,7 @@ func TestString(t *testing.T) {
 		logger.Infof("%d: %c  ", i, x)
 	}
 
-	// In general(normally, usually, commonly, generally), modifying string has to transform it into []byte、[]rune, which calls a reallocation of memory and data duplication.
+	// In general, modifying string has to transform it into []byte、[]rune, which calls a reallocation of memory and data duplication.
 	// If we just need to turn string into []byte in a read-only situation, using unsafe.Pointer instead can avoid extra actions mentioned above.
 	// TODO how to alter string by unsafe.Pointer
 	b := []byte("1234")

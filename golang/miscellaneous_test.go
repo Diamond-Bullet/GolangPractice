@@ -2,23 +2,51 @@ package golang
 
 import (
 	"GolangPractice/utils/logger"
-	"errors"
+	"encoding/base64"
 	"fmt"
-	"sync"
-	"testing"
-	"time"
-
 	"github.com/buger/jsonparser"
 	"github.com/bwmarrin/snowflake"
 	"github.com/google/go-cmp/cmp"
 	"github.com/gookit/color"
-	"github.com/panjf2000/ants/v2"
-	pkgerrors "github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/tealeg/xlsx"
 	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
+	"regexp"
+	"strconv"
+	"strings"
+	"testing"
+	"time"
 )
+
+// Introduction document: https://www.cnblogs.com/zhichaoma/p/12640064.html
+
+func TestUnicodeDecode(t *testing.T) {
+	uContent := "\u62a5\u544a\u6587\u4ef6\n\u5185\u5bb9\u5f02\u5e38"
+
+	text, err := strconv.Unquote(strings.Replace(strconv.Quote(uContent), `\\u`, `\u`, -1))
+	fmt.Println(text, err)
+}
+
+func TestBase64(t *testing.T) {
+	data := "种豆得豆"
+	sEnc := base64.StdEncoding.EncodeToString([]byte(data))
+	fmt.Println(sEnc)
+
+	sDec, _ := base64.StdEncoding.DecodeString(sEnc)
+	fmt.Println(string(sDec))
+}
+
+func TestRegExp(t *testing.T) {
+	// match strings starts with things like `(1234, '`
+	r, err := regexp.Compile(`^\([0-9]*[1-9][0-9]*, '`)
+	if err != nil {
+		color.Redln(err)
+		return
+	}
+
+	color.Blueln("r.MatchString(\"(1234, 'Good Good'\"):", r.MatchString("(1234, 'Good Good'"))
+	color.Blueln("r.FindStringIndex(\"(1234, 'Good Good'\")", r.FindStringIndex("(1234, 'Good Good'"))
+}
 
 // https://github.com/buger/jsonparser #Parse json data dynamically，support Get、Set。
 func TestJsonParser(t *testing.T) {
@@ -149,56 +177,6 @@ func TestSnowFlake(t *testing.T) {
 	logger.Infof("ID       : %d", node.Generate().Int64())
 }
 
-// https://github.com/pkg/errors error with stack trace
-// alternative: https://github.com/go-errors/errors
-// learn about new error handling draft `Go2 errors` by Go team.
-func TestStackError(t *testing.T) {
-	err := pkgerrors.Errorf("err: %s", "i want to bring out an error")
-	logger.Infoln(err)
-	logger.Infof("%+v", err)
-
-	err1 := pkgerrors.Wrap(err, "err1")
-	logger.Infof("%+v", err1)
-
-	err2 := StackError1()
-	logger.Infof("%+v", err2)
-}
-
-func StackError1() error {
-	return StackError2()
-}
-
-func StackError2() error {
-	return pkgerrors.New("error here")
-}
-
-// provided by Go team. simply wrap an error with new prefix.
-func TestWrapError(t *testing.T) {
-	err := errors.New("error here")
-	err1 := fmt.Errorf("layer1: %w", err)
-	err2 := fmt.Errorf("layer2: %w", err1)
-	logger.Errorln(err2)
-}
-
-// https://golang.org/x/sync/errgroup
-// Slightly different from `go func()...`, it handles errors.
-// ErrGroup does NOT offer the functionality of recovering from panic.
-func TestErrGroup(t *testing.T) {
-	g := new(errgroup.Group)
-
-	g.Go(func() error {
-		return nil
-	})
-	g.Go(func() error {
-		return errors.New("very good")
-	})
-
-	err := g.Wait()
-	if err != nil {
-		logger.Errorln(err)
-	}
-}
-
 // https://github.com/google/go-cmp/cmp
 // Compare 2 objects according to customized rules which are implemented in `Equal()` method of the type.
 func TestCmp(t *testing.T) {
@@ -230,28 +208,4 @@ func TestUberZap(t *testing.T) {
 	sugar.Infof("failed to fetch URL: %s", "http://example.com")
 }
 
-// TODO　https://github.com/jlaffaye/ftp
-
-// https://github.com/panjf2000/ants/v2 Goroutine Pool.
-func TestGoroutinePool(t *testing.T) {
-	const TaskNum = 1e3
-
-	pool, err := ants.NewPool(TaskNum / 10)
-	if err != nil {
-		logger.Errorln(err)
-		return
-	}
-	defer pool.Release()
-
-	waitGroup := new(sync.WaitGroup)
-
-	for i := 0; i < TaskNum; i++ {
-		_ = pool.Submit(func() {
-			waitGroup.Add(1)
-			defer waitGroup.Done()
-			fmt.Println("Good task")
-		})
-	}
-
-	waitGroup.Wait()
-}
+// TODO https://github.com/jlaffaye/ftp

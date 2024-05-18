@@ -1,6 +1,7 @@
 package golang
 
 import (
+	"GolangPractice/utils/logger"
 	"fmt"
 	"syscall"
 	"testing"
@@ -23,19 +24,27 @@ const (
 
 func TestTime(t *testing.T) {
 	// Parse current time.
-	ti := time.Now()
-	t1 := ti.Format(TimeFormatMillisecond)
-	fmt.Printf("Current Time: %s\n", t1)
-
-	// Assign location.
-	loc, _ := time.LoadLocation("Local") // UTC， or other valid location name
-	// another way to get local time zone is time.Local.
-	// UTC is accessible if using time.UTC.
-	t2, _ := time.ParseInLocation(TimeFormatLog, "2021/11/02 15:04:05", loc)
-	fmt.Printf("Parse string as time.Time: %s\n", t2)
+	nowStamp := time.Now()
+	timeStr := nowStamp.Format(TimeFormatMillisecond)
+	logger.Infoln("Current Time: %s", timeStr)
 }
 
-func TestGetCTime(t *testing.T) {
+func TestTimeLocation(t *testing.T) {
+	// Assign location.
+	loc, _ := time.LoadLocation("Local") // UTC， or other valid location name
+
+	// another way to get local time zone is time.Local.
+	// UTC is accessible if using time.UTC.
+	timeStr, _ := time.ParseInLocation(TimeFormatLog, "2021/11/02 15:04:05", loc)
+	logger.Infoln("Local time.Time: %s", timeStr)
+
+	NewYorkLoc, _ := time.LoadLocation("America/New_York")
+
+	timeStr, _ = time.ParseInLocation(TimeFormatLog, "2021/11/02 15:04:05", NewYorkLoc)
+	logger.Infoln("New York time.Time: %s", timeStr)
+}
+
+func TestGetFileCreationTime(t *testing.T) {
 	var st syscall.Stat_t
 	fileFullPath := "/root/demo.txt"
 	err := syscall.Stat(fileFullPath, &st)
