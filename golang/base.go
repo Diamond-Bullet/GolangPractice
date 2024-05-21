@@ -1,9 +1,17 @@
 package golang
 
-type User struct{}
+type User struct {
+	ID   uint64
+	Name string
+	Age  string
+}
 
 func (u User) ToString() {
 	println("user")
+}
+
+func (u User) ToStrParam(param string) {
+	println(param)
 }
 
 func (u *User) ToStringPtr() {

@@ -8,65 +8,71 @@ import (
 
 // https://zhuanlan.zhihu.com/p/269096255 introduce CanSet, CanAddr, flag
 
-// Reflect.
-// an Interface type variable stores a 2-elements tuple: (value, type)
-
-func TestBase(t *testing.T) {
-	var x float64
-	logger.Infof("x type: %v\n", reflect.TypeOf(x))   // Type
-	logger.Infof("x value: %v\n", reflect.ValueOf(x)) // Value
-
-	v := reflect.ValueOf(x) // type reflect.Value, some other methods can refer to
-	logger.Infoln(v.Float())
-
-	type X int
-	var xx X = 10
-	// type表示显示类型，kind表示其底层类型
-	logger.Infoln(reflect.TypeOf(xx).Name(), reflect.TypeOf(xx).Kind())
-
-	// 构造基础复合类型
-	// a := reflect.ArrayOf(10, reflect.TypeOf(byte(0))) [10]uint8
-	// m := reflect.MapOf(reflect.TypeOf(""), reflect.TypeOf(int(0))) map[string]int
-
-	// Elem() 返回指针，管道，切片等复合类型的基础类型
-	p := reflect.TypeOf(&x)
-	logger.Infoln(p, p.Elem())
-}
-
+// reflect.Type provide methods to query type information of a struct.
+// like type, package path, fields' types and names.
 func TestReflectType(t *testing.T) {
 	var x User
-	tx := reflect.TypeOf(x)
-	logger.Infoln("x type: ", tx) // the type of `x`
 
-	logger.Infoln("x package path: ", tx.PkgPath())
-}
+	reflectTypeUser := reflect.TypeOf(x)
 
-func TestReflectMethod(t *testing.T) {
-	var x User
-	vx := reflect.ValueOf(x)
+	logger.Infoln("x type: ", reflectTypeUser)                   // golang.User
+	logger.Infoln("x package path: ", reflectTypeUser.PkgPath()) // GolangPractice/golang
 
-	// argument for `Call` is the input of this method.
-	// return value of `Call` is the result of this method.
-	res := vx.Method(2).Call([]reflect.Value{})
-	logger.Infoln(res)
-	vx.MethodByName("ToStringPtr").Call([]reflect.Value{})
+	// reflect.Type is more comprehensive, providing specific type information.
+	// reflect.Kind is kind of a rough classification, telling underlying type like whether it is an int, map, struct, etc.
+	logger.Infoln(reflectTypeUser.Name(), reflectTypeUser.Kind())
 }
 
 func TestReflectValue(t *testing.T) {
-	var x int
-	vx := reflect.ValueOf(x)
-	logger.Infoln("vx can set: ", vx.CanSet())
+	var x User
+	reflectValueUser := reflect.ValueOf(x)
 
-	// go1.16.5: Elem只能用于interface, ptr, 获取指向的基础类型
-	vpx := reflect.ValueOf(&x)
-	logger.Infoln("vpx can set: ", vpx.CanSet()) // 是否可以赋值
-	logger.Infoln("vpx.Elem can set: ", vpx.Elem().CanSet())
+	if reflectValueUser.CanSet() {
+		reflectValueUser.Set(reflect.ValueOf(User{}))
+	}
 
-	vpx.Elem().SetInt(20)
-	logger.Infoln(x)
+	// Elem is applicable to interfaces, pointers. To get the value the interface contains or the pointer points to.
+	if reflectValueUser.Elem().CanSet() {
+		reflectValueUser.Elem().Set(reflect.ValueOf(User{}))
+	}
+}
 
-	var ix = interface{}(&x)
-	vix := reflect.ValueOf(ix)
-	logger.Infoln("vix can set: ", vix.CanSet())
-	logger.Infoln("vix.Elem can set: ", vix.Elem().CanSet())
+func TestReflectValueMethod(t *testing.T) {
+	var x User
+	reflectValueUser := reflect.ValueOf(x)
+
+	if reflectValueUser.Type().Name() != "golang.User" {
+		return
+	}
+
+	// argument for `Call` is the input of this method.
+	// return value of `Call` is the result of this method.
+	res := reflectValueUser.Method(2).Call([]reflect.Value{})
+	logger.Infoln(res)
+
+	reflectValueUser.MethodByName("ToStrParam").Call([]reflect.Value{reflect.ValueOf("Fabulous!")})
+}
+
+func TestReflectValueField(t *testing.T) {
+	var x User
+	reflectValueUser := reflect.ValueOf(x)
+
+	field := reflectValueUser.FieldByName("Name")
+	if field.CanSet() {
+		field.SetString("123")
+	}
+
+	numField := reflectValueUser.Field(2)
+	if numField.CanSet() {
+		numField.SetString("456")
+	}
+}
+
+// TODO mechanisms and applications
+func TestCompoundType(t *testing.T) {
+	arr := reflect.ArrayOf(10, reflect.TypeOf(byte(0)))                  // [10]uint8
+	mapping := reflect.MapOf(reflect.TypeOf(""), reflect.TypeOf(int(0))) // map[string]int
+
+	logger.Infoln(arr)
+	logger.Infoln(mapping)
 }
