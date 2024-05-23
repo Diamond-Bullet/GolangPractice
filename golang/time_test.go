@@ -8,8 +8,6 @@ import (
 	"time"
 )
 
-// reference: https://zhuanlan.zhihu.com/p/324922044
-
 const (
 	timeFormatDay = "2006-01-02"
 
@@ -22,14 +20,15 @@ const (
 	TimeFormatISO = "2006-01-02T15:04:05Z"
 )
 
-func TestTime(t *testing.T) {
-	// Parse current time.
+func TestTimeFormat(t *testing.T) {
+	// Format current time.
 	nowStamp := time.Now()
+
 	timeStr := nowStamp.Format(TimeFormatMillisecond)
 	logger.Infoln("Current Time: %s", timeStr)
 }
 
-func TestTimeLocation(t *testing.T) {
+func TestTimeParse(t *testing.T) {
 	// Assign location.
 	loc, _ := time.LoadLocation("Local") // UTC， or other valid location name
 
@@ -40,8 +39,13 @@ func TestTimeLocation(t *testing.T) {
 
 	NewYorkLoc, _ := time.LoadLocation("America/New_York")
 
-	timeStr, _ = time.ParseInLocation(TimeFormatLog, "2021/11/02 15:04:05", NewYorkLoc)
+	// you can either define a format by yourself or use predefined patterns in `time` package.
+	timeStr, _ = time.ParseInLocation(time.RFC3339, "2021/11/02 15:04:05", NewYorkLoc)
 	logger.Infoln("New York time.Time: %s", timeStr)
+}
+
+func TestTimeCalc(t *testing.T) {
+	logger.Infoln(time.Now().AddDate(1,1,1).String())
 }
 
 func TestGetFileCreationTime(t *testing.T) {

@@ -1,5 +1,6 @@
 ####################### Text & File #################
-## sort. 对文件中所有行，默认字典序排序. -n 按数值排序；-k 取某一列排序；-t 指定列的分隔符；-r 倒序；
+## `sort`: order all lines in the file, lexicographically by default.
+# `-n`: 按数值排序；-k 取某一列排序；-t 指定列的分隔符；-r 倒序；
 sort -n -k 5 -t " " file.txt
 
 ## wc
@@ -15,30 +16,30 @@ ls -l [path]| grep "^-" | wc -l
 uniq -c file.txt
 
 ## awk
-# 参考 菜鸟教程
-# BEGIN{开始时执行，仅一次};
-# {对每行进行处理};
-# END{结束时执行，仅一次}
+# reference 菜鸟教程
+# BEGIN{execute at the beginning, for just 1 time};
+# {process each line};
+# END{execute in the end, just once}
 awk '{for(i=1;i<=NF;i++){if(NR==1){res[i]=$i;}else{res[i]=res[i]" "$i;}}};
-    END{for(i=1;i<=NF;i++){print res[i]}}' file.txt # 转置
+    END{for(i=1;i<=NF;i++){print res[i]}}' file.txt # transposing
 
-awk '{if(NR==10){print $0}}' file.txt # 输出第10行
+awk '{if(NR==10){print $0}}' file.txt # output line 10
 
 awk '{for(i=1;i<=NF;i++){res[$i]++}};
-    END{for(w in res){print w, res[w]};}' file.txt | sort -nr -k 2 # 统计词频
+    END{for(w in res){print w, res[w]};}' file.txt | sort -nr -k 2 # count words frequency TODO
 
-awk '$0 ~ /^([0-9]{3}\-){2}[0-9]{4}$|^\([0-9]{3}\)\s[0-9]{3}\-[0-9]{4}$/' file.txt # 匹配手机号
+awk '$0 ~ /^([0-9]{3}\-){2}[0-9]{4}$|^\([0-9]{3}\)\s[0-9]{3}\-[0-9]{4}$/' file.txt # phone number match
 
-awk '{if($0 ~ /github\.com/){print $1"@"$2}}' go.mod # 下载go.mod下的github依赖
+awk '{if($0 ~ /github\.com/){print $1"@"$2}}' go.mod # download github dependencies in `go.mod`
 
-ls -l | awk '$1 !~ /^d.*/  {print $9}' | xargs wc -l | sort -nr -k 1 # 排列目录下文件行数
+ls -l | awk '$1 !~ /^d.*/  {print $9}' | xargs wc -l | sort -nr -k 1 # order non-directory files by lines amount of their content
 
-# -F 指定分隔符
+# `-F`: claim delimiter
 # refer to https://juejin.cn/post/7055242139222949924
 grep "parent" log.txt | awk -F "child\":\"" '{print $2}' | awk -F "\":\"" '{print $1" "$5}' | awk -F "\",\"name" '{print $1}' | sort -k 2 -r | head -n 25
 
 ## sed
-# -i, replace string and update the file. -e, print content after substituting and not change the file.
+# `-i`, replace string and update the file. `-e`, print content after substituting and not change the file.
 sed -i "s/old_string/new_string/" file.txt
 # print line 5-10.
 sed -n '5,10p' file.txt
@@ -48,7 +49,7 @@ sed -n '5,10p' file.txt
 cat file.txt | xargs wget
 cat file.txt | xargs -n1 -t
 
-## `zcat`, uncompress files to standard output.
+## `zcat`, decompress files to standard output.
 # like `uncompress -c`
 zcat api.log.gz | grep --binary-files=text '/app/content/config' | grep -a '1000976'
 
@@ -321,7 +322,7 @@ mutagen list
 mutagen daemon stop
 
 ## register new service on Linux.
-# /usr/bin/systemd/system 服务配置文件夹
+# `/usr/bin/systemd/system` service configurations location
 sudo systemctl daemon-reload
 sudo systemctl enable job.service
 sudo systemctl start job.service
@@ -330,8 +331,8 @@ sudo systemctl start job.service
 date "+%Y-%m-%d %H:%M:%S"
 
 ####################### Mac OS #################
-# Mac下使用了zsh会不执行/etc/profile文件，当然，如果用原始的是会执行。
-# 转而执行的是这两个文件，每次登陆都会执行：~/.zshrc与/etc/zshenv、/etc/zshrc
+# after switching to zsh on Mac, `/etc/profile` is not automatically executed.
+# instead, `~/.zshrc` ,`/etc/zshenv` and `/etc/zshrc` get executed each time you log in.
 
 # clear screen
 cmd + k

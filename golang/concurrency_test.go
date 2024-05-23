@@ -96,10 +96,10 @@ func TestSyncPool(t *testing.T) {
 	for i := 0; i < numWorkers; i++ {
 		go func() {
 			defer wg.Done()
-			// 申请一个 buffer 实例
+			// acquire an instance of buffer
 			buffer := objectPool.Get()
 			_ = buffer.(*[]byte)
-			// 释放一个 buffer 实例
+			// return the instance of buffer
 			defer objectPool.Put(buffer)
 		}()
 	}

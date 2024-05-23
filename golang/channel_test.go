@@ -105,7 +105,7 @@ func TestSend2Closed(t *testing.T) {
 	time.Sleep(10 * time.Second)
 }
 
-func TestOkJudge(t *testing.T) {
+func TestOkJudgement(t *testing.T) {
 	ch := make(chan int, 2)
 
 	// `ok` semantics, helping you judge whether channel closes.
@@ -166,7 +166,8 @@ func TestSelectGet(t *testing.T) {
 }
 
 func TestSelectSend(t *testing.T) {
-	// randomly select a channel and send data随机选择一个管道，向其发送数据并执行，管道满则该case阻塞
+	// randomly select a channel and send data to it.
+	// if the channel is full, this branch can not proceed now. other branches are tested if they can be executed.
 	ch1 := make(chan int, 2)
 	ch2 := make(chan int, 2)
 	go func() {
@@ -195,7 +196,7 @@ func TestSelectSend(t *testing.T) {
 // so there is stricter restriction on both sides to prevent misoperations(misuse).
 
 // random number based on channel, just for fun.
-func TestRandom(t *testing.T) {
+func TestRandomOnChannel(t *testing.T) {
 	random(100)
 }
 

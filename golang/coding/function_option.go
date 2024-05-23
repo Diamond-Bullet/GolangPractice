@@ -6,7 +6,7 @@ type Server struct {
 	Name string
 }
 
-// 方式1 Function Option
+// Method 1: Function Option
 
 type Option func(*Server)
 
@@ -24,7 +24,7 @@ func NewServer1(options ...Option) *Server {
 	return server
 }
 
-// 方式2
+// Method 2
 
 type Config struct {
 	Name string
@@ -34,7 +34,7 @@ func NewServer2(config *Config) *Server {
 	return &Server{Name: config.Name}
 }
 
-// 方式3
+// Method 3
 
 func (s *Server) WithName(name string) *Server {
 	s.Name = name
