@@ -9,7 +9,6 @@ import "fmt"
 那么小米的笔记本电脑和苹果的笔记本电脑肯定不一样，手机情况也是如此。这就构成了两个产品家族的系列产品之间比较的关系。
 */
 
-// Computer 电脑
 type Computer interface {
 	SetCOS()
 }
@@ -26,7 +25,6 @@ func (m *MiComputer) SetCOS() {
 	fmt.Println("MiComputer: Windows")
 }
 
-// Phone 手机
 type Phone interface {
 	SetPOS()
 }
@@ -43,13 +41,11 @@ func (m *MiPhone) SetPOS() {
 	fmt.Println("MiPhone: Android")
 }
 
-// AbstractFactory 品牌工厂类
 type AbstractFactory interface {
 	MakeComputer() Computer
 	MakePhone() Phone
 }
 
-// MacFactory 苹果品牌工厂
 type MacFactory struct{}
 
 func (m *MacFactory) MakeComputer() Computer {

@@ -1,6 +1,6 @@
 ####################### Text & File #################
 ## `sort`: order all lines in the file, lexicographically by default.
-# `-n`: 按数值排序；-k 取某一列排序；-t 指定列的分隔符；-r 倒序；
+# `-n`: sort numerically; `-k`: sort by specified column; `-t`: declare the column delimiter; `-r`: descending order
 sort -n -k 5 -t " " file.txt
 
 ## wc
@@ -16,7 +16,7 @@ ls -l [path]| grep "^-" | wc -l
 uniq -c file.txt
 
 ## awk
-# reference 菜鸟教程
+# reference https://www.runoob.com/
 # BEGIN{execute at the beginning, for just 1 time};
 # {process each line};
 # END{execute in the end, just once}
@@ -120,14 +120,17 @@ tar -cvf file.tar file.txt
 # decompress or extract the .tar file
 tar -xvf file.tar
 
+# create directory recursively
+mkdir -p parent/folder
+
 ####################### Profiling #################
 ##df
-# 查看磁盘使用况
+# view drive usage
 df -hT
-##du
-# 查看当前文件夹下各个文件占用空间大小
+##du, disk usage
+# show disk usage of subdirectories. `max-depth` declares the traversal depth level.
 du -h --max-depth=1 ./*
-# 查看该文件夹大小
+# show size of current folder
 du -hs [path]
 
 ## network traffic analysis
@@ -245,23 +248,24 @@ apt install dnsutils
 ftp 1.2.3.4 # the interactive terminal will ask you username and password.
 ftp -p 1.2.3.4 # use with passive mode.
 
-## `ncat`, 正反向shell:
-# 正向Shell，服务器上使用ncat监听
+## `ncat`
+# Normal shell, `ncat` listens on server
 ncat -l [port] -e /bin/bash
-# 开发机上连接
+# then connect from client
 ncat [remote_ip] [port]
-#反向Shell，开发机上使用ncat监听
+# Reverse shell. `ncat` listens on client
 ncat -l [port]
-# 服务器上连接
+# then connect from server
 ncat [local_ip] [port] -e /bin/bash
 
-# `socat`, 正向Shell，1.服务器上使用socat监听
+## `socat`
+# Normal shell，`socat` listens on server
 socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp-listen:9999,bind=0.0.0.0,reuseaddr,fork
-#正向Shell，2.开发机上连接
+# then connect from client
 socat file:`tty`,raw,echo=0 tcp:192.168.0.1:9999
-#反向Shell，1.开发机上使用socat监听
+# Reverse shell. `socat` listens on client
 socat file:`tty`,raw,echo=0 tcp-listen:9999,bind=0.0.0.0,reuseaddr,fork
-#反向Shell，2.服务器上连接
+# then connect from server
 socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:192.168.0.10:9999
 
 ####################### Trifle #################
