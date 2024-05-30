@@ -210,7 +210,13 @@ kill -l
 # `<<<`, convey single line of input.
 cat output.txt <<< "1234"
 
-####################### Remote Interaction #################
+####################### Network Communication #################
+# test if server is reachable by send Internet Control Message Protocol Echo request.
+ping 8.8.8.8
+
+# connect to remote server via tcp protocol. useful when checking connectivity.
+telnet 8.8.8.8 1234
+
 # generate key pair and copy to remote server.
 ssh-keygen -t rsa
 ssh-copy-id root@1.2.3.4
