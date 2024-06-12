@@ -6,11 +6,14 @@ import (
 	"fmt"
 	"github.com/buger/jsonparser"
 	"github.com/bwmarrin/snowflake"
+	"github.com/gocarina/gocsv"
 	"github.com/google/go-cmp/cmp"
 	"github.com/gookit/color"
 	"github.com/sirupsen/logrus"
 	"github.com/tealeg/xlsx"
 	"go.uber.org/zap"
+	"log"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -76,7 +79,7 @@ func TestJsonParser(t *testing.T) {
 
 // https://github.com/tealeg/xlsx #seems like the official's.
 // https://github.com/qax-os/excelize is the most starred repo by now
-func TestHandleExelSheet(t *testing.T) {
+func TestExelSheet(t *testing.T) {
 	excelFileName := "/foo.xlsx"
 	xlFile, err := xlsx.OpenFile(excelFileName)
 	if err != nil {
@@ -103,6 +106,36 @@ func TestHandleExelSheet(t *testing.T) {
 	// add sell.
 	newCell := xlFile.Sheets[0].Row(0).AddCell()
 	newCell.SetDate(time.Now())
+}
+
+func TestCSV(t *testing.T) {
+	// Go team also provides a built-in package `encoding/csv` for csv file.
+	type Person struct {
+		Name string `csv:"name"`
+		Age  int    `csv:"age"`
+		City string `csv:"city"`
+	}
+
+	// Sample data to write to CSV
+	people := []Person{
+		{"Alice", 30, "New York"},
+		{"Bob", 25, "Los Angeles"},
+		{"Charlie", 35, "Chicago"},
+	}
+
+	// Create a CSV file
+	file, err := os.Create("people.csv")
+	if err != nil {
+		log.Fatal("Unable to create file:", err)
+	}
+	defer file.Close()
+
+	// Marshal the data to the CSV file
+	if err := gocsv.MarshalFile(&people, file); err != nil {
+		log.Fatal("Error marshaling to CSV:", err)
+	}
+
+	log.Println("CSV file written successfully.")
 }
 
 func TestColorfulPrint(t *testing.T) {
