@@ -1,3 +1,0 @@
-package stack_error
-
-

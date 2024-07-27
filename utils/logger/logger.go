@@ -28,7 +28,7 @@ type Logger struct {
 }
 
 func (l *Logger) Print(logLevel LogLevel, v string) {
-	_ = l.Output(2, Colored(l.LogColor[logLevel], v))
+	_ = l.Output(3, Colored(l.LogColor[logLevel], v))
 }
 
 func Debugln(v ...any) {
