@@ -10,7 +10,7 @@ import (
 func TestDirControl_AddDir(t *testing.T) {
 	delTime, _ := time.Parse("2006-01-02 15:04:05", "")
 
-	dirControl := NewDirControl("", delTime)
+	dirControl := NewPackageCleaner("", delTime)
 
 	type args struct {
 		dir os.DirEntry
@@ -23,7 +23,7 @@ func TestDirControl_AddDir(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dirControl.AddDir(tt.args.dir)
+			dirControl.Clean(tt.args.dir)
 		})
 	}
 

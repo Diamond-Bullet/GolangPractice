@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GolangPractice/utils/logger"
 	"bufio"
 	"flag"
 	"fmt"
@@ -11,81 +12,102 @@ import (
 
 /*
 quick start:
-go_pkg_cleaner -dir /tmp -date 2021-11-20
+go_pkg_cleaner -dir /tmp -deadline 20240606
 */
-
-const (
-	DefaultSafePeriod = time.Hour * 24 * 15
-)
 
 var (
 	path       = flag.String("dir", "", "the PATH you want to clear")
-	deadline   = flag.String("date", "", "packages created before the date are going to be cleared. Layout is like 2006-01-02")
+	deadline   = flag.String("deadline", "", "packages created before the date are going to be cleared. Layout is like 20060102")
 	safePeriod = flag.String("safe", "", "only if there is a package's creation time later than `date+safe`, older ones can be eliminated. It's measured in days.")
 )
 
+
+const (
+	DefaultSafePeriod = time.Hour * 24 * 15 // 15 days
+	TimeLayOut = "20060102"
+)
+
 func main() {
-	ts := parse()
-	categories, err := os.ReadDir(*path)
+	ts, err := parse()
 	if err != nil {
-		fmt.Println("read directory fail:", err)
-		os.Exit(-1)
-	}
-
-	dc := NewDirControl(*path, ts)
-
-	for _, d := range categories {
-		dc.AddDir(d)
-	}
-
-	dc.DoDel()
-}
-
-func parse() time.Time {
-	flag.Parse()
-
-	ts, err := time.Parse("2006-01-02", *deadline)
-	if err != nil {
-		fmt.Println("wrong date get:", deadline)
 		fmt.Println(err)
 		os.Exit(-1)
 	}
 
+	doubleConfirmation()
+
+
+	packageCleaner := NewPackageCleaner(*path, ts)
+
+	err = packageCleaner.Clean()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(-1)
+	}
+}
+
+func parse() (time.Time, error) {
+	flag.Parse()
+
+	ts, err := time.Parse(TimeLayOut, *deadline)
+	if err != nil {
+		fmt.Println("wrong date get:", deadline)
+		fmt.Println(err)
+		return time.Time{}, err
+	}
+
+	return ts, nil
+}
+
+func doubleConfirmation() {
 	fmt.Printf("this is the directory you want to clear:%s\n confirm it[y/n] and click [Enter] key to submit your choice", *path)
 	confirm, err := bufio.NewReader(os.Stdin).ReadString('\n')
 	if err != nil {
-		fmt.Println("program unfortunately exit:", err)
+		logger.Errorln("program unfortunately exit:", err)
 		os.Exit(-1)
 	}
 	if confirm != "y\n" {
 		os.Exit(0)
 	}
-
-	return ts
 }
 
-type DirControl struct {
-	Path        string
-	DelDate     time.Time
-	SafePeriod  time.Duration
+type PackageCleaner struct {
+	Path       string
+	Deadline   time.Time
+	SafePeriod time.Duration
 	DelWait     map[string][]string
 	SafeDelMark map[string]bool
 }
 
-func NewDirControl(path string, delDate time.Time) *DirControl {
-	return &DirControl{
+func NewPackageCleaner(path string, deadline time.Time) *PackageCleaner {
+	return &PackageCleaner{
 		Path:        path,
-		DelDate:     delDate,
+		Deadline:    deadline,
 		SafePeriod:  DefaultSafePeriod,
 		DelWait:     map[string][]string{},
 		SafeDelMark: map[string]bool{},
 	}
 }
 
-func (d *DirControl) AddDir(dir os.DirEntry) {
+func (p *PackageCleaner) Clean() error {
+	categories, err := os.ReadDir(p.Path)
+	if err != nil {
+		logger.Errorln("read directory fail:", err)
+		return err
+	}
+
+	for _, category := range categories {
+		p.Determine(category)
+	}
+
+	p.Remove()
+	return nil
+}
+
+func (p *PackageCleaner) Determine(dir os.DirEntry) {
 	info, err := dir.Info()
 	if err != nil {
-		fmt.Printf("addDir err: %v, %v\n", err, dir)
+		logger.Errorf("addDir err: %s, %v", err.Error(), dir)
 		return
 	}
 
@@ -110,17 +132,17 @@ func (d *DirControl) AddDir(dir os.DirEntry) {
 	}
 
 	fileSymbol := fileMeta[0]
-	if createTime.After(d.DelDate.Add(d.SafePeriod)) {
-		d.SafeDelMark[fileSymbol] = true
-	} else if createTime.Before(d.DelDate) {
-		d.DelWait[fileSymbol] = append(d.DelWait[fileSymbol], info.Name())
+	if createTime.After(p.Deadline.Add(p.SafePeriod)) {
+		p.SafeDelMark[fileSymbol] = true
+	} else if createTime.Before(p.Deadline) {
+		p.DelWait[fileSymbol] = append(p.DelWait[fileSymbol], info.Name())
 	}
 }
 
-func (d *DirControl) DoDel() {
-	for fileSymbol := range d.SafeDelMark {
-		for _, file := range d.DelWait[fileSymbol] {
-			err := os.RemoveAll(d.Path + "/" + file)
+func (p *PackageCleaner) Remove() {
+	for fileSymbol := range p.SafeDelMark {
+		for _, file := range p.DelWait[fileSymbol] {
+			err := os.RemoveAll(p.Path + "/" + file)
 			if err != nil {
 				fmt.Printf("[ERROR] remove file %v err:%v\n", file, err)
 				continue

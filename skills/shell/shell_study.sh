@@ -100,43 +100,10 @@ function testFunc() {
 
 testFunc 1 2
 
-####################### Examples #################
-# .kinit_auto.sh, kinit automatically when powering on.
-fail=false
-for ((i = 0; i < 5; i++)); do
-  kdestroy && kinit --password-file=/root/.kinit_password -l 86400 root@666.com
-  if [ "$(klist | wc -l)" -ge 4 ]; then
-    break
-  fi
-  fail=true
-  echo "$(date "+%Y-%m-%d %H:%M:%S"), kinit failed in ${i}" >>/root/.kinit_log.txt
-  sleep 1s
-done
-if [ $fail == true ]; then
-  echo >>/root/.kinit_log.txt
-fi
-
+####################### chunks #################
 # check whether file exists.
 if [ -f "/data/filename" ]; then
   echo "file exists"
 else
   echo "file doesn't exist"
-fi
-
-# file backing up
-BACKUP_FILE="/tmp/dump.sql"
-DEST_PARENT_DIR="/tmp/dump"
-LOG_FILE="/tmp/dump/backup.log"
-MAX_BACKUPS=100
-
-TIMESTAMP=$(date +"%Y%m%d%H%M%S")
-cp ${BACKUP_FILE} ${DEST_PARENT_DIR}/dump_${TIMESTAMP}.sql
-mysqldump -h 1.2.3.4 -P 3306 --databases biz_db > ${BACKUP_FILE}
-
-BACKUP_COUNT=$(ls -1t ${DEST_PARENT_DIR}/dump_* | wc -l)
-
-if [ "$BACKUP_COUNT" -gt "$MAX_BACKUPS" ]; then
-    echo "Backup count exceeded the threshold ($MAX_BACKUPS). Deleting the oldest backups." >> "$LOG_FILE"
-    ls -1t ${DEST_PARENT_DIR}/dump_* | tail -n +$(($MAX_BACKUPS + 1)) | xargs rm -rf
-    echo "Oldest backups deleted." >> "$LOG_FILE"
 fi
