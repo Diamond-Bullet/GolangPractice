@@ -8,14 +8,15 @@ import (
 	"time"
 )
 
+// see more layouts in src/time/format.go
 const (
-	timeFormatDay = "2006-01-02"
+	TimeFormatDate = "2006-01-02"
+	TimeFormatDate2 = "20060102"
 
-	TimeFormatSecond = "2006-01-02 15:04:05"
+	TimeFormatTime = "2006-01-02 15:04:05"
+	TimeFormatTime2 = "2006/01/02 15:04:05"
 
-	TimeFormatLog = "2006/01/02 15:04:05"
-
-	TimeFormatMillisecond = "2006-01-02 15:04:05.000"
+	TimeFormatMS = "2006-01-02 15:04:05.000"
 
 	TimeFormatISO = "2006-01-02T15:04:05Z"
 )
@@ -24,7 +25,7 @@ func TestTimeFormat(t *testing.T) {
 	// Format current time.
 	nowStamp := time.Now()
 
-	timeStr := nowStamp.Format(TimeFormatMillisecond)
+	timeStr := nowStamp.Format(TimeFormatMS)
 	logger.Infoln("Current Time: %s", timeStr)
 }
 
@@ -34,7 +35,7 @@ func TestTimeParse(t *testing.T) {
 
 	// another way to get local time zone is time.Local.
 	// UTC is accessible if using time.UTC.
-	timeStr, _ := time.ParseInLocation(TimeFormatLog, "2021/11/02 15:04:05", loc)
+	timeStr, _ := time.ParseInLocation(TimeFormatTime2, "2021/11/02 15:04:05", loc)
 	logger.Infoln("Local time.Time: %s", timeStr)
 
 	NewYorkLoc, _ := time.LoadLocation("America/New_York")

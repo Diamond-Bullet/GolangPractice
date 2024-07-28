@@ -10,7 +10,7 @@ type StackError interface {
 }
 
 type stackError struct {
-	Code int
+	Code    int
 	Message string
 	*stack
 }
