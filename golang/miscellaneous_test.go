@@ -4,6 +4,7 @@ import (
 	"GolangPractice/utils/logger"
 	"encoding/base64"
 	"fmt"
+	"github.com/BurntSushi/toml"
 	"github.com/buger/jsonparser"
 	"github.com/bwmarrin/snowflake"
 	"github.com/gocarina/gocsv"
@@ -242,3 +243,17 @@ func TestUberZap(t *testing.T) {
 }
 
 // TODO https://github.com/jlaffaye/ftp
+
+func TestToml(t *testing.T) {
+	// Initialize a variable to hold the parsed configuration
+	var data struct{
+		Age int
+		Name string
+	}
+
+	// Read and parse the TOML file
+	if _, err := toml.DecodeFile("config.toml", &data); err != nil {
+		logger.Errorln("Error parsing TOML file:", err)
+		return
+	}
+}
