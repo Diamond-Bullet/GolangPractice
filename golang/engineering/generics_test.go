@@ -1,4 +1,4 @@
-package golang
+package engineering
 
 import (
 	"GolangPractice/utils/logger"
@@ -6,6 +6,30 @@ import (
 	"golang.org/x/exp/constraints"
 	"testing"
 )
+
+// Generics, also named type parameters.
+// equals interface plus reflect.
+
+func TestGenericStack(t *testing.T) {
+	stack := Stack[any]{}
+
+	stack.Push(12)
+	stack.Push(Stack[int]{})
+	value, ok := stack.Pop()
+	if !ok {
+		return
+	}
+	logger.Infoln(value)
+
+	staticStack := Stack[int]{}
+	staticStack.Push(122)
+	staticStack.Push(344)
+	staticValue, ok := staticStack.Pop()
+	if !ok {
+		return
+	}
+	logger.Infoln(staticValue)
+}
 
 // see examples in Go official package "slices"
 func Contain[T comparable](s []T, p T) bool {
@@ -56,27 +80,6 @@ func (s *Stack[T]) Pop() (T, bool) {
 	v := s.elements[lastIndex]
 	s.elements = s.elements[:lastIndex]
 	return v, true
-}
-
-func TestGenericStack(t *testing.T) {
-	stack := Stack[any]{}
-
-	stack.Push(12)
-	stack.Push(Stack[int]{})
-	value, ok := stack.Pop()
-	if !ok {
-		return
-	}
-	logger.Infoln(value)
-
-	staticStack := Stack[int]{}
-	staticStack.Push(122)
-	staticStack.Push(344)
-	staticValue, ok := staticStack.Pop()
-	if !ok {
-		return
-	}
-	logger.Infoln(staticValue)
 }
 
 // Generic Set type

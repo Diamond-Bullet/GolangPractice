@@ -1,4 +1,4 @@
-package golang
+package engineering
 
 type User struct {
 	ID   uint64
