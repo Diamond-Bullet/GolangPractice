@@ -1,8 +1,4 @@
 #!/bin/bash
-# installation instruction https://github.com/ohmyzsh/ohmyzsh/wiki
-# nowadays, you can simply ask ChatGPT how to achieve it.
-# you can also install it from source, which is quite easy as well.
-
 cd ~
 
 function install_pkg() {
