@@ -8,6 +8,7 @@ import (
 	"runtime/debug"
 	"testing"
 	"time"
+	"unicode/utf8"
 	"unsafe"
 )
 
@@ -162,7 +163,7 @@ func TestPanicNotCaptured(t *testing.T) {
 func TestPanicCaptured(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
-			logger.Infof("recovered from crash: %v", r)                                      // here is only a line of error
+			logger.Infof("recovered from crash: %v", r)                                    // here is only a line of error
 			logger.Infof("recovered from crash: %v, detailed stack: %s", r, debug.Stack()) // print goroutine stack
 		}
 	}()
@@ -200,13 +201,11 @@ func TestString(t *testing.T) {
 
 	logger.Infof("%#v", (*reflect.StringHeader)(unsafe.Pointer(&s)))
 	logger.Infof("%#v", (*reflect.StringHeader)(unsafe.Pointer(&s1)))
-	logger.Infoln()
 
 	// byte
 	for i := 0; i < len(s); i++ {
 		logger.Infof("%d: %c  ", i, s[i])
 	}
-	logger.Infoln()
 
 	// rune
 	// library `utf8` offers some functions handling type `rune`.
@@ -228,6 +227,15 @@ func TestString(t *testing.T) {
 	// Allocating memory in advance(ahead, beforehand).
 	// strings.Join() will statistics required room, and apply at one time.
 	// bytes.NewBufferString("") is most efficient.
+}
+
+func TestStrLen(t *testing.T) {
+	s := "abcdefg"
+	logger.Infoln("len:", len(s)) // 7
+
+	s1 := "abc好东西"
+	logger.Infoln("len:", len(s1))                                          // 12
+	logger.Infoln("rune len:", utf8.RuneCountInString(s1), len([]rune(s1))) // 6
 }
 
 // array
