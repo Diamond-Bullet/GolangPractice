@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"log"
 	"net/http"
@@ -29,7 +30,7 @@ func main() {
 	go GracefulShutdown(server, logger, quit, done)
 
 	logger.Println("Server is ready to handle requests at", listenAddr)
-	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+	if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		logger.Fatalf("Could not listen on %s: %v\n", listenAddr, err)
 	}
 
