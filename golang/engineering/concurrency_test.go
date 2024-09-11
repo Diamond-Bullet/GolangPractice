@@ -3,9 +3,9 @@ package engineering
 import (
 	"GolangPractice/utils/logger"
 	"context"
-	"errors"
 	"fmt"
 	"github.com/panjf2000/ants/v2"
+	uberAtomic "go.uber.org/atomic"
 	"golang.org/x/sync/errgroup"
 	"sync"
 	"sync/atomic"
@@ -47,7 +47,29 @@ func TestMutex(t *testing.T) {
 		println("hello world")
 	}()
 
+	// this operation is blocked
 	m.Lock()
+	logger.Infoln("main exits")
+	m.Unlock()
+}
+
+// sync/atomic is suitable for atomic operations on a single variable.
+func TestAtomic(t *testing.T) {
+	var a int32
+	atomic.AddInt32(&a, 1)
+	logger.Infoln(a)
+
+	var b atomic.Uint64
+	b.Store(1)
+	logger.Infoln(b.Load())
+}
+
+// go.uber.org/atomic is a more advanced version of sync/atomic.
+// it encapsulates atomic.Value to provide atomic operations on variables of varying length.
+func TestUberAtomic(t *testing.T) {
+	str := uberAtomic.NewString("hello world")
+	str.Store("goodbye world")
+	logger.Infoln(str.Load())
 }
 
 func TestChannelSyncNoBuf(t *testing.T) {
@@ -204,12 +226,17 @@ func TestWaitGroup(t *testing.T) {
 func TestErrGroup(t *testing.T) {
 	g := new(errgroup.Group)
 
-	g.Go(func() error {
-		return nil
-	})
-	g.Go(func() error {
-		return errors.New("very good")
-	})
+	// Set the maximum number of active goroutines.
+	// g.SetLimit(10)
+
+	for i := 0; i < 10; i++ {
+		g.Go(func() error {
+			time.Sleep(10 * time.Second)
+			return nil
+		})
+	}
+
+	logger.Infoln("waiting")
 
 	err := g.Wait()
 	if err != nil {

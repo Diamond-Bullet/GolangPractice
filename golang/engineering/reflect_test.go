@@ -54,13 +54,14 @@ func TestReflectValueMethod(t *testing.T) {
 }
 
 func TestReflectValueField(t *testing.T) {
-	var x User
+	x := User{Name: "Alice", Age: "18"}
 	reflectValueUser := reflect.ValueOf(x)
 
 	field := reflectValueUser.FieldByName("Name")
 	if field.CanSet() {
 		field.SetString("123")
 	}
+	logger.Infoln(field.String())
 
 	numField := reflectValueUser.Field(2)
 	if numField.CanSet() {
