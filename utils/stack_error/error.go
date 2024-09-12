@@ -49,7 +49,7 @@ func (s *StackError) ErrorMsg() string {
 	return s.Message
 }
 
-func NewWithLog(errCode int, message string) Error {
+func NewErrWithLog(errCode int, message string) Error {
 	stackError := &StackError{
 		Code:    errCode,
 		Message: message,
@@ -59,8 +59,8 @@ func NewWithLog(errCode int, message string) Error {
 	return stackError
 }
 
-func NewWithLogMetric(errType ErrorType, format string, v ...any) Error {
-	message := fmt.Sprint(format, v)
+func NewWithLog(errType ErrorType, format string, v ...any) Error {
+	message := fmt.Sprint(errType.MetricName+": "+format, v)
 
 	stackError := &StackError{
 		Code:    errType.Code,
@@ -68,9 +68,28 @@ func NewWithLogMetric(errType ErrorType, format string, v ...any) Error {
 		stack:   callers(),
 	}
 
+	// log
+	logger.Errorln(stackError.Error())
+	return stackError
+}
+
+func NewWithLogMetric(errType ErrorType, format string, v ...any) Error {
+	message := fmt.Sprint(errType.MetricName+": "+format, v)
+
+	stackError := &StackError{
+		Code:    errType.Code,
+		Message: message,
+		stack:   callers(),
+	}
+
+	// log
 	logger.Errorln(message, " stack: ", stackError.Error())
 
-	// TODO metric package
+	// metric
+	Inc(errType)
 
 	return stackError
+}
+
+func Inc(errType ErrorType) {
 }
