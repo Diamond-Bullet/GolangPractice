@@ -69,6 +69,7 @@ func TestForRange(t *testing.T) {
 func TestFetchFromClosed(t *testing.T) {
 	ch := make(chan int, 2)
 
+	// TODO what if there are still values in the channel?
 	// fetch data from closed channel. the received are default values of channel's underlying type.
 	go func() {
 		for {
