@@ -1,7 +1,7 @@
 package design_pattern
 
 /*
-	对象池模式
+	Object Pool
 */
 
 import (

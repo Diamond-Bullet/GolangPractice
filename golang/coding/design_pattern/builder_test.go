@@ -6,14 +6,15 @@ import (
 )
 
 /*
-Builder
-将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
+Builder: 将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
+The function is similar to `golang/coding/option_test.go`.
 
 复杂对象相当于一辆有待建造的汽车，而对象的属性相当于汽车的部件，建造产品的过程就相当于组合部件的过程。
 由于组合部件的过程很复杂，因此，这些部件的组合过程往往被“外部化”到一个称作建造者的对象里，
 建造者返还给客户端的是一个已经建造完毕的完整产品对象，而用户无须关心该对象所包含的属性以及它们的组装方式，这就是建造者模式的模式动机。
 
-Use: The constructor of a class has both compulsory and optional parameters, and typically more than 4.
+Use:
+The constructor of a class has both compulsory and optional parameters, and typically more than 4.
 */
 
 func TestBuilder(t *testing.T) {
@@ -23,7 +24,7 @@ func TestBuilder(t *testing.T) {
 	println(mac.GetComputer())
 }
 
-// Builder 生成器接口
+// Builder
 type Builder interface {
 	PartUsbCount(int)
 	PartKeyBoard(string)
@@ -65,7 +66,7 @@ func (m MacBuilder) GetComputer() string {
 `, m.CPU, m.RAM, m.USBCount, m.KeyBoard, m.Display)
 }
 
-// Director 指导器，负责组装各部分
+// Director
 type Director struct {
 	builder Builder
 }
