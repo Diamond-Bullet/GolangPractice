@@ -1,62 +1,41 @@
 package design_pattern
 
 import (
+	"GolangPractice/utils/logger"
 	"fmt"
 	"testing"
 )
 
 /*
-Builder: 将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
-The function is similar to `golang/coding/option_test.go`.
+Builder:
+	The constructor of a class has both compulsory and optional parameters, and typically more than 4.
+	The use and function are similar to `golang/coding/option_test.go`.
+	You can customize the building of a class rather than filling in all the parameters.
 
-复杂对象相当于一辆有待建造的汽车，而对象的属性相当于汽车的部件，建造产品的过程就相当于组合部件的过程。
-由于组合部件的过程很复杂，因此，这些部件的组合过程往往被“外部化”到一个称作建造者的对象里，
-建造者返还给客户端的是一个已经建造完毕的完整产品对象，而用户无须关心该对象所包含的属性以及它们的组装方式，这就是建造者模式的模式动机。
+	It resembles the process of building a car, in which you build all components separately and then assemble them together.
 
-Use:
-The constructor of a class has both compulsory and optional parameters, and typically more than 4.
+Roles:
+	1. Product: The final object that will be created by the builder.
+	2. Builder: The interface that will define the steps to build the product.
+	3. ConcreteBuilder: The class that implements the Builder interface.
+	4. Director: The class that will construct the final object using the Builder interface.
 */
 
 func TestBuilder(t *testing.T) {
-	mac := NewMac("Intel Core i7-10900", "Santax 16GB DDR4")
-	director := NewDirector(mac)
-	director.Construct("MAC Standard KeyBoard", "SkyWorth 15.6", 6)
-	println(mac.GetComputer())
+	macBuilder := NewMacBuilder("Intel Core i7-10900", "Santax 16GB DDR4")
+	director := NewDirector(macBuilder)
+
+	mac := director.Construct("MAC Standard KeyBoard", "SkyWorth 15.6", 6)
+	logger.Infoln(mac.Info())
 }
 
-// Builder
-type Builder interface {
-	PartUsbCount(int)
-	PartKeyBoard(string)
-	PartDisplay(string)
-}
-
-type MacBuilder struct {
+type Mac struct {
 	CPU, RAM          string
 	USBCount          int
 	KeyBoard, Display string
 }
 
-func NewMac(cpu, ram string) *MacBuilder {
-	return &MacBuilder{
-		CPU: cpu,
-		RAM: ram,
-	}
-}
-
-func (m *MacBuilder) PartUsbCount(usbCount int) {
-	m.USBCount = usbCount
-}
-
-func (m *MacBuilder) PartKeyBoard(keyBoard string) {
-	m.KeyBoard = keyBoard
-}
-
-func (m *MacBuilder) PartDisplay(display string) {
-	m.Display = display
-}
-
-func (m MacBuilder) GetComputer() string {
+func (m *Mac) Info() string {
 	return fmt.Sprintf(`
 	CPU:		%s
 	RAM:		%s
@@ -66,15 +45,61 @@ func (m MacBuilder) GetComputer() string {
 `, m.CPU, m.RAM, m.USBCount, m.KeyBoard, m.Display)
 }
 
+// Builder
+type Builder interface {
+	SetCPU(cpu string) Builder
+	SetRAM(ram string) Builder
+	WithUsbCount(int) Builder
+	WithKeyBoard(string) Builder
+	WithDisplay(string) Builder
+	Build() *Mac
+}
+
+type MacBuilder struct {
+	Mac *Mac
+}
+
+func NewMacBuilder(cpu, ram string) Builder {
+	return (&MacBuilder{Mac: &Mac{}}).SetCPU(cpu).SetRAM(ram)
+}
+
+func (m *MacBuilder) SetCPU(cpu string) Builder {
+	m.Mac.CPU = cpu
+	return m
+}
+
+func (m *MacBuilder) SetRAM(ram string) Builder {
+	m.Mac.RAM = ram
+	return m
+}
+
+func (m *MacBuilder) WithUsbCount(usbCount int) Builder {
+	m.Mac.USBCount = usbCount
+	return m
+}
+
+func (m *MacBuilder) WithKeyBoard(keyBoard string) Builder {
+	m.Mac.KeyBoard = keyBoard
+	return m
+}
+
+func (m *MacBuilder) WithDisplay(display string) Builder {
+	m.Mac.Display = display
+	return m
+}
+
+func (m *MacBuilder) Build() *Mac {
+	return m.Mac
+}
+
 // Director
 type Director struct {
 	builder Builder
 }
 
-func (d *Director) Construct(keyBoard, DisPlay string, UsbCount int) {
-	d.builder.PartKeyBoard(keyBoard)
-	d.builder.PartDisplay(DisPlay)
-	d.builder.PartUsbCount(UsbCount)
+func (d *Director) Construct(keyBoard, DisPlay string, UsbCount int) *Mac {
+	d.builder.WithKeyBoard(keyBoard).WithDisplay(DisPlay).WithUsbCount(UsbCount)
+	return d.builder.Build()
 }
 
 func NewDirector(builder Builder) *Director {
