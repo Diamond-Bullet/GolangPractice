@@ -1,21 +1,19 @@
-package design_pattern
+package creational_pattern
 
 import "testing"
 
 /*
 Factory Method
 
-角色：
-	Product：抽象产品
-	ConcreteProduct：具体产品
-	Product：抽象工厂
-	ConcreteFactory：具体工厂
+Roles:
+	Product: interface of the product
+	ConcreteProduct: implementation of the product
+	Factory: interface of the factory
+	ConcreteFactory: implementation of the factory
 
-现在对该系统进行修改，不再设计一个按钮工厂类来统一负责所有产品的创建，而是将具体按钮的创建过程交给专门的工厂子类去完成，
-我们先定义一个抽象的按钮工厂类，再定义具体的工厂类来生成圆形按钮、矩形按钮、菱形按钮等，它们实现在抽象按钮工厂类中定义的方法。
-这种抽象化的结果使这种结构可以在不修改具体工厂类的情况下引进新的产品，如果出现新的按钮类型，
-只需要为这种新类型的按钮创建一个具体的工厂类就可以获得该新按钮的实例，
-这一特点无疑使得工厂方法模式具有超越简单工厂模式的优越性，更加符合"开闭原则"。
+In this pattern, dedicated subclasses are applied to create particular objects rather than a single factory class.
+Now if we are going to add a new object type, we just need to create a new factory class for it instead of altering the existing one.
+This feature makes the pattern more in line with the "Open-Closed Principle".
 */
 
 func TestFactoryMethod(t *testing.T) {

@@ -1,4 +1,4 @@
-package design_pattern
+package behavioral_pattern
 
 // todo Visitor Pattern
 

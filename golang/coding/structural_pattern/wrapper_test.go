@@ -1,4 +1,4 @@
-package design_pattern
+package structural_pattern
 
 import (
 	"strconv"

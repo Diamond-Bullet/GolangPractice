@@ -1,4 +1,4 @@
-package design_pattern
+package creational_pattern
 
 /*
 单例模式
