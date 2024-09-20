@@ -4,16 +4,15 @@ import "testing"
 
 /*
 Factory Method
+A dedicated factory implementation is applied to create A particular object, rather than all in ONE single factory class.
+Now if we are going to add a new object type, we just need to create a new factory class for it instead of altering the existing one.
+This feature makes the pattern more in line with the "Open-Closed Principle".
 
 Roles:
 	Product: interface of the product
 	ConcreteProduct: implementation of the product
 	Factory: interface of the factory
 	ConcreteFactory: implementation of the factory
-
-In this pattern, dedicated subclasses are applied to create particular objects rather than a single factory class.
-Now if we are going to add a new object type, we just need to create a new factory class for it instead of altering the existing one.
-This feature makes the pattern more in line with the "Open-Closed Principle".
 */
 
 func TestFactoryMethod(t *testing.T) {
