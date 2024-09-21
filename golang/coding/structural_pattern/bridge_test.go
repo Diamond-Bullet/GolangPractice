@@ -1,30 +1,136 @@
 package structural_pattern
 
+import "testing"
+
 /*
-如果一个系统需要在抽象化和具体化之间增加更多的灵活性，避免在两个层次之间建立静态的继承关系，通过桥接模式可以使它们在抽象层建立一个关联关系。
+Bridge:
+When we have two factors that can change independently, and we need the combination of them,
+use bridge to connect them rather than implementing a class to couple them.
 
-“抽象部分”和“实现部分”可以以继承的方式独立扩展而互不影响，在程序运行时可以动态将一个抽象化子类的对象和一个实现化子类的对象进行组合，即系统需要对抽象化角色和实现化角色进行动态耦合。
-
-一个类存在两个（或多个）独立变化的维度，且这两个（或多个）维度都需要独立进行扩展。
-
-对于那些不希望使用继承或因为多层继承导致系统类的个数急剧增加的系统，桥接模式尤为适用。
-
-抽象化(Abstraction)角色：抽象化给出的定义，并保存一个对实现化对象的引用。
-修正抽象化(RefinedAbstraction)角色：扩展抽象化角色，改变和修正父类对抽象化的定义。
-实现化(Implementor)角色：这个角色给出实现化角色的接口，但不给出具体的实现。
-		必须指出的是，这个接口不一定和抽象化角色的接口定义相同，实际上，这两个接口可以非常不一样。
-		实现化角色应当只给出底层操作，而抽象化角色应当只给出基于底层操作的更高一层的操作。
-具体实现化(ConcreteImplementor)角色：这个角色给出实现化角色接口的具体实现。
+3*4 > 3+4
 */
 
-// 避免系统类的个数以笛卡尔积的级别增加，类似于链式调用
+func TestBridge(t *testing.T) {
+	tv := &TV{}
+	basicRemote := &BasicRemote{device: tv}
+	basicRemote.Power()
+	basicRemote.VolumeUp()
+	basicRemote.VolumeDown()
 
-// Coffee 抽象化角色(这不标准，它也具体实现了尺寸这个属性)
-type Coffee interface {
-	SetSize(n int)
+	radio := &Radio{}
+	advancedRemote := &AdvancedRemote{device: radio}
+	advancedRemote.Power()
+	advancedRemote.VolumeUp()
+	advancedRemote.VolumeDown()
 }
 
-// Additives 实现化角色
-type Additives interface {
-	AddSomething(thing string)
+type Remote interface {
+	Power()
+	VolumeUp()
+	VolumeDown()
+}
+
+type Device interface {
+	On()
+	Off()
+	IsOn() bool
+	SetVolume(volume int)
+	GetVolume() int
+}
+
+type BasicRemote struct {
+	device Device
+}
+
+func (b *BasicRemote) Power() {
+	if b.device.IsOn() {
+		b.device.Off()
+		return
+	}
+	b.device.On()
+}
+
+func (b *BasicRemote) VolumeUp() {
+	b.device.SetVolume(b.device.GetVolume() + 1)
+}
+
+func (b *BasicRemote) VolumeDown() {
+	b.device.SetVolume(b.device.GetVolume() - 1)
+}
+
+type AdvancedRemote struct {
+	device      Device
+	volumeUpCnt int
+}
+
+func (a *AdvancedRemote) Power() {
+	if a.device.IsOn() {
+		a.device.Off()
+		return
+	}
+	a.device.On()
+}
+
+func (a *AdvancedRemote) VolumeUp() {
+	a.volumeUpCnt++
+	if a.volumeUpCnt < 2 {
+		a.device.SetVolume(a.device.GetVolume() + 1)
+		return
+	}
+	a.device.SetVolume(a.device.GetVolume() + 5)
+}
+
+func (a *AdvancedRemote) VolumeDown() {
+	a.volumeUpCnt = 0
+	a.device.SetVolume(a.device.GetVolume() - 1)
+}
+
+type TV struct {
+	isOn   bool
+	volume int
+}
+
+func (t *TV) On() {
+	t.isOn = true
+}
+
+func (t *TV) Off() {
+	t.isOn = false
+}
+
+func (t *TV) IsOn() bool {
+	return t.isOn
+}
+
+func (t *TV) SetVolume(volume int) {
+	t.volume = volume
+}
+
+func (t *TV) GetVolume() int {
+	return t.volume
+}
+
+type Radio struct {
+	isOn   bool
+	volume int
+}
+
+func (r *Radio) On() {
+	r.isOn = true
+}
+
+func (r *Radio) Off() {
+	r.isOn = false
+}
+
+func (r *Radio) IsOn() bool {
+	return r.isOn
+}
+
+func (r *Radio) SetVolume(volume int) {
+	r.volume = volume
+}
+
+func (r *Radio) GetVolume() int {
+	return r.volume
 }
