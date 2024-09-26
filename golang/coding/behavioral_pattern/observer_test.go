@@ -1,22 +1,33 @@
 package behavioral_pattern
 
 import (
+	"github.com/gookit/color"
 	"reflect"
+	"testing"
 	"time"
 )
 
 /*
-观察者模式，  发布-订阅(Publish - Subscribe)
-定义对象间的一种一对多的依赖关系 ,当一个对象的状态发生改变时 , 所有依赖于它的对象都得到通知并被自动更新。
-推，拉。
+Observer, also named Publish-Subscribe.
+It defines a 1-to-n dependency among objects. When the state of an object changes, all subscribers get notified and updated.
+Push, Pull.
 
-适用场景：
-一个系统中有多个相互协作的类，需要维护其一致性，我们并不总希望为了维护一致性而导致紧密的耦合。
-一个抽象模型的一个方面，被另外若干个方面依赖。一个对象的改变，将导致其他若干个对象的改变。
-
-角色：
-目标，提供注册和删除观察者的接口；	观察者，收到通知并更新的接口
+Applicable scenarios:
+1. There are several classes cooperating with each other in a system, which we need to maintain the consistency of them without introducing too much coupling.
+2. The change of one object leads to changes of multiple other objects.
 */
+
+func TestObserver(t *testing.T) {
+	clock := &Clock{
+		Observers: make(map[Observer]struct{}),
+		Time:      time.Now().String(),
+	}
+
+	digitalGUI := &DigitalGUI{}
+	clock.Attach(digitalGUI)
+
+	clock.Update()
+}
 
 type Subject interface {
 	Attach(o Observer)
@@ -43,7 +54,6 @@ func (c *Clock) Detach(o Observer) {
 	delete(c.Observers, o)
 }
 
-// Update 目标状态更新，随后通知观察者
 func (c *Clock) Update() {
 	c.Time = time.Now().String()
 	c.notify()
@@ -65,11 +75,11 @@ type DigitalGUI struct {
 
 func (d *DigitalGUI) Update(s Subject) {
 	d.Time = s.GetMsg()
-	println(d.Time)
+	color.Blueln(d.Time)
 }
 
 /*
-现在考虑在观察者和目标之间增加一个 变更管理器 ChangeManager
+Now we add a layer ChangeManager between Subject and Observers.
 1. 维护一个目标的观察者集合
 2. 定义一个特定的更新策略
 3. 根据一个目标的请求，更新所有依赖于这个目标的观察者
