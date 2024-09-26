@@ -1,9 +1,64 @@
 package behavioral_pattern
 
-/*
-原型模式
+import (
+	"GolangPractice/utils/logger"
+	"testing"
+)
 
-当一个对象的构建代价过高时。例如某个对象里面的数据需要访问数据库才能拿到，而我们却要多次构建这样的对象。
-当构建的多个对象，均需要处于某种原始状态时，就可以先构建一个拥有此状态的原型对象，其他对象基于原型对象来修改。
+/*
+ProtoType
+
+When the cost of building an object is rather high,
+for example, we need to access the database to get the data,
+but we have to build it multiple times.
+
+If the object built all have the same state at start, We can build a prototype object with the state, and then adjust it.
+
+In gorm, when we create a new transaction instance, we use Clone method.
 */
-type ProtoType struct{}
+
+func TestPrototype(t *testing.T) {
+	manager := NewPrototypeManager()
+
+	t1 := &TypeA{name: "type1"}
+	manager.Set("t1", t1)
+
+	t2 := manager.Get("t1").Clone()
+	if t1 == t2 {
+		logger.Errorln("t1 == t2")
+	}
+
+	t3 := t1.Clone()
+	if t1 == t3 {
+		logger.Errorln("t1 == t3")
+	}
+}
+
+type Cloneable interface {
+	Clone() Cloneable
+}
+
+type PrototypeManager struct {
+	prototypes map[string]Cloneable
+}
+
+func NewPrototypeManager() *PrototypeManager {
+	return &PrototypeManager{prototypes: make(map[string]Cloneable)}
+}
+
+func (p *PrototypeManager) Get(name string) Cloneable {
+	return p.prototypes[name]
+}
+
+func (p *PrototypeManager) Set(name string, prototype Cloneable) {
+	p.prototypes[name] = prototype
+}
+
+type TypeA struct {
+	name string
+}
+
+func (t *TypeA) Clone() Cloneable {
+	tc := *t
+	return &tc
+}
