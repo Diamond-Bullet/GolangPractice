@@ -1,17 +1,21 @@
 package behavioral_pattern
 
-import "testing"
+import (
+	"github.com/gookit/color"
+	"testing"
+)
 
 // Visitor provide a way to add operations to an object while not changing it.
 
 func TestVisitor(t *testing.T) {
 	info := &InfoHost{
-		F1: "f1",
-		F2: "f2",
-		F3: "f3",
+		Name:    "INFO",
+		Region:  "JAPAN",
+		Replica: "3",
 	}
-	f1Visitor := &F1Visitor{}
-	info.Accept(f1Visitor)
+
+	nameVisitor := &NameVisitor{}
+	info.Accept(nameVisitor)
 }
 
 type Host interface {
@@ -23,17 +27,25 @@ type Visitor interface {
 }
 
 type InfoHost struct {
-	F1 string
-	F2 string
-	F3 string
+	Name    string
+	Region  string
+	Replica string
 }
 
 func (i *InfoHost) Accept(visitor Visitor) {
 	visitor.Visit(i)
 }
 
-type F1Visitor struct{}
+type NameVisitor struct{}
 
-func (f *F1Visitor) Visit(host Host) {
-
+func (n *NameVisitor) Visit(host Host) {
+	switch h := host.(type) {
+	case *InfoHost:
+		if h == nil {
+			return
+		}
+		color.Blueln(h.Name)
+	default:
+		return
+	}
 }

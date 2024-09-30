@@ -5,7 +5,7 @@ package behavioral_pattern
 */
 
 import (
-	"fmt"
+	"GolangPractice/utils/logger"
 	"runtime"
 	"sync"
 	"testing"
@@ -25,10 +25,11 @@ func TestObjectPool(t *testing.T) {
 	}
 
 	pool.Wg.Wait()
-	fmt.Println("goroutines: ", runtime.NumGoroutine())
+	logger.Infoln("goroutines: ", runtime.NumGoroutine())
 	pool.Stop()
+
 	time.Sleep(time.Second)
-	fmt.Println("goroutines: ", runtime.NumGoroutine())
+	logger.Infoln("goroutines: ", runtime.NumGoroutine())
 }
 
 type Task struct {
@@ -70,9 +71,9 @@ func (p *Pool) Work(workerID int) {
 	for task := range p.JobsChannel {
 		err := task.Execute()
 		if err != nil {
-			fmt.Println(workerID, "run error:", err)
+			logger.Infoln(workerID, "run error:", err)
 		} else {
-			fmt.Println(workerID, "run success!")
+			logger.Infoln(workerID, "run success!")
 		}
 
 		p.Wg.Done()

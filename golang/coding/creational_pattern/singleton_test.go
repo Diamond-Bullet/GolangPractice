@@ -1,10 +1,7 @@
 package creational_pattern
 
 /*
-单例模式
-	某个类只有一个实例，且自行实例化并向整个系统提供此实例
-
-你可以直接使用封装好的 sync.Once() 方法，实现单例模式
+Singleton
 */
 
 import (
