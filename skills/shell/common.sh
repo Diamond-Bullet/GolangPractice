@@ -340,6 +340,11 @@ sudo systemctl start job.service
 # print present time in particular pattern.
 date "+%Y-%m-%d %H:%M:%S"
 
+# stress testing https://www.cnblogs.com/myvic/p/7703973.html
+# -n: total requests number; -c: concurrent requests number.
+# example of post_data.txt: {"name":"songzq","age":18}
+ab -n 10000 -c 100 -H "Content-Type: application/json" -T application/json http://localhost:8080/api -p post_data.txt
+
 ####################### Mac OS #################
 # after switching to zsh on Mac, `/etc/profile` is not automatically executed.
 # instead, `~/.zshrc` ,`/etc/zshenv` and `/etc/zshrc` get executed each time you log in.
