@@ -9,20 +9,6 @@ type Number interface {
 	constraints.Integer | constraints.Float
 }
 
-func Max[T Number](x, y T) T {
-	if x > y {
-		return x
-	}
-	return y
-}
-
-func Min[T Number](x, y T) T {
-	if x < y {
-		return x
-	}
-	return y
-}
-
 func Pow[T Number](x, y T) T {
 	return T(math.Pow(float64(x), float64(y)))
 }
