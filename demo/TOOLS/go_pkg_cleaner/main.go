@@ -63,7 +63,7 @@ func doubleConfirmation() {
 	fmt.Printf("this is the directory you want to clear:%s\n confirm it[y/n] and click [Enter] key to submit your choice", *path)
 	confirm, err := bufio.NewReader(os.Stdin).ReadString('\n')
 	if err != nil {
-		logger.Errorln("program unfortunately exit:", err)
+		logger.Error("program unfortunately exit:", err)
 		os.Exit(-1)
 	}
 	if confirm != "y\n" {
@@ -92,7 +92,7 @@ func NewPackageCleaner(path string, deadline time.Time) *PackageCleaner {
 func (p *PackageCleaner) Clean() error {
 	categories, err := os.ReadDir(p.Path)
 	if err != nil {
-		logger.Errorln("read directory fail:", err)
+		logger.Error("read directory fail:", err)
 		return err
 	}
 

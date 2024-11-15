@@ -10,17 +10,17 @@ func TestMapReduce(t *testing.T) {
 	mappedResult := Map([]int{1, 2, 3, 4, 5}, func(i int) string {
 		return strconv.Itoa(i << 1)
 	})
-	logger.Infoln(mappedResult)
+	logger.Info(mappedResult)
 
 	reducedResult := Reduce([]int{1, 2, 3, 4, 5}, func(acc int, i int) int {
 		return acc + i
 	}, 0)
-	logger.Infoln(reducedResult)
+	logger.Info(reducedResult)
 
 	filteredResult := Filter([]int{1, 2, 3, 4, 5}, func(i int) bool {
 		return i%2 == 0
 	})
-	logger.Infoln(filteredResult)
+	logger.Info(filteredResult)
 }
 
 func Map[T, F any](source []T, mapper func(T) F) []F {

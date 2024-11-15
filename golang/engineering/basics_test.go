@@ -49,10 +49,10 @@ func TestClosure(t *testing.T) {
 
 	innerFunc := Foo()
 
-	logger.Infoln(&innerFunc)
+	logger.Info(&innerFunc)
 	logger.Infof("innerFunc size: %d", unsafe.Sizeof(innerFunc))
-	logger.Infoln(innerFunc(1)) // 2
-	logger.Infoln(innerFunc(2)) // 4
+	logger.Info(innerFunc(1)) // 2
+	logger.Info(innerFunc(2)) // 4
 }
 
 // memory alignment
@@ -74,10 +74,10 @@ func TestMemoryAlignment(t *testing.T) {
 
 	p := Part2{}
 	var x = 1<<63 - 1
-	logger.Infoln(unsafe.Offsetof(p.e))
+	logger.Info(unsafe.Offsetof(p.e))
 	logger.Infof("p align: %d", unsafe.Alignof(p.e))
-	logger.Infoln(&(p.e))
-	logger.Infoln(&x)
+	logger.Info(&(p.e))
+	logger.Info(&x)
 	logger.Infof("p size: %d", unsafe.Sizeof(p))
 }
 
@@ -89,10 +89,10 @@ func TestPointer(t *testing.T) {
 	}
 
 	s := S1{}
-	logger.Infoln(s)
+	logger.Info(s)
 	b := (*int64)(unsafe.Pointer(uintptr(unsafe.Pointer(&s)) + unsafe.Offsetof(s.B)))
 	*b = 1
-	logger.Infoln(s)
+	logger.Info(s)
 }
 
 // defer: last in, first out
@@ -106,11 +106,11 @@ func TestDeferSequence(t *testing.T) {
 	// 1
 
 	defer func() {
-		logger.Infoln(1)
+		logger.Info(1)
 	}()
 
 	defer func() {
-		logger.Infoln(2)
+		logger.Info(2)
 	}()
 }
 
@@ -137,7 +137,7 @@ func TestDeferReturn(t *testing.T) {
 		return i // x = i, defer func, ret x
 	}
 	tt := tf()
-	logger.Infoln(tt) // 1
+	logger.Info(tt) // 1
 }
 
 func JustForPanic() {
@@ -184,7 +184,7 @@ func TestMemoryAddress(t *testing.T) {
 
 		px := (*[]int)(unsafe.Pointer(p))
 		if (*px)[0] != x[0] {
-			logger.Infoln(*px)
+			logger.Info(*px)
 		}
 	}
 }
@@ -220,7 +220,7 @@ func TestString(t *testing.T) {
 	sb := *(*string)(unsafe.Pointer(&b))
 	bs := *(*[]byte)(unsafe.Pointer(&sb))
 	bs[1] = 'a'
-	logger.Infoln(sb)
+	logger.Info(sb)
 	logger.Infof("%s", bs)
 
 	// Concatenating/Joining/Splicing strings dynamically needs to reallocate memory constantly, leading to(resulting in) worse performance.
@@ -231,11 +231,11 @@ func TestString(t *testing.T) {
 
 func TestStrLen(t *testing.T) {
 	s := "abcdefg"
-	logger.Infoln("len:", len(s)) // 7
+	logger.Info("len:", len(s)) // 7
 
 	s1 := "abc好东西"
-	logger.Infoln("len:", len(s1))                                          // 12
-	logger.Infoln("rune len:", utf8.RuneCountInString(s1), len([]rune(s1))) // 6
+	logger.Info("len:", len(s1))                                          // 12
+	logger.Info("rune len:", utf8.RuneCountInString(s1), len([]rune(s1))) // 6
 }
 
 // array
@@ -252,7 +252,7 @@ func TestArray(t *testing.T) {
 
 	// if the array's basic(underlying) type supports operations like `==`、`!=`, the array does too(then so does the array).
 	a, b := [2]int{1, 2}, [2]int{2, 4}
-	logger.Infoln(a == b)
+	logger.Info(a == b)
 }
 
 // slice
@@ -268,14 +268,14 @@ func TestSlice(t *testing.T) {
 	s := make([]int, 0, 10)
 	s3 := append(s, 10)
 	s4 := append(s, 20)
-	logger.Infoln(s3)
-	logger.Infoln(s4)
+	logger.Info(s3)
+	logger.Info(s4)
 
 	// when capacity is no longer sufficient, slice will scale up，a new underlying array will be assigned to replace the old and smaller one.
 	s5 := s[:2:3] // start:end:cap
 	s6 := append(s5, 20, 30, 40, 50)
-	logger.Infoln(&s5[0])
-	logger.Infoln(&s6[0])
+	logger.Info(&s5[0])
+	logger.Info(&s6[0])
 }
 
 // map
@@ -288,7 +288,7 @@ func TestMap(t *testing.T) {
 	}
 
 	change(m)
-	logger.Infoln(m[1]) // result: 2, map is a pointer
+	logger.Info(m[1]) // result: 2, map is a pointer
 
 	for i := 2; i < 5; i++ {
 		m[i] = i + 10
@@ -297,7 +297,7 @@ func TestMap(t *testing.T) {
 	for k := range m {
 		m[k+10] = k + 20
 		delete(m, k+1)
-		logger.Infoln(k, m)
+		logger.Info(k, m)
 	}
 
 	// Can not do some other concurrent operations at the same time when writing the map,

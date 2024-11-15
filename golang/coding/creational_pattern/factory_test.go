@@ -11,10 +11,10 @@ Simple Factory: not a standard design pattern but an approach to centralize the 
 
 func TestFactory(t *testing.T) {
 	car := NewProduct(Car)
-	logger.Infoln(car.Say())
+	logger.Info(car.Say())
 
 	toy := NewProduct(Toy)
-	logger.Infoln(toy.Say())
+	logger.Info(toy.Say())
 }
 
 type Product interface {

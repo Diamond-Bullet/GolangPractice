@@ -13,7 +13,7 @@ func TestWrapError(t *testing.T) {
 	err := errors.New("error here")
 	err1 := fmt.Errorf("layer1: %w", err)
 	err2 := fmt.Errorf("layer2: %w", err1)
-	logger.Errorln(err2)
+	logger.Error(err2)
 }
 
 func StackError1() error {
@@ -29,7 +29,7 @@ func StackError2() error {
 // learn about new error handling draft `Go2 errors` by Go team.
 func TestStackError(t *testing.T) {
 	err := pkgerrors.Errorf("err: %s", "i want to bring out an error")
-	logger.Infoln(err)
+	logger.Info(err)
 	logger.Infof("%+v", err)
 
 	err1 := pkgerrors.Wrap(err, "err1")

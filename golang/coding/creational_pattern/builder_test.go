@@ -26,7 +26,7 @@ func TestBuilder(t *testing.T) {
 	director := NewDirector(macBuilder)
 
 	mac := director.Construct("MAC Standard KeyBoard", "SkyWorth 15.6", 6)
-	logger.Infoln(mac.Info())
+	logger.Info(mac.Info())
 }
 
 type Mac struct {

@@ -68,7 +68,7 @@ func TestRuntimePprof(t *testing.T) {
 func TestNetHttpPprof(t *testing.T) {
 	// pprof
 	go func() {
-		logger.Infoln(http.ListenAndServe(":61111", nil))
+		logger.Info(http.ListenAndServe(":61111", nil))
 	}()
 
 	// your product code here

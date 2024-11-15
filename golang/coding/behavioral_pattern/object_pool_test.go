@@ -25,11 +25,11 @@ func TestObjectPool(t *testing.T) {
 	}
 
 	pool.Wg.Wait()
-	logger.Infoln("goroutines: ", runtime.NumGoroutine())
+	logger.Info("goroutines: ", runtime.NumGoroutine())
 	pool.Stop()
 
 	time.Sleep(time.Second)
-	logger.Infoln("goroutines: ", runtime.NumGoroutine())
+	logger.Info("goroutines: ", runtime.NumGoroutine())
 }
 
 type Task struct {
@@ -71,9 +71,9 @@ func (p *Pool) Work(workerID int) {
 	for task := range p.JobsChannel {
 		err := task.Execute()
 		if err != nil {
-			logger.Infoln(workerID, "run error:", err)
+			logger.Info(workerID, "run error:", err)
 		} else {
-			logger.Infoln(workerID, "run success!")
+			logger.Info(workerID, "run success!")
 		}
 
 		p.Wg.Done()

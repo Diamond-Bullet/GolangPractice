@@ -55,7 +55,7 @@ func NewErrWithLog(errCode int, message string) Error {
 		Message: message,
 		stack:   callers(),
 	}
-	logger.Errorln(stackError.Error())
+	logger.Error(stackError.Error())
 	return stackError
 }
 
@@ -69,7 +69,7 @@ func NewWithLog(errType ErrorType, format string, v ...any) Error {
 	}
 
 	// log
-	logger.Errorln(stackError.Error())
+	logger.Error(stackError.Error())
 	return stackError
 }
 
@@ -83,7 +83,7 @@ func NewWithLogMetric(errType ErrorType, format string, v ...any) Error {
 	}
 
 	// log
-	logger.Errorln(message, " stack: ", stackError.Error())
+	logger.Error(message, " stack: ", stackError.Error())
 
 	// metric
 	Inc(errType)

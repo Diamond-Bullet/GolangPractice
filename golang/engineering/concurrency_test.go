@@ -49,7 +49,7 @@ func TestMutex(t *testing.T) {
 
 	// this operation is blocked
 	m.Lock()
-	logger.Infoln("main exits")
+	logger.Info("main exits")
 	m.Unlock()
 }
 
@@ -57,11 +57,11 @@ func TestMutex(t *testing.T) {
 func TestAtomic(t *testing.T) {
 	var a int32
 	atomic.AddInt32(&a, 1)
-	logger.Infoln(a)
+	logger.Info(a)
 
 	var b atomic.Uint64
 	b.Store(1)
-	logger.Infoln(b.Load())
+	logger.Info(b.Load())
 }
 
 // go.uber.org/atomic is a more advanced version of sync/atomic.
@@ -69,7 +69,7 @@ func TestAtomic(t *testing.T) {
 func TestUberAtomic(t *testing.T) {
 	str := uberAtomic.NewString("hello world")
 	str.Store("goodbye world")
-	logger.Infoln(str.Load())
+	logger.Info(str.Load())
 }
 
 func TestChannelSyncNoBuf(t *testing.T) {
@@ -128,7 +128,7 @@ func TestSyncPool(t *testing.T) {
 	}
 	wg.Wait()
 
-	logger.Infoln(numCalcsCreated)
+	logger.Info(numCalcsCreated)
 }
 
 func TestSyncCond(t *testing.T) {
@@ -236,11 +236,11 @@ func TestErrGroup(t *testing.T) {
 		})
 	}
 
-	logger.Infoln("waiting")
+	logger.Info("waiting")
 
 	err := g.Wait()
 	if err != nil {
-		logger.Errorln(err)
+		logger.Error(err)
 	}
 }
 
@@ -250,7 +250,7 @@ func TestGoroutinePool(t *testing.T) {
 
 	pool, err := ants.NewPool(TaskNum / 10)
 	if err != nil {
-		logger.Errorln(err)
+		logger.Error(err)
 		return
 	}
 	defer pool.Release()

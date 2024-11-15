@@ -1,39 +1,40 @@
 package questions
 
 import (
+	"GolangPractice/utils/logger"
 	"fmt"
 	"sort"
 	"testing"
 )
 
 func TestCountingSort(t *testing.T) {
-	fmt.Printf("%v", CountingSort([]int{1, 3, 4, 3, 2, 1}, 5, func(num int) int {
+	logger.Infof("%v", CountingSort([]int{1, 3, 4, 3, 2, 1}, 5, func(num int) int {
 		return num
 	}))
 }
 
 func TestRadixSort(t *testing.T) {
-	fmt.Printf("%v", RadixSort([]int{13, 32, 41, 33, 22, 11}, 10, 2))
+	logger.Infof("%v", RadixSort([]int{13, 32, 41, 33, 22, 11}, 10, 2))
 }
 
 func TestFindNumKByQuickSort(t *testing.T) {
 	arr := []int{13, 32, 41, 33, 22, 11}
-	fmt.Printf("%v\n", FindNumKByQuickSort(arr, 0, len(arr), 4))
+	logger.Infof("%v\n", FindNumKByQuickSort(arr, 0, len(arr), 4))
 	sort.Ints(arr)
-	fmt.Printf("%v", arr)
+	logger.Infof("%v", arr)
 }
 
 func TestInsertSort(t *testing.T) {
 	arr := []int{13, 32, 41, 33, 22, 11}
 	InsertSort(arr, 0, len(arr))
-	fmt.Printf("%v", arr)
+	logger.Infof("%v", arr)
 }
 
 func TestFindNumK(t *testing.T) {
 	arr := []int{13, 32, 41, 33, 22, 11}
-	fmt.Printf("%v\n", FindNumK(arr, 0, len(arr), 4))
+	logger.Infof("%v\n", FindNumK(arr, 0, len(arr), 4))
 	sort.Ints(arr)
-	fmt.Printf("%v", arr)
+	logger.Infof("%v", arr)
 }
 
 func TestQuickSort(t *testing.T) {

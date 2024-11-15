@@ -75,7 +75,7 @@ func TestJsonParser(t *testing.T) {
 }`)
 
 	val, err := jsonparser.Set(data, []byte("https://github.com"), "person", "avatars", "[0]", "backup_url")
-	logger.Infoln(string(val), " err: ", err)
+	logger.Info(string(val), " err: ", err)
 }
 
 // https://github.com/tealeg/xlsx #seems like the official's.
@@ -84,7 +84,7 @@ func TestExelSheet(t *testing.T) {
 	excelFileName := "/foo.xlsx"
 	xlFile, err := xlsx.OpenFile(excelFileName)
 	if err != nil {
-		logger.Errorln(err)
+		logger.Error(err)
 		return
 	}
 
@@ -185,7 +185,7 @@ func TestSnowFlake(t *testing.T) {
 	// Create a new Node with a Node number of 1
 	node, err := snowflake.NewNode(1)
 	if err != nil {
-		logger.Errorln(err)
+		logger.Error(err)
 		return
 	}
 
@@ -253,7 +253,7 @@ func TestToml(t *testing.T) {
 
 	// Read and parse the TOML file
 	if _, err := toml.DecodeFile("config.toml", &data); err != nil {
-		logger.Errorln("Error parsing TOML file:", err)
+		logger.Error("Error parsing TOML file:", err)
 		return
 	}
 }

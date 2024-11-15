@@ -18,7 +18,7 @@ func main() {
 	// Open the PDF file
 	doc, err := fitz.New(Input)
 	if err != nil {
-		logger.Errorln(err)
+		logger.Error(err)
 		return
 	}
 	defer doc.Close()
@@ -27,14 +27,14 @@ func main() {
 	for i := 0; i < doc.NumPage(); i++ {
 		img, localErr := doc.Image(i)
 		if localErr != nil {
-			logger.Errorln(localErr)
+			logger.Error(localErr)
 			return
 		}
 
 		// Create output file
 		outFile, localErr := os.Create(OutputPrefix + fmt.Sprintf("%d.jpg", i+1))
 		if localErr != nil {
-			logger.Errorln(localErr)
+			logger.Error(localErr)
 			return
 		}
 		defer outFile.Close()
@@ -42,7 +42,7 @@ func main() {
 		// Encode as JPEG
 		localErr = jpeg.Encode(outFile, img, &jpeg.Options{Quality: 90})
 		if localErr != nil {
-			logger.Errorln(localErr)
+			logger.Error(localErr)
 			return
 		}
 

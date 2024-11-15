@@ -12,7 +12,7 @@ import (
 func TestPNG(t *testing.T) {
 	reader, err := os.Open("materials/img.png")
 	if err != nil {
-	    logger.Errorln(err.Error())
+	    logger.Error(err.Error())
 		return
 	}
 	defer reader.Close()
@@ -20,10 +20,10 @@ func TestPNG(t *testing.T) {
 
 	img, err := png.Decode(reader)
 	if err != nil {
-		logger.Errorln(err.Error())
+		logger.Error(err.Error())
 		return
 	}
-	logger.Infoln(ColorToHex(img.At(1,1)))
+	logger.Info(ColorToHex(img.At(1,1)))
 }
 
 //ColorToHex convert color.Color into Hex string, ignoring the alpha channel.

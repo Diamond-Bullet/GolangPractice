@@ -26,7 +26,7 @@ func TestTimeFormat(t *testing.T) {
 	nowStamp := time.Now()
 
 	timeStr := nowStamp.Format(TimeFormatMS)
-	logger.Infoln("Current Time: %s", timeStr)
+	logger.Info("Current Time: %s", timeStr)
 }
 
 func TestTimeParse(t *testing.T) {
@@ -36,17 +36,17 @@ func TestTimeParse(t *testing.T) {
 	// another way to get local time zone is time.Local.
 	// UTC is accessible if using time.UTC.
 	timeStr, _ := time.ParseInLocation(TimeFormatTime2, "2021/11/02 15:04:05", loc)
-	logger.Infoln("Local time.Time: %s", timeStr)
+	logger.Info("Local time.Time: %s", timeStr)
 
 	NewYorkLoc, _ := time.LoadLocation("America/New_York")
 
 	// you can either define a format by yourself or use predefined patterns in `time` package.
 	timeStr, _ = time.ParseInLocation(time.RFC3339, "2021/11/02 15:04:05", NewYorkLoc)
-	logger.Infoln("New York time.Time: %s", timeStr)
+	logger.Info("New York time.Time: %s", timeStr)
 }
 
 func TestTimeCalc(t *testing.T) {
-	logger.Infoln(time.Now().AddDate(1,1,1).String())
+	logger.Info(time.Now().AddDate(1,1,1).String())
 }
 
 func TestGetFileCreationTime(t *testing.T) {

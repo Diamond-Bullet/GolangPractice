@@ -18,7 +18,7 @@ func TestFreeCache(t *testing.T) {
 	_ = cache.Set([]byte("key"), []byte("value"), -1)
 
 	val, err := cache.Get([]byte("key"))
-	logger.Infoln(string(val), err)
+	logger.Info(string(val), err)
 }
 
 // https://github.com/allegro/bigcache
@@ -30,7 +30,7 @@ func TestBigCache(t *testing.T) {
 	_ = cache.Set("my-unique-key", []byte("value"))
 
 	entry, err := cache.Get("my-unique-key")
-	logger.Infoln(string(entry), err)
+	logger.Info(string(entry), err)
 }
 
 // https://github.com/hashicorp/golang-lru

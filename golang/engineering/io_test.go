@@ -23,15 +23,15 @@ func TestWorkDir(t *testing.T) {
 	// Get current work directory
 	workDir, err := os.Getwd()
 	if err != nil {
-		logger.Errorln(err)
+		logger.Error(err)
 		return
 	}
-	logger.Infoln("workDir:", workDir)
+	logger.Info("workDir:", workDir)
 
 	// change current directory
 	err = os.Chdir("/root")
 	if err != nil {
-		logger.Errorln(err)
+		logger.Error(err)
 		return
 	}
 }
@@ -43,7 +43,7 @@ func TestFile(t *testing.T) {
 	// flag `os.O_CREATE` used for creating a file when not existing. you can use os.Create() instead.
 	f, err := os.OpenFile(homeDir+"test.txt", os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
-		logger.Errorln("open file err:", err)
+		logger.Error("open file err:", err)
 		return
 	}
 	defer f.Close()
@@ -60,7 +60,7 @@ func TestReadFile(t *testing.T) {
 	// METHOD 1: os.Open just for Reading.
 	file, err := os.Open("test.txt")
 	if err != nil {
-		logger.Errorln("open file err: ", err)
+		logger.Error("open file err: ", err)
 		return
 	}
 	defer file.Close()
@@ -74,12 +74,12 @@ func TestReadFile(t *testing.T) {
 			break
 		}
 		if err1 != nil {
-			logger.Errorln("read file err:", err1)
+			logger.Error("read file err:", err1)
 			return
 		}
 		content.Write(buf[:n])
 	}
-	logger.Infoln("content:", content.String())
+	logger.Info("content:", content.String())
 
 	// METHOD 2
 	content1, err := os.ReadFile("test.txt")
@@ -101,7 +101,7 @@ func TestStd(t *testing.T) {
 	logger.Infof("input: %s, 					err: %s", input, err.Error())
 
 	_, err = os.Stdout.Write(input)
-	logger.Errorln("Write err:", err)
+	logger.Error("Write err:", err)
 
 	// TODO doesn't work well
 	// redirect output to particular file
@@ -114,13 +114,13 @@ func TestStd(t *testing.T) {
 	os.Stdout = redirectFile
 	os.Stderr = redirectFile
 
-	logger.Infoln("output after redirect")
+	logger.Info("output after redirect")
 }
 
 func TestBufIO(t *testing.T) {
 	f, err := os.OpenFile("test.txt", os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
-		logger.Errorln("open file err: ", err)
+		logger.Error("open file err: ", err)
 		return
 	}
 	defer f.Close()

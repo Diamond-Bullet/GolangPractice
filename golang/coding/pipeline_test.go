@@ -19,13 +19,13 @@ func TestPipeline(t *testing.T) {
 	// Method 1: Embedded functions
 	result := Work(Work(Generate(source), mapper1), mapper2)
 	for v := range result {
-		logger.Infoln(v)
+		logger.Info(v)
 	}
 
 	// Method 2: Functions list
 	result = Pipeline(source, Generate[int], Work[int], mapper1, mapper2)
 	for v := range result {
-		logger.Infoln(v)
+		logger.Info(v)
 	}
 }
 
@@ -48,7 +48,7 @@ func TestConcurrentPipeline(t *testing.T) {
 	}
 
 	for n := range sum(merge(chans[:])) {
-		logger.Infoln(n)
+		logger.Info(n)
 	}
 }
 

@@ -25,12 +25,12 @@ func TestPrototype(t *testing.T) {
 
 	t2 := manager.Get("t1").Clone()
 	if t1 == t2 {
-		logger.Errorln("t1 == t2")
+		logger.Error("t1 == t2")
 	}
 
 	t3 := t1.Clone()
 	if t1 == t3 {
-		logger.Errorln("t1 == t3")
+		logger.Error("t1 == t3")
 	}
 }
 

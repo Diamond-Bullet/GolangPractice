@@ -47,7 +47,7 @@ type LogDecorator struct {
 }
 
 func (l *LogDecorator) Add(a, b int) int {
-	logger.Infoln("a =", a, "b =", b)
+	logger.Info("a =", a, "b =", b)
 	res := l.Adder.Add(a, b)
 	return res
 }

@@ -15,12 +15,12 @@ func TestReflectType(t *testing.T) {
 
 	reflectTypeUser := reflect.TypeOf(x)
 
-	logger.Infoln("x type: ", reflectTypeUser)                   // golang.User
-	logger.Infoln("x package path: ", reflectTypeUser.PkgPath()) // GolangPractice/golang
+	logger.Info("x type: ", reflectTypeUser)                   // golang.User
+	logger.Info("x package path: ", reflectTypeUser.PkgPath()) // GolangPractice/golang
 
 	// reflect.Type is more comprehensive, providing specific type information.
 	// reflect.Kind is kind of a rough classification, telling underlying type like whether it is an int, map, struct, etc.
-	logger.Infoln(reflectTypeUser.Name(), reflectTypeUser.Kind())
+	logger.Info(reflectTypeUser.Name(), reflectTypeUser.Kind())
 }
 
 func TestReflectValue(t *testing.T) {
@@ -48,7 +48,7 @@ func TestReflectValueMethod(t *testing.T) {
 	// argument for `Call` is the input of this method.
 	// return value of `Call` is the result of this method.
 	res := reflectValueUser.Method(2).Call([]reflect.Value{})
-	logger.Infoln(res)
+	logger.Info(res)
 
 	reflectValueUser.MethodByName("ToStrParam").Call([]reflect.Value{reflect.ValueOf("Fabulous!")})
 }
@@ -61,7 +61,7 @@ func TestReflectValueField(t *testing.T) {
 	if field.CanSet() {
 		field.SetString("123")
 	}
-	logger.Infoln(field.String())
+	logger.Info(field.String())
 
 	numField := reflectValueUser.Field(2)
 	if numField.CanSet() {
@@ -74,6 +74,6 @@ func TestCompoundType(t *testing.T) {
 	arr := reflect.ArrayOf(10, reflect.TypeOf(byte(0)))                  // [10]uint8
 	mapping := reflect.MapOf(reflect.TypeOf(""), reflect.TypeOf(int(0))) // map[string]int
 
-	logger.Infoln(arr)
-	logger.Infoln(mapping)
+	logger.Info(arr)
+	logger.Info(mapping)
 }

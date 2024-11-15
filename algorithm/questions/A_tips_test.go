@@ -21,9 +21,9 @@ func TestBits(t *testing.T) {
 	// z = x &^ y. if the bit in `y` is 1, then the corresponding bit in `z` is 0.
 	logger.Infof("%b", 0b11111&^0b00001)
 
-	logger.Infoln(bits.OnesCount(6)) // return 2. represent the count of `1` of x in binary form.
+	logger.Info(bits.OnesCount(6)) // return 2. represent the count of `1` of x in binary form.
 
-	logger.Infoln(bits.Len(8)) // return 4. indicate the length of x in binary form when trimming all leading zeros.
+	logger.Info(bits.Len(8)) // return 4. indicate the length of x in binary form when trimming all leading zeros.
 }
 
 func TestSort(t *testing.T) {
@@ -34,14 +34,14 @@ func TestSort(t *testing.T) {
 	})
 
 	// sort.Search, f(ret) = true, f(ret-1) = false
-	logger.Infoln(sort.Search(len(x), func(i int) bool {
+	logger.Info(sort.Search(len(x), func(i int) bool {
 		return x[i] >= 2
 	}))
 
 	// equivalent to sort.Search(len(x), func(i int) bool {
 	//	return x[i] >= 2
 	//})
-	logger.Infoln(sort.SearchInts(x, 2))
+	logger.Info(sort.SearchInts(x, 2))
 }
 
 func TestStrings(t *testing.T) {
@@ -68,5 +68,5 @@ func TestRedBlackTree(t *testing.T) {
 }
 
 func TestDoublyLinkedList(t *testing.T) {
-	logger.Infoln(list.New())
+	logger.Info(list.New())
 }

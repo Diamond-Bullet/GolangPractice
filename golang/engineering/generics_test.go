@@ -19,7 +19,7 @@ func TestGenericStack(t *testing.T) {
 	if !ok {
 		return
 	}
-	logger.Infoln(value)
+	logger.Info(value)
 
 	staticStack := Stack[int]{}
 	staticStack.Push(122)
@@ -28,7 +28,7 @@ func TestGenericStack(t *testing.T) {
 	if !ok {
 		return
 	}
-	logger.Infoln(staticValue)
+	logger.Info(staticValue)
 }
 
 // see examples in Go official package "slices"
@@ -148,5 +148,5 @@ func TestGenericResult(t *testing.T) {
 	if Validate(result) != nil {
 		return
 	}
-	logger.Infoln(result.Value())
+	logger.Info(result.Value())
 }

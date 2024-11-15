@@ -15,7 +15,7 @@ There is a saying in IT world: there is no problem that cannot be solved by addi
 
 func TestAdapter(t *testing.T) {
 	adapter := NewAdapter(NewAdaptee())
-	logger.Infoln(adapter.Request(1))
+	logger.Info(adapter.Request(1))
 }
 
 type Target interface {

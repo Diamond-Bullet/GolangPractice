@@ -7,5 +7,5 @@ import (
 
 func TestNew(t *testing.T) {
 	err := New(-10000, "good")
-	logger.Errorln(err)
+	logger.Error(err)
 }
