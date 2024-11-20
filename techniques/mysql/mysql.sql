@@ -1,26 +1,32 @@
 ####################### CRUD #################
 create table book (
-    `id`         bigint(20) unsigned not null auto_increment comment 'book ID',
-    `book_name`  varchar(64) not null default '' comment 'book name',
-    `book_pages` int(11) not null default 0 comment 'page amount',
-    `type`       tinyint(4) unsigned not null default 0 comment '0:normal 1:funny',
-    `created_time` timestamp not null default CURRENT_TIMESTAMP comment 'created time',
-    `friend1`    bigint(20) unsigned NOT NULL default 0,
-    `friend2`    bigint(20) unsigned NOT NULL default 0,
-    `data`       json,
+    `id`            bigint(20) unsigned not null auto_increment comment 'book ID',
+    `book_name`     varchar(64) not null default '' comment 'book name',
+    `book_pages`    int(11) not null default 0 comment 'page amount',
+    `type`          tinyint(4) unsigned not null default 0 comment '0:normal 1:funny',
+    `created_time`  timestamp not null default CURRENT_TIMESTAMP comment 'created time',
+    `fan1`          bigint(20) unsigned NOT NULL default 0,
+    `fan2`          bigint(20) unsigned NOT NULL default 0,
+    `data`          json,
 
     primary key (`id`),
     unique key `idx_book_name` (`book_name`),
-    unique key idx_friend1_friend2 (friend1, friend2) #联合索引
+    unique key idx_fan1_fan2 (fan1, fan2) #联合索引
 ) engine=InnoDB auto_increment=1 default charset=utf8mb4 comment='book table';
 
-CREATE DATABASE database_name CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+SHOW CREATE TABLE book;
+
+DROP TABLE book;
+
+CREATE DATABASE playground CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+create database if not exists playground default charset utf8mb4 collate utf8mb4_bin;
+
+SHOW TABLES FROM playground;
+SHOW CREATE DATABASE playground;
+
+DROP DATABASE playground;
 
 ####################### System #################
-SHOW TABLES FROM database_name;
-SHOW CREATE DATABASE database_name;
-
-SHOW CREATE TABLE book;
 SHOW TABLE STATUS LIKE '%table_name%';
 SHOW INDEXES FROM book;
 
@@ -81,10 +87,11 @@ select * from book limit 1\G
 # when the result set of select statement is empty, null gets returned.
 select ifnull((select * from book), 0);
 
-####################### Functions #################
 select round(1.23333, 2); # 四舍五入，保留n位小数
 
 select left('123456', 2); # 截取左边2位
+
+select 1 > 2 as result; # 0 for false, 1 for true
 
 # https://learn.microsoft.com/en-us/sql/t-sql/functions/row-number-transact-sql?view=sql-server-ver16
 # ROW_NUMBER(): number the results sequentially, like 1,2,3,4.
