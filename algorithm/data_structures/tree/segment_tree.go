@@ -1,4 +1,4 @@
-package data_structures
+package tree
 
 // A segment tree indicates some interval properties, like array.
 // every node we mark as ([l, r], p), so `p` could be sum, maximum, minimum or other characteristics.

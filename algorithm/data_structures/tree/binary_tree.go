@@ -1,4 +1,4 @@
-package data_structures
+package tree
 
 // TreeNode # binary tree
 type TreeNode struct {
