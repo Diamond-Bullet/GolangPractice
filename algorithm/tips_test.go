@@ -1,4 +1,4 @@
-package questions
+package main
 
 import (
 	"GolangPractice/utils/logger"
@@ -20,10 +20,10 @@ func TestBits(t *testing.T) {
 	// set to 0 by bit.
 	// z = x &^ y. if the bit in `y` is 1, then the corresponding bit in `z` is 0.
 	logger.Infof("%b", 0b11111&^0b00001)
-
-	logger.Info(bits.OnesCount(6)) // return 2. represent the count of `1` of x in binary form.
-
-	logger.Info(bits.Len(8)) // return 4. indicate the length of x in binary form when trimming all leading zeros.
+	// represent the count of `1` of x in binary form.
+	logger.Info(bits.OnesCount(6)) // 2
+	// indicate the length of x in binary form when trimming all leading zeros.
+	logger.Info(bits.Len(8)) // 4
 }
 
 func TestSort(t *testing.T) {
