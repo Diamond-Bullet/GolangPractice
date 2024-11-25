@@ -1,4 +1,4 @@
-package data_structures
+package basics
 
 type Stack[T any] []T
 

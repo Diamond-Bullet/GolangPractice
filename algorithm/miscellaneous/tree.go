@@ -1,13 +1,13 @@
-package questions
+package miscellaneous
 
 import (
-	"GolangPractice/algorithm/data_structures"
-	"GolangPractice/algorithm/data_structures/tree"
+	"GolangPractice/algorithm/basics"
+	"GolangPractice/algorithm/basics/tree"
 )
 
 // InOrderWalk MarkIt 非递归,二叉树,中序遍历
 func InOrderWalk(root *tree.TreeNode) []int {
-	stack := data_structures.Stack{}
+	stack := basics.Stack{}
 	var ret []int
 	node := root
 	for node != nil || len(stack) > 0 {
@@ -24,7 +24,7 @@ func InOrderWalk(root *tree.TreeNode) []int {
 
 // PreOrderWalk MarkIt 非递归,二叉树,前序遍历
 func PreOrderWalk(root *tree.TreeNode) []int {
-	stack := data_structures.Stack{}
+	stack := basics.Stack{}
 	var ret []int
 	node := root
 	for node != nil || len(stack) > 0 {
@@ -41,7 +41,7 @@ func PreOrderWalk(root *tree.TreeNode) []int {
 
 // PostOrderWalk MarkIt 非递归,二叉树,后序遍历
 func PostOrderWalk(root *tree.TreeNode) []int {
-	stack := data_structures.Stack{}
+	stack := basics.Stack{}
 	var ret []int
 	node := root
 	for node != nil || len(stack) > 0 {

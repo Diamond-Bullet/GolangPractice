@@ -1,4 +1,4 @@
-package data_structures
+package basics
 
 // DisjointSet union-find algorithm
 // https://www.geeksforgeeks.org/introduction-to-disjoint-set-data-structure-or-union-find-algorithm/

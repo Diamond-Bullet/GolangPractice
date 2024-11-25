@@ -1,4 +1,4 @@
-package questions
+package miscellaneous
 
 // PickPrimeN1 MarkIt 筛素数, 素数定义
 func PickPrimeN1(n int) []int {

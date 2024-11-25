@@ -1,4 +1,4 @@
-package data_structures
+package basics
 
 // ListNode linked list
 type ListNode[T any] struct {

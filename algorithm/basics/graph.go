@@ -1,4 +1,4 @@
-package questions
+package basics
 
 // ShortestPath
 // Dijkstra, relating to questions like the shortest path of two nodes.

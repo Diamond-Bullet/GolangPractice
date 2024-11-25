@@ -1,4 +1,4 @@
-package data_structures
+package basics
 
 import "golang.org/x/exp/constraints"
 

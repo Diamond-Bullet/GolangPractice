@@ -1,19 +1,15 @@
 package main
 
 import (
-	"golang.org/x/exp/constraints"
+	"GolangPractice/lib/basic"
 	"math"
 )
 
-type Number interface {
-	constraints.Integer | constraints.Float
-}
-
-func Pow[T Number](x, y T) T {
+func Pow[T basic.Number](x, y T) T {
 	return T(math.Pow(float64(x), float64(y)))
 }
 
-func Abs[T Number](x T) T {
+func Abs[T basic.Number](x T) T {
 	if x < 0 {
 		return -x
 	}

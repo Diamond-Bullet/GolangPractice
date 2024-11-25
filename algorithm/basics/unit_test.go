@@ -1,4 +1,4 @@
-package questions
+package basics
 
 import (
 	"GolangPractice/utils/logger"
@@ -47,8 +47,4 @@ func TestHeapSort(t *testing.T) {
 	arr := []int{3, 2, 3, 4, 2, 1, 5, 3, 2, 3, 4, 3, 32, 4, 1, 2345, 2}
 	HeapSort(arr)
 	fmt.Println(arr)
-}
-
-func TestPickPrimeN(t *testing.T) {
-	fmt.Println(PickPrimeN3(10))
 }
