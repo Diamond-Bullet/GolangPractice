@@ -1,16 +1,15 @@
 package data_structures
 
 // ListNode linked list
-type ListNode struct {
-	Val  int
-	Next *ListNode
+type ListNode[T any] struct {
+	Val  T
+	Next *ListNode[T]
 }
 
 // DoublyListNode doubly-linked list
-type DoublyListNode struct {
-	Key  int
-	Val  int
-	Pre  *DoublyListNode
-	Next *DoublyListNode
+type DoublyListNode[T any] struct {
+	Key  T
+	Val  T
+	Pre  *DoublyListNode[T]
+	Next *DoublyListNode[T]
 }
-

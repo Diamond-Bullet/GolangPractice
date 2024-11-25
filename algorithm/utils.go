@@ -20,7 +20,7 @@ func Abs[T Number](x T) T {
 	return x
 }
 
-// frequently used data structure definition
+// frequently used data structures
 
 type TreeNode struct {
 	Val   int
