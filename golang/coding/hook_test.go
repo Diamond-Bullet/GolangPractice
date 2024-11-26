@@ -1,7 +1,7 @@
 package coding
 
 import (
-	"GolangPractice/utils/logger"
+	"GolangPractice/lib/logger"
 	"reflect"
 )
 

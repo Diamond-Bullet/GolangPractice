@@ -1,7 +1,7 @@
 package engineering
 
 import (
-	"GolangPractice/utils/logger"
+	"GolangPractice/lib/logger"
 	"context"
 	"github.com/allegro/bigcache/v3"
 	"github.com/coocood/freecache"

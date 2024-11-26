@@ -1,7 +1,7 @@
 package main
 
 import (
-	"GolangPractice/utils/logger"
+	"GolangPractice/lib/logger"
 	"fmt"
 	"github.com/gen2brain/go-fitz"
 	"github.com/gookit/color"

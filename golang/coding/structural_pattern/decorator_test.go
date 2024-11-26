@@ -1,7 +1,7 @@
 package structural_pattern
 
 import (
-	"GolangPractice/utils/logger"
+	"GolangPractice/lib/logger"
 	"github.com/gookit/color"
 	"testing"
 )

@@ -1,7 +1,7 @@
 package stack_error
 
 import (
-	"GolangPractice/utils/logger"
+	"GolangPractice/lib/logger"
 	"testing"
 )
 

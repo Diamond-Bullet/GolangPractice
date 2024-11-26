@@ -1,7 +1,7 @@
 package basics
 
 import (
-	"GolangPractice/utils/logger"
+	"GolangPractice/lib/logger"
 	"fmt"
 	"sort"
 	"testing"
