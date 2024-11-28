@@ -19,3 +19,19 @@ func Abs[T basic.Number](x T) T {
 	}
 	return x
 }
+
+func Keys[T comparable, V any](m map[T]V) []T {
+	s := make([]T, 0, len(m))
+	for k := range m {
+		s = append(s, k)
+	}
+	return s
+}
+
+func Values[T comparable, V any](m map[T]V) []V {
+	s := make([]V, 0, len(m))
+	for _, v := range m {
+		s = append(s, v)
+	}
+	return s
+}
