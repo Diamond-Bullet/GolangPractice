@@ -54,6 +54,8 @@ ALTER user 'root'@'localhost' IDENTIFIED BY '123456';
 show procedure status where db='database';    # show procedures of the database
 select routine_name from information_schema.routines where routine_schema='database';
 
+DROP PROCEDURE IF EXISTS add_data;
+
 # insert records in batches.
 # for now, it doesn't work on mariadb.
 CREATE FUNCTION `rand_string`(n INT) RETURNS varchar(255) CHARSET latin1
@@ -92,6 +94,9 @@ select round(1.23333, 2); # 四舍五入，保留n位小数
 select left('123456', 2); # 截取左边2位
 
 select 1 > 2 as result; # 0 for false, 1 for true
+
+select CAST(123 AS CHAR); # convert integer to string
+select CONCAT('123', 'abc'); # concatenate strings
 
 # https://learn.microsoft.com/en-us/sql/t-sql/functions/row-number-transact-sql?view=sql-server-ver16
 # ROW_NUMBER(): number the results sequentially, like 1,2,3,4.
