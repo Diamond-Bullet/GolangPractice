@@ -10,10 +10,10 @@ import (
 
 // see more layouts in src/time/format.go
 const (
-	TimeFormatDate = "2006-01-02"
+	TimeFormatDate  = "2006-01-02"
 	TimeFormatDate2 = "20060102"
 
-	TimeFormatTime = "2006-01-02 15:04:05"
+	TimeFormatTime  = "2006-01-02 15:04:05"
 	TimeFormatTime2 = "2006/01/02 15:04:05"
 
 	TimeFormatMS = "2006-01-02 15:04:05.000"
@@ -26,27 +26,24 @@ func TestTimeFormat(t *testing.T) {
 	nowStamp := time.Now()
 
 	timeStr := nowStamp.Format(TimeFormatMS)
-	logger.Info("Current Time: %s", timeStr)
+	logger.Infof("Current Time: %s", timeStr)
 }
 
 func TestTimeParse(t *testing.T) {
 	// Assign location.
-	loc, _ := time.LoadLocation("Local") // UTC， or other valid location name
+	// time.Local, time.UTC.
+	locIdentifier := "America/New_York"
+	loc, _ := time.LoadLocation(locIdentifier)
 
-	// another way to get local time zone is time.Local.
-	// UTC is accessible if using time.UTC.
-	timeStr, _ := time.ParseInLocation(TimeFormatTime2, "2021/11/02 15:04:05", loc)
-	logger.Info("Local time.Time: %s", timeStr)
+	templateTime, _ := time.ParseInLocation(TimeFormatTime2, "2021/11/02 15:04:05", loc)
+	logger.Infof("%s %s", locIdentifier, templateTime.String())
 
-	NewYorkLoc, _ := time.LoadLocation("America/New_York")
-
-	// you can either define a format by yourself or use predefined patterns in `time` package.
-	timeStr, _ = time.ParseInLocation(time.RFC3339, "2021/11/02 15:04:05", NewYorkLoc)
-	logger.Info("New York time.Time: %s", timeStr)
+	// Specify time zone.
+	logger.Info(time.Local.String(), templateTime.In(time.Local))
 }
 
 func TestTimeCalc(t *testing.T) {
-	logger.Info(time.Now().AddDate(1,1,1).String())
+	logger.Info(time.Now().AddDate(1, 1, 1).String())
 }
 
 func TestGetFileCreationTime(t *testing.T) {
