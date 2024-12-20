@@ -6,9 +6,34 @@ import (
 	"github.com/allegro/bigcache/v3"
 	"github.com/coocood/freecache"
 	lru "github.com/hashicorp/golang-lru/v2"
+	"sync"
 	"testing"
 	"time"
 )
+
+func TestSyncMap(t *testing.T) {
+	key, subKey := "", 50
+	m := &sync.Map{}
+	setMap(m, key, subKey)
+}
+
+func setMap(m *sync.Map, key string, subKey int) {
+	subM, ok := m.Load(key)
+	if ok {
+		e, ok1 := subM.(*sync.Map).Load(subKey)
+		if ok1 {
+			subM.(*sync.Map).Store(subKey, e.(int)+1)
+			return
+		}
+
+		subM.(*sync.Map).Store(subKey, 1)
+		return
+	}
+
+	newSubM := &sync.Map{}
+	newSubM.Store(subKey, 1)
+	m.Store(key, newSubM)
+}
 
 // https://github.com/coocood/freecache
 // thread-safe
@@ -37,7 +62,7 @@ func TestBigCache(t *testing.T) {
 // thread-safe
 func TestLRU(t *testing.T) {
 	l, _ := lru.New[int, any](128)
-	
+
 	l.Add(10, nil)
 	l.Get(10)
 }

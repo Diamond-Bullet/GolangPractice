@@ -13,29 +13,6 @@ import (
 	"time"
 )
 
-// concurrency-safe Map
-// theories, refer to：https://blog.csdn.net/u011957758/article/details/96633984
-func TestSyncMap(t *testing.T) {
-	key, subKey := "", 50
-	m := &sync.Map{}
-	setMap(m, key, subKey)
-}
-
-func setMap(m *sync.Map, key string, subKey int) {
-	if subM, ok := m.Load(key); ok {
-		e, ok1 := subM.(*sync.Map).Load(subKey)
-		if ok1 {
-			subM.(*sync.Map).Store(subKey, e.(int)+1)
-		} else {
-			subM.(*sync.Map).Store(subKey, 1)
-		}
-	} else {
-		newSubM := &sync.Map{}
-		newSubM.Store(subKey, 1)
-		m.Store(key, newSubM)
-	}
-}
-
 // synchronization
 // mutually exclusive
 func TestMutex(t *testing.T) {
