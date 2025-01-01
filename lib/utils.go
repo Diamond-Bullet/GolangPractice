@@ -20,6 +20,13 @@ func Abs[T basic.Number](x T) T {
 	return x
 }
 
+func Ternary[T any](condition bool, forTrue, forFalse T) T {
+	if condition {
+		return forTrue
+	}
+	return forFalse
+}
+
 func Keys[T comparable, V any](m map[T]V) []T {
 	s := make([]T, 0, len(m))
 	for k := range m {

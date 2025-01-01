@@ -22,6 +22,13 @@ func Abs[T Number](x T) T {
 	return x
 }
 
+func Ternary[T any](condition bool, forTrue, forFalse T) T {
+	if condition {
+		return forTrue
+	}
+	return forFalse
+}
+
 func Keys[T comparable, V any](m map[T]V) []T {
 	s := make([]T, 0, len(m))
 	for k := range m {
@@ -47,4 +54,23 @@ type TreeNode struct {
 type ListNode struct {
 	Val  int
 	Next *ListNode
+}
+
+func List(head *ListNode) []int {
+	var res []int
+	for head != nil {
+		res = append(res, head.Val)
+		head = head.Next
+	}
+	return res
+}
+
+func LinkedList(arr []int) *ListNode {
+	dummyHead := &ListNode{}
+	cur := dummyHead
+	for _, v := range arr {
+		cur.Next = &ListNode{Val: v}
+		cur = cur.Next
+	}
+	return dummyHead.Next
 }
