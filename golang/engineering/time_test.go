@@ -1,7 +1,7 @@
 package engineering
 
 import (
-	"GolangPractice/lib/logger"
+	"GolangPractice/pkg/logger"
 	"fmt"
 	"syscall"
 	"testing"

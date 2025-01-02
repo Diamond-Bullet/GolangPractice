@@ -1,7 +1,7 @@
 package engineering
 
 import (
-	"GolangPractice/lib/logger"
+	"GolangPractice/pkg/logger"
 	"context"
 	"fmt"
 	"github.com/panjf2000/ants/v2"

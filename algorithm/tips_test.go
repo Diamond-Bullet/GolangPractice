@@ -1,7 +1,7 @@
 package main
 
 import (
-	"GolangPractice/lib/logger"
+	"GolangPractice/pkg/logger"
 	"container/list"
 	"github.com/emirpasic/gods/trees/redblacktree"
 	"math/bits"

@@ -1,7 +1,7 @@
 package engineering
 
 import (
-	"GolangPractice/lib/logger"
+	"GolangPractice/pkg/logger"
 	"encoding/json"
 	"golang.org/x/exp/constraints"
 	"testing"

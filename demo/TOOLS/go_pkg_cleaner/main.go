@@ -1,7 +1,7 @@
 package main
 
 import (
-	"GolangPractice/lib/logger"
+	"GolangPractice/pkg/logger"
 	"bufio"
 	"flag"
 	"fmt"

@@ -1,7 +1,7 @@
 package engineering
 
 import (
-	"GolangPractice/lib/logger"
+	"GolangPractice/pkg/logger"
 	"archive/zip"
 	"bufio"
 	"bytes"

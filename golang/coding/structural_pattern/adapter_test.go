@@ -1,7 +1,7 @@
 package structural_pattern
 
 import (
-	"GolangPractice/lib/logger"
+	"GolangPractice/pkg/logger"
 	"strconv"
 	"testing"
 )

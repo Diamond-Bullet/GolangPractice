@@ -1,7 +1,7 @@
 package creational_pattern
 
 import (
-	"GolangPractice/lib/logger"
+	"GolangPractice/pkg/logger"
 	"testing"
 )
 

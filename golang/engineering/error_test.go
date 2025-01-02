@@ -1,7 +1,7 @@
 package engineering
 
 import (
-	"GolangPractice/lib/logger"
+	"GolangPractice/pkg/logger"
 	"errors"
 	"fmt"
 	pkgerrors "github.com/pkg/errors"

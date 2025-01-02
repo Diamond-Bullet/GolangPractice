@@ -1,7 +1,7 @@
 package engineering
 
 import (
-	"GolangPractice/lib/logger"
+	"GolangPractice/pkg/logger"
 	"encoding/base64"
 	"fmt"
 	"github.com/BurntSushi/toml"
