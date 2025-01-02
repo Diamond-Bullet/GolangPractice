@@ -43,7 +43,9 @@ func TestTimeParse(t *testing.T) {
 }
 
 func TestTimeCalc(t *testing.T) {
-	logger.Info(time.Now().AddDate(1, 1, 1).String())
+	logger.Info(time.Now().AddDate(1, 1, 1))
+	logger.Info(time.Now().AddDate(0, 0, -1))
+	logger.Info(time.Now().AddDate(0, 0, -26))
 }
 
 func TestGetFileCreationTime(t *testing.T) {
