@@ -4,6 +4,5 @@ local
 go.mod
 go.sum
 
-pkg
 .idea
 .DS_Store
