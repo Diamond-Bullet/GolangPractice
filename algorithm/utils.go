@@ -45,12 +45,6 @@ func Values[T comparable, V any](m map[T]V) []V {
 	return s
 }
 
-type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
-}
-
 type ListNode struct {
 	Val  int
 	Next *ListNode
@@ -73,4 +67,30 @@ func LinkedList(arr []int) *ListNode {
 		cur = cur.Next
 	}
 	return dummyHead.Next
+}
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func BinaryTree(arr []int) *TreeNode {
+	if len(arr) == 0 {
+		return nil
+	}
+	nodes := make([]*TreeNode, len(arr))
+	nodes[0] = &TreeNode{Val: arr[0]}
+	for i := 0; i < len(arr)>>1; i++ {
+		node := nodes[i]
+		if i<<1+1 < len(arr) {
+			node.Left = &TreeNode{Val: arr[i<<1+1]}
+			nodes[i<<1+1] = node.Left
+		}
+		if i<<1+2 < len(arr) {
+			node.Right = &TreeNode{Val: arr[i<<1+2]}
+			nodes[i<<1+2] = node.Right
+		}
+	}
+	return nodes[0]
 }
