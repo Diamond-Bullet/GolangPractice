@@ -88,9 +88,15 @@ file file.txt
 # show comprehensive information of the file. like type, ctime, mtime, size, etc.
 stat file.txt
 
-# find files whose name matches the pattern in specified folder.
-# `-type` file type. `-ctime` creation time. `-mtime` modification time.
+# name matches the pattern.
 find . -name "*.c"
+# f: file; d: directory; l: symbolic link.
+find . -type f
+# +10M: larger than 10M; -10M: smaller than 10M.
+find . -size +10M
+# +10: 10 days ago. -10: within 10 days. 10: exactly 10 days.
+find . -ctime +10
+find . -mtime -10
 
 # compress a file/folder to tar format
 tar -cvf file.tar file.txt

@@ -9,48 +9,48 @@ import (
 )
 
 func Debug(v ...any) {
-	getLogger().Print(DEBUG, fmt.Sprintln(v...))
+	getLogger().Print(_DEBUG, fmt.Sprintln(v...))
 }
 
 // Debugf don't need to add `\n`. it's automatically added.
 func Debugf(format string, v ...any) {
-	getLogger().Print(DEBUG, fmt.Sprintf(format, v...))
+	getLogger().Print(_DEBUG, fmt.Sprintf(format, v...))
 }
 
 func Info(v ...any) {
-	getLogger().Print(INFO, fmt.Sprintln(v...))
+	getLogger().Print(_INFO, fmt.Sprintln(v...))
 }
 
 // Infof don't need to add `\n`. it's automatically added.
 func Infof(format string, v ...any) {
-	getLogger().Print(INFO, fmt.Sprintf(format, v...))
+	getLogger().Print(_INFO, fmt.Sprintf(format, v...))
 }
 
 func Warn(v ...any) {
-	getLogger().Print(WARN, fmt.Sprintln(v...))
+	getLogger().Print(_WARN, fmt.Sprintln(v...))
 }
 
 // Warnf don't need to add `\n`. it's automatically added.
 func Warnf(format string, v ...any) {
-	getLogger().Print(WARN, fmt.Sprintf(format, v...))
+	getLogger().Print(_WARN, fmt.Sprintf(format, v...))
 }
 
 func Error(v ...any) {
-	getLogger().Print(ERROR, fmt.Sprintln(v...))
+	getLogger().Print(_ERROR, fmt.Sprintln(v...))
 }
 
 // Errorf don't need to add `\n`. it's automatically added.
 func Errorf(format string, v ...any) {
-	getLogger().Print(ERROR, fmt.Sprintf(format, v...))
+	getLogger().Print(_ERROR, fmt.Sprintf(format, v...))
 }
 
 type LogLevel uint8
 
 const (
-	DEBUG LogLevel = iota
-	INFO
-	WARN
-	ERROR
+	_DEBUG LogLevel = iota
+	_INFO
+	_WARN
+	_ERROR
 )
 
 type Logger interface {
