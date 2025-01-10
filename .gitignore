@@ -1,4 +1,4 @@
-algorithm/main.go
+algo/main.go
 local
 
 go.mod

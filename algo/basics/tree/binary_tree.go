@@ -1,6 +1,6 @@
 package tree
 
-import "GolangPractice/algorithm/basics"
+import "GolangPractice/algo/basics"
 
 // TreeNode # binary tree
 type TreeNode struct {

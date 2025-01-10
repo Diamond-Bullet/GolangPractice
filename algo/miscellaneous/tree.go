@@ -1,7 +1,7 @@
 package miscellaneous
 
 import (
-	"GolangPractice/algorithm/basics/tree"
+	"GolangPractice/algo/basics/tree"
 )
 
 // TreeDelete MarkIt 二叉搜索树，删除节点
