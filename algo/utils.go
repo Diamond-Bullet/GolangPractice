@@ -22,6 +22,32 @@ func Abs[T Number](x T) T {
 	return x
 }
 
+func Map[T, F any](source []T, mapper func(T) F) []F {
+	result := make([]F, len(source))
+	for i, v := range source {
+		result[i] = mapper(v)
+	}
+	return result
+}
+
+func Reduce[T, F any](source []T, reducer func(F, T) F, initial F) F {
+	result := initial
+	for _, v := range source {
+		result = reducer(result, v)
+	}
+	return result
+}
+
+func Filter[T any](source []T, filter func(T) bool) []T {
+	result := make([]T, 0)
+	for _, v := range source {
+		if filter(v) {
+			result = append(result, v)
+		}
+	}
+	return result
+}
+
 func Ternary[T any](condition bool, forTrue, forFalse T) T {
 	if condition {
 		return forTrue
